@@ -3,12 +3,8 @@ import {
   Text,
   View,
   Pressable,
-  TextInput,
-  TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { useState } from "react";
-import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Input } from "@ui-kitten/components";

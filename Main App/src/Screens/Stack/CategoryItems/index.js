@@ -10,13 +10,10 @@ import {
 import React from "react";
 import { useState } from "react";
 import TopView from "../../../Components/TopView";
+import AddToCart2 from "../../../Components/AddToCart2";
 
 const CategoryItems = ({ navigation, route }) => {
-  const item = {
-    id: 1,
-    title: "The Burgers",
-    image: require("../../../../assets/images/category/drinks.webp"),
-  };
+  const { category } = route.params;
 
   const items = [
     {
@@ -53,7 +50,7 @@ const CategoryItems = ({ navigation, route }) => {
     <View style={{ flex: 1, backgroundColor: "#e34" }}>
       <TopView
         position={"relative"}
-        title={item.title}
+        title={category.title}
         navigation={navigation}
       />
       <View
@@ -64,26 +61,28 @@ const CategoryItems = ({ navigation, route }) => {
       <View style={styles.imageBox}>
         <View
           style={{
-            elevation: 5,
-            width: 160,
-            height: 160,
-            marginTop: -80,
-            borderRadius: 100,
+            marginTop: -100,
+            position: "absolute",
           }}
         >
           <Image
             style={{
-              width: 160,
-              height: 160,
-              borderRadius: 100,
+              width: 200,
+              height: 200,
+              objectFit: "contain",
             }}
-            width={160}
-            height={160}
-            source={item.image}
+            width={500}
+            height={500}
+            source={category.image}
           />
         </View>
 
-        <ScrollView>
+        <ScrollView
+          style={{
+            paddingTop: 80,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
           <View>
             <Text
               style={{
@@ -93,7 +92,7 @@ const CategoryItems = ({ navigation, route }) => {
                 textAlign: "center",
               }}
             >
-              {item.title}
+              {category.title}
             </Text>
             <View
               style={{
@@ -186,42 +185,10 @@ const CategoryItems = ({ navigation, route }) => {
                       />
                     </View>
 
-                    <Pressable
-                      style={{
-                        borderColor: "#e34",
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "80%",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        marginTop: -28,
-                        paddingVertical: 5,
-                        backgroundColor: "rgb(240,220,220)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: "#e34",
-                          fontWeight: 700,
-                          fontSize: 18,
-                          marginBottom: 2,
-                        }}
-                      >
-                        ADD +
-                      </Text>
-                    </Pressable>
+                   <AddToCart2 />
                   </View>
                 </View>
               ))}
-              <Text
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                end of products
-              </Text>
             </View>
           </View>
         </ScrollView>

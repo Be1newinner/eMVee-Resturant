@@ -8,13 +8,9 @@ import {
 } from "react-native";
 import React from "react";
 import { TotalCategoryList } from "../../../Services/OfflineDataToLive";
-import { Input } from "@ui-kitten/components";
-import { AntDesign } from "@expo/vector-icons";
 import { TopViewHome } from "../../../Components/TopViewHome";
 
 const CategoryScreen = ({ navigation }) => {
-  const [value, setValue] = React.useState("");
-
   return (
     <View
       style={{
@@ -44,7 +40,9 @@ const CategoryScreen = ({ navigation }) => {
         }
         renderItem={({ item, index }) => (
           <Pressable
-            onPress={() => navigation.navigate("CategoryItems")}
+            onPress={() =>
+              navigation.navigate("CategoryItems", { category: item })
+            }
             style={{
               borderRadius: 10,
               overflow: "hidden",
@@ -87,18 +85,11 @@ const CategoryScreen = ({ navigation }) => {
                   width: Dimensions.get("screen").width / 2 - 17,
                   height: Dimensions.get("screen").width / 2 - 17,
                   borderRadius: 10,
+                  backgroundColor: "rgba(240,48,64,0.15)",
                 }}
                 source={item.image}
               />
             </View>
-            {/* <Text
-                style={{
-                  // color: "#fff",
-                  // fontSize: 18,
-                }}
-              >
-                {item.title}
-              </Text> */}
           </Pressable>
         )}
       />

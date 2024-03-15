@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
               >
                 Our Products
               </Text>
-              <Pressable onPress={() => navigation.navigate("Pizza")}>
+              <Pressable onPress={() => navigation.navigate("Category")}>
                 <Text
                   style={{
                     marginVertical: 15,
@@ -60,7 +60,7 @@ const HomeScreen = ({ navigation }) => {
               >
                 Popular
               </Text>
-              <Pressable onPress={() => navigation.navigate("PizzaScreen")}>
+              <Pressable onPress={() => navigation.navigate("Category")}>
                 <Text
                   style={{
                     marginVertical: 15,

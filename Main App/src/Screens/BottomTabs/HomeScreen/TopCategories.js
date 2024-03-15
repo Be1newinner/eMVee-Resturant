@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { TopCategoryList } from "../../../Services/OfflineDataToLive";
+import { TotalCategoryList } from "../../../Services/OfflineDataToLive";
 
 const ProductItems = () => {
   const navigation = useNavigation();
@@ -18,14 +18,19 @@ const ProductItems = () => {
       <FlatList
         style={styles.product}
         showsHorizontalScrollIndicator={false}
-        data={TopCategoryList}
+        data={TotalCategoryList.filter((e) => e.p === true)}
         horizontal
         renderItem={({ item, index }) => (
           <Pressable
-            onPress={() => navigation.navigate("Burger", { item: item })}
+            onPress={() =>
+              navigation.navigate("CategoryItems", { category: item })
+            }
             style={styles.imageList}
           >
-            <Image style={styles.productImage} source={item.image} />
+            <Image
+              style={styles.productImage}
+              source={item.image}
+            />
             <Text style={{ marginTop: 10, fontSize: 12 }}>{item.title}</Text>
           </Pressable>
         )}
