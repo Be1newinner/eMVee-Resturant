@@ -2,7 +2,7 @@ export const PopularItems = [
   {
     id: 1,
     title: "Fried Rice",
-    Price: "₹80",
+    Price: 80,
     Description: "eMVee Restaurant",
     Ingredients: "Fermented local ingredients",
     image: require("../../assets/Friedrice.jpg"),
@@ -10,35 +10,35 @@ export const PopularItems = [
   {
     id: 2,
     title: "Grilled Chicken",
-    Price: "₹190",
+    Price: 190,
     Description: "eMVee Restaurant",
     image: require("../../assets/chickengrill.jpg"),
   },
   {
     id: 3,
     title: "Octopus Stir Fried",
-    Price: "₹400",
+    Price: 400,
     Description: "eMVee Restaurant",
     image: require("../../assets/octstir.jpg"),
   },
   {
     id: 4,
     title: "Porkribs",
-    Price: "₹270",
+    Price: 270,
     Description: "eMVee Restaurant",
     image: require("../../assets/Porkribs.jpg"),
   },
   {
     id: 5,
     title: "Prawn Fried",
-    Price: "₹290",
+    Price: 290,
     Description: "eMVee Restaurant",
     image: require("../../assets/Prawnfried.jpg"),
   },
   {
     id: 6,
     title: "Thukpa",
-    Price: "₹80",
+    Price: 80,
     Description: "eMVee Restaurant",
     image: require("../../assets/Thukpa.jpg"),
   },
@@ -48,7 +48,7 @@ export const AllProductsData = [
   {
     id: 1,
     title: "Fried Rice",
-    Price: "₹80",
+    Price: 80,
     Description: "eMVee Restaurant",
     Ingredients: "Fermented local ingredients",
     image: require("../../assets/Friedrice.jpg"),
@@ -57,7 +57,7 @@ export const AllProductsData = [
   {
     id: 2,
     title: "Grilled Chicken",
-    Price: "₹190",
+    Price: 190,
     Description: "eMVee Restaurant",
     image: require("../../assets/chickengrill.jpg"),
     p: true,
@@ -65,7 +65,7 @@ export const AllProductsData = [
   {
     id: 3,
     title: "Octopus Stir Fried",
-    Price: "₹400",
+    Price: 400,
     Description: "eMVee Restaurant",
     image: require("../../assets/octstir.jpg"),
     p: true,
@@ -73,7 +73,7 @@ export const AllProductsData = [
   {
     id: 4,
     title: "Porkribs",
-    Price: "₹270",
+    Price: 270,
     Description: "eMVee Restaurant",
     image: require("../../assets/Porkribs.jpg"),
     p: true,
@@ -81,7 +81,7 @@ export const AllProductsData = [
   {
     id: 5,
     title: "Prawn Fried",
-    Price: "₹290",
+    Price: 290,
     Description: "eMVee Restaurant",
     image: require("../../assets/Prawnfried.jpg"),
     p: true,
@@ -89,7 +89,7 @@ export const AllProductsData = [
   {
     id: 6,
     title: "Thukpa",
-    Price: "₹80",
+    Price: 80,
     Description: "eMVee Restaurant",
     image: require("../../assets/Thukpa.jpg"),
     p: true,

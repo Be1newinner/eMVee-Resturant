@@ -9,12 +9,13 @@ import {
 import React from "react";
 import { TotalCategoryList } from "../../../Services/OfflineDataToLive";
 import { TopViewHome } from "../../../Components/TopViewHome";
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 
 const CategoryScreen = ({ navigation }) => {
   return (
     <View
       style={{
-        backgroundColor: "rgba(0,0,100,0.04)",
+        backgroundColor: GlobalColors.primary,
       }}
     >
       <FlatList
@@ -24,6 +25,13 @@ const CategoryScreen = ({ navigation }) => {
           rowGap: 10,
           paddingBottom: 40,
         }}
+        ListFooterComponent={
+          <View
+            style={{
+              height: 50,
+            }}
+          ></View>
+        }
         ListHeaderComponent={
           <View>
             <TopViewHome />

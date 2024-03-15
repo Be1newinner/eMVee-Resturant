@@ -1,13 +1,14 @@
 import React from "react";
-
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CategoryScreen from "../Screens/BottomTabs/CategoryScreen";
 import HomeScreen from "../Screens/BottomTabs/HomeScreen";
 import SettingScreen from "../Screens/BottomTabs/SettingScreen";
+import OrdersScreen from "../Screens/BottomTabs/OrdersScreen";
 
-import { AntDesign, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
+import { Dimensions } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,17 +18,32 @@ const BottomTabScreen = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor:  GlobalColors.themeColor,
+          backgroundColor: GlobalColors.themeColor,
           alignItems: "center",
           justifyContent: "center",
+          paddingBottom: 5,
+          height: 55,
+          width: Dimensions.get("screen").width - 20,
+          position: "absolute",
+          bottom: 10,
+          left: 10,
+          borderRadius: 10,
+          elevation: 10,
+          borderBlockColor: "rgba(0,0,0,0.15)",
         },
       }}
     >
       <Tab.Screen
         options={{
-          tabBarShowLabel: false,
+          tabBarLabelStyle: {
+            color: "#fff",
+          },
           tabBarIcon: ({ focused }) => (
-            <AntDesign name="home" size={26} color={"#fff"} />
+            <Ionicons
+              name={focused ? "home-sharp" : "home-outline"}
+              size={24}
+              color="white"
+            />
           ),
         }}
         name="Main"
@@ -35,10 +51,16 @@ const BottomTabScreen = () => {
       />
       <Tab.Screen
         options={{
-          tabBarShowLabel: false,
+          tabBarLabelStyle: {
+            color: "#fff",
+          },
           headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
-            <MaterialIcons name="category" size={26} color={"white"} />
+            <Ionicons
+              name={focused ? "shapes-sharp" : "shapes-outline"}
+              size={24}
+              color="white"
+            />
           ),
         }}
         name="Category"
@@ -46,9 +68,32 @@ const BottomTabScreen = () => {
       />
       <Tab.Screen
         options={{
-          tabBarShowLabel: false,
+          tabBarLabelStyle: {
+            color: "#fff",
+          },
+          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
-            <FontAwesome5 name="user" size={26} color={"white"} />
+            <Ionicons
+              name={focused ? "fast-food-sharp" : "fast-food-outline"}
+              size={24}
+              color="white"
+            />
+          ),
+        }}
+        name="OrdersScreen"
+        component={OrdersScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabelStyle: {
+            color: "#fff",
+          },
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "person-sharp" : "person-outline"}
+              size={24}
+              color="white"
+            />
           ),
         }}
         name="SettingScreen"

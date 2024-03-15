@@ -4,6 +4,7 @@ import TopCategories from "./TopCategories";
 import PopularList from "./PopularList";
 
 import { TopViewHome } from "../../../Components/TopViewHome";
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -84,6 +85,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: GlobalColors.primary,
   },
 });

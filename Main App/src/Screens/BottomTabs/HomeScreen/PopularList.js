@@ -11,54 +11,52 @@ import { PopularItems } from "../../../Services/OfflineDataToLive";
 
 const PopularList = ({ children, navigation }) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#f0f0f0",
+    <FlatList
+      showsVerticalScrollIndicator={false}
+      data={PopularItems}
+      numColumns={2}
+      ListHeaderComponent={children}
+      contentContainerStyle={{
+        gap: 10,
+        paddingBottom: 50,
       }}
-    >
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={PopularItems}
-        numColumns={2}
-        ListHeaderComponent={children}
-        contentContainerStyle={{
-          gap: 10,
-          paddingBottom: 50,
-        }}
-        renderItem={({ item, index }) => (
-          <Pressable
-            style={[
-              styles.popularItems,
-              {
-                marginRight: index % 2 ? 10 : 0,
-                marginLeft: 10,
-              },
-            ]}
-            onPress={() => navigation.navigate("ProductDetail")}
-          >
-            <Image
-              style={{
-                width: "100%",
-                height: 130,
-                resizeMode: "cover",
-                borderRadius: 10,
-              }}
-              source={item.image}
-            />
-            <Text style={{ fontSize: 17, fontWeight: "500", marginTop: 5 }}>
-              {item.title}
-            </Text>
-            <Text style={{ fontSize: 12, opacity: 0.7 }}>
-              {item.Description}
-            </Text>
-            <Text style={{ fontWeight: "500", color: "#e5002b" }}>
-              {item.Price}
-            </Text>
-          </Pressable>
-        )}
-      />
-    </View>
+      ListFooterComponent={
+        <View
+          style={{
+            height: 50,
+          }}
+        ></View>
+      }
+      renderItem={({ item, index }) => (
+        <Pressable
+          style={[
+            styles.popularItems,
+            {
+              marginRight: index % 2 ? 10 : 0,
+              marginLeft: 10,
+            },
+          ]}
+          onPress={() => navigation.navigate("ProductDetail")}
+        >
+          <Image
+            style={{
+              width: "100%",
+              height: 130,
+              resizeMode: "cover",
+              borderRadius: 10,
+            }}
+            source={item.image}
+          />
+          <Text style={{ fontSize: 17, fontWeight: "500", marginTop: 5 }}>
+            {item.title}
+          </Text>
+          <Text style={{ fontSize: 12, opacity: 0.7 }}>{item.Description}</Text>
+          <Text style={{ fontWeight: "500", color: "#e5002b" }}>
+            {item.Price}
+          </Text>
+        </Pressable>
+      )}
+    />
   );
 };
 

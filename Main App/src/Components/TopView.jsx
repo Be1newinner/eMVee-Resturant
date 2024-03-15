@@ -2,10 +2,11 @@ import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function TopView({
-  navigation,
-  title,
+  navigation = null,
+  title = "",
   position = "absolute",
   color = "#fff",
+  style,
 }) {
   return (
     <View
@@ -18,11 +19,12 @@ export default function TopView({
         flexDirection: "row",
         height: 40,
         alignItems: "center",
+        ...style,
       }}
     >
-      {navigation.canGoBack() && (
+      {navigation?.canGoBack() && (
         <Pressable
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation?.goBack()}
           style={{
             elevation: 5,
             marginRight: 10,
