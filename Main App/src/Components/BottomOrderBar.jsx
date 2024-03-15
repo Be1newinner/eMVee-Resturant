@@ -20,7 +20,7 @@ export default function BottomOrderBar({ bottom = 0, navigation }) {
         bottom,
         elevation: 5,
         margin: 10,
-        flexDirection: "row",
+        flexDirection: "row-reverse",
         justifyContent: "space-between",
         padding: 10,
       }}

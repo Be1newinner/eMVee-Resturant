@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
         navigation={navigation}
         children={
           <View>
-            <TopViewHome />
+            <TopViewHome navigation={navigation} />
             <View
               style={{
                 flexDirection: "row",
@@ -25,7 +25,7 @@ const HomeScreen = ({ navigation }) => {
               <Text
                 style={{ marginVertical: 15, fontSize: 17, fontWeight: "500" }}
               >
-                Our Products
+                Our Top Categories
               </Text>
               <Pressable onPress={() => navigation.navigate("Category")}>
                 <Text
@@ -59,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
               <Text
                 style={{ marginVertical: 15, fontSize: 18, fontWeight: "500" }}
               >
-                Popular
+                Our Popular Dishes
               </Text>
               <Pressable onPress={() => navigation.navigate("Category")}>
                 <Text

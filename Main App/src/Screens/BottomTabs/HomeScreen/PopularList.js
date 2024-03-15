@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { PopularItems } from "../../../Services/OfflineDataToLive";
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 
 const PopularList = ({ children, navigation }) => {
   return (
@@ -34,6 +35,7 @@ const PopularList = ({ children, navigation }) => {
             {
               marginRight: index % 2 ? 10 : 0,
               marginLeft: 10,
+              gap: 5,
             },
           ]}
           onPress={() => navigation.navigate("ProductDetail")}
@@ -47,12 +49,20 @@ const PopularList = ({ children, navigation }) => {
             }}
             source={item.image}
           />
-          <Text style={{ fontSize: 17, fontWeight: "500", marginTop: 5 }}>
+          <Text style={{ fontSize: 17, fontWeight: "500", marginLeft: 5 }}>
             {item.title}
           </Text>
-          <Text style={{ fontSize: 12, opacity: 0.7 }}>{item.Description}</Text>
-          <Text style={{ fontWeight: "500", color: "#e5002b" }}>
-            {item.Price}
+          <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
+            {item.Description}
+          </Text>
+          <Text
+            style={{
+              fontWeight: "500",
+              color: GlobalColors.themeColor,
+              marginLeft: 5,
+            }}
+          >
+            ₹{item.Price}/-
           </Text>
         </Pressable>
       )}

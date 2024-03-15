@@ -80,7 +80,7 @@ const BottomTabScreen = () => {
             />
           ),
         }}
-        name="OrdersScreen"
+        name="Orders"
         component={OrdersScreen}
       />
       <Tab.Screen
@@ -96,7 +96,7 @@ const BottomTabScreen = () => {
             />
           ),
         }}
-        name="SettingScreen"
+        name="Profile"
         component={SettingScreen}
       />
     </Tab.Navigator>

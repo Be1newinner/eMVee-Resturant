@@ -34,7 +34,7 @@ const CategoryScreen = ({ navigation }) => {
         }
         ListHeaderComponent={
           <View>
-            <TopViewHome />
+            <TopViewHome navigation={navigation} />
             <Text
               style={{
                 fontSize: 16,

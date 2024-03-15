@@ -1,22 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { Input } from "@ui-kitten/components";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
+import { Input } from "@ui-kitten/components";
 
 export const TopViewHome = ({ navigation }) => {
-  const [value, setValue] = React.useState("");
-
   return (
     <View
       style={{
-        backgroundColor:  GlobalColors.themeColor,
+        backgroundColor: GlobalColors.themeColor,
         padding: 20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
@@ -54,7 +46,6 @@ export const TopViewHome = ({ navigation }) => {
 
       <Input
         placeholder="Search for dishes"
-        value={value}
         style={{
           borderRadius: 15,
           marginTop: 5,
@@ -63,7 +54,8 @@ export const TopViewHome = ({ navigation }) => {
         accessoryRight={
           <AntDesign name="search1" size={24} color="rgba(0,0,0,0.5)" />
         }
-        onChangeText={(nextValue) => setValue(nextValue)}
+        defaultValue=""
+        onPressIn={() => navigation.navigate("ProductSearchScreen")}
       />
     </View>
   );
