@@ -24,7 +24,7 @@ export default function StackScreens() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="BottomTab"
+        initialRouteName="Welcome"
         screenOptions={{
           headerShown: false,
         }}
