@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, Text, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import ProductSearchBar from "../../../Components/ProductSearchBar";
 import { useEffect, useState } from "react";
@@ -7,8 +7,9 @@ import {
   AllProductsData,
 } from "../../../Services/OfflineDataToLive";
 import { AntDesign } from "@expo/vector-icons";
-export default function ProductSearchScreen() {
-  const [value, setValue] = useState("bua");
+import TopView from "../../../Components/TopView";
+export default function ProductSearchScreen({ navigation }) {
+  const [value, setValue] = useState("");
   const [filteredArray, setFilteredArray] = useState(null);
 
   useEffect(() => {
@@ -29,6 +30,13 @@ export default function ProductSearchScreen() {
         gap: 10,
       }}
     >
+      <TopView
+        navigation={navigation}
+        title="Search Dishes"
+        position="relative"
+        color="#222"
+      />
+
       <ProductSearchBar
         value={value}
         setValue={setValue}
@@ -57,7 +65,7 @@ export default function ProductSearchScreen() {
             padding: 10,
           }}
           renderItem={({ item }) => (
-            <View
+            <Pressable
               style={{
                 flexDirection: "row",
                 backgroundColor: "#fff",
@@ -66,6 +74,7 @@ export default function ProductSearchScreen() {
                 elevation: 5,
                 gap: 10,
               }}
+              onPress={() => navigation.navigate("ProductDetail")}
             >
               <Image
                 source={item.image}
@@ -106,7 +115,7 @@ export default function ProductSearchScreen() {
                   color={GlobalColors.productText}
                 />
               </View>
-            </View>
+            </Pressable>
           )}
         />
       ) : (

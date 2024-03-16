@@ -13,73 +13,41 @@ import CartScreen from "../Screens/Stack/CartScreen";
 import OrderConfirm from "../Screens/Stack/OrderConfirm";
 import OrdersDetails from "../Screens/Stack/OrdersDetails";
 import ProductSearchScreen from "../Screens/Stack/ProductSearchScreen";
+import AddAddressScreen from "../Screens/Stack/AddAddressScreen";
+import AboutUs from "../Screens/Stack/AboutUs";
+import TermsCondition from "../Screens/Stack/TermsCondition";
+import PrivacyPolicy from "../Screens/Stack/PrivacyPolicy";
 
 const Stack = createNativeStackNavigator();
 
 export default function StackScreens() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="BottomTab">
+      <Stack.Navigator
+        initialRouteName="BottomTab"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="BottomTab" component={BottomTabNavigation} />
+        <Stack.Screen name="ProductDetail" component={ProductDetail} />
+        <Stack.Screen name="CategoryItems" component={CategoryItems} />
+        <Stack.Screen name="EditProfile" component={ProfileScreen} />
+        <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen name="OrderConfirm" component={OrderConfirm} />
+        <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
         <Stack.Screen
-          options={{ headerShown: false }}
-          name="Welcome"
-          component={WelcomeScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="SignIn"
-          component={SignInScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="BottomTab"
-          component={BottomTabNavigation}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="ProductDetail"
-          component={ProductDetail}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="CategoryItems"
-          component={CategoryItems}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="EditProfile"
-          component={ProfileScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="CartScreen"
-          component={CartScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="OrderConfirm"
-          component={OrderConfirm}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="OrdersDetails"
-          component={OrdersDetails}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
           name="ProductSearchScreen"
           component={ProductSearchScreen}
         />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Burger"
-          component={BurgerScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Fried"
-          component={FriedRiceScreen}
-        />
+        <Stack.Screen name="AddAddressScreen" component={AddAddressScreen} />
+        <Stack.Screen name="AboutUs" component={AboutUs} />
+        <Stack.Screen name="TermsCondition" component={TermsCondition} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+        <Stack.Screen name="Burger" component={BurgerScreen} />
+        <Stack.Screen name="Fried" component={FriedRiceScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

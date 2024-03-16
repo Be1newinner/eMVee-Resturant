@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 
 const SignInScreen = ({ navigation }) => {
-  const [fullName, setFullName] = useState('');
-  const [address, setAddress] = useState('');
-  const [landmark, setLandmark] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [email, setEmail] = useState("");
 
   return (
     <View style={styles.container}>
@@ -19,7 +24,7 @@ const SignInScreen = ({ navigation }) => {
         placeholder="Full name"
       />
 
-      <Text style={styles.header}>Address with Road/Street</Text>
+      <Text style={styles.header}>House / Office No.</Text>
       <TextInput
         style={styles.input}
         value={address}
@@ -27,12 +32,12 @@ const SignInScreen = ({ navigation }) => {
         placeholder="Enter your address"
       />
 
-      <Text style={styles.header}>Landmark</Text>
+      <Text style={styles.header}>Area, Landmark</Text>
       <TextInput
         style={styles.input}
         value={landmark}
         onChangeText={setLandmark}
-        placeholder="Ex. Near Hospital"
+        placeholder="Aslali, e.g. Near Hospital"
       />
 
       <Text style={styles.header}>Mobile no.</Text>
@@ -44,53 +49,46 @@ const SignInScreen = ({ navigation }) => {
         keyboardType="phone-pad"
       />
 
-      <Text style={styles.header}>Email</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Enter your email"
-        keyboardType="email-address"
-      />
-
-      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => navigation.navigate("BottomTab")}
+      >
         <Text style={styles.text}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-
 export default SignInScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingVertical: 50,
-        paddingHorizontal: 20,
-    },
-    header: {
-        fontSize: 20,
-        marginBottom: 7,
-        fontWeight: "500",
-        color: '#191919',
-    },
-    input: {
-        marginBottom: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: "#C7C8CC",
-        padding: 5,
-    },
-    btn: {
-        backgroundColor: '#e5002b',
-        paddingVertical: 13,
-        alignItems: 'center',
-        borderRadius: 12,
-        marginTop: 15,
-    },
-    text: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: '500',
-    },
-})
+  container: {
+    flex: 1,
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+  },
+  header: {
+    fontSize: 20,
+    marginBottom: 7,
+    fontWeight: "500",
+    color: "#191919",
+  },
+  input: {
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#C7C8CC",
+    padding: 5,
+  },
+  btn: {
+    backgroundColor: "#e5002b",
+    paddingVertical: 13,
+    alignItems: "center",
+    borderRadius: 12,
+    marginTop: 15,
+  },
+  text: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "500",
+  },
+});

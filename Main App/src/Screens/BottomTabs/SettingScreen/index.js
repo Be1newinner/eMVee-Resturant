@@ -18,26 +18,32 @@ export default function SettingScreen({ navigation }) {
     },
     {
       title: "Saved Addresses",
-      action: "",
+      action: "AddAddressScreen",
       key: 1,
       icon: "enviromento",
     },
     {
       title: "About Us",
-      action: "",
+      action: "AboutUs",
       key: 2,
       icon: "info",
     },
     {
       title: "Terms & Conditions",
-      action: "",
+      action: "TermsCondition",
       key: 3,
       icon: "",
     },
     {
       title: "Privacy Policy",
-      action: "",
+      action: "PrivacyPolicy",
       key: 4,
+      icon: "",
+    },
+    {
+      title: "Log Out",
+      action: "SignIn",
+      key: 5,
       icon: "",
     },
   ];

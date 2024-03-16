@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Restaurant",
-    "slug": "Restaurant",
+    "name": "emvee-restaurant",
+    "slug": "emvee-restaurant",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -21,13 +21,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/splash.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.be1newinner.emveerestaurant"
     },
     "web": {
       "favicon": "./assets/splash.png"
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "36e9e9e7-a091-4c30-97d9-9654bd817183"
+      }
+    }
   }
 }

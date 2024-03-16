@@ -31,6 +31,7 @@ export const TopViewHome = ({ navigation }) => {
               alignItems: "center",
               marginLeft: -3,
             }}
+            onPress={() => navigation.navigate("AddAddressScreen")}
           >
             <MaterialIcons name="place" size={17} color="#fff" />
             <Text
@@ -57,6 +58,44 @@ export const TopViewHome = ({ navigation }) => {
         defaultValue=""
         onPressIn={() => navigation.navigate("ProductSearchScreen")}
       />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          marginTop: 10,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            backgroundColor: "#e53a75",
+            alignItems: "center",
+            gap: 5,
+            padding: 5,
+            paddingHorizontal: 20,
+            borderRadius: 20,
+            elevation: 5,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "rgb(255,255,255)",
+              height: 10,
+              width: 10,
+              borderRadius: 10,
+            }}
+          />
+          <Text
+            style={{
+              fontWeight: 600,
+              fontSize: 13,
+              color: "rgb(255,255,255)",
+            }}
+          >
+            Store Closed
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
