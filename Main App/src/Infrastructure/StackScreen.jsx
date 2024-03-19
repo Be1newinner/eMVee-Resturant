@@ -4,9 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WelcomeScreen from "../Screens/Stack/WelcomeScreen";
 
 // Auth
-import SignInScreen from "../Screens/Stack/Auth";
 import RegisterScreen from "../Screens/Stack/Auth/RegisterScreen";
 import LoginScreen from "../Screens/Stack/Auth/LoginScreen";
+import VerifyEmail from "../Screens/Stack/Auth/VerifyEmail";
 
 import BurgerScreen from "../Screens/Stack/BurgerScreen";
 import CategoryItems from "../Screens/Stack/CategoryItems";
@@ -29,7 +29,7 @@ export default function StackScreens() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="RegisterScreen"
+        initialRouteName="Welcome"
         screenOptions={{
           headerShown: false,
         }}
@@ -37,8 +37,8 @@ export default function StackScreens() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
 
         {/* Auth  */}
-        <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
 
         <Stack.Screen name="BottomTab" component={BottomTabNavigation} />

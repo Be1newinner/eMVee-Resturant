@@ -1,7 +1,23 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { firebaseAuth } from "../../../Infrastructure/firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const WelcomeScreen = ({ navigation }) => {
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          navigation.replace("BottomTab");
+          console.log("User is verified!");
+        } else {
+          navigation.navigate("VerifyEmail");
+          console.log("User is not verified!");
+        }
+      }
+    });
+  }, [firebaseAuth]);
+
   return (
     <View style={styles.container}>
       <Image style={styles.img} source={{ uri: "assets:/food.png" }} />

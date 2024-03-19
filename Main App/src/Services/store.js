@@ -18,6 +18,8 @@ const counterSlice = createSlice({
   },
 });
 
+const allProductsSlice = createSlice({})
+
 export const store = configureStore({
   reducer: {
     counter: counterSlice.reducer,
