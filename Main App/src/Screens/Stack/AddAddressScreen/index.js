@@ -1,41 +1,37 @@
-import { Dimensions, FlatList, Text, View } from "react-native";
+import { Dimensions, FlatList, Pressable, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-import { Button, Divider } from "@ui-kitten/components";
+import { Divider } from "@ui-kitten/components";
 import AddNewAddressButton from "../../../Components/AddNewAddressButton";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import {
+  changeDefaultAddress,
+  removeAddress,
+} from "../../../Services/Slices/AddressSlice";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function AddAddressScreen({ navigation }) {
-  const saved_addresses = [
-    {
-      h: "h449. g13",
-      l: "asthan lsndir",
-      n: "Vijay",
-      p: "8130506844",
-      pi: "110062",
-      t: 0,
-      k: 0,
-    },
-    {
-      h: "h449. g13",
-      l: "asthan lsndir",
-      n: "Vijay",
-      p: "8130506844",
-      pi: "110062",
-      t: 1,
-      k: 1,
-    },
-    {
-      h: "h449. g13",
-      l: "asthan lsndir",
-      n: "Vijay",
-      p: "8130506844",
-      pi: "110062",
-      t: 2,
-      k: 2,
-    },
-  ];
-  const CurrentAddress = saved_addresses[0];
+  const saved_addresses = useSelector((state) => state.Address);
+  const dispatch = useDispatch();
+
+  const [SavedAddresses, setSavedAddress] = useState(null);
+  const [DefaultAddresses, setDefaultAddress] = useState(0);
+  const [CurrentAddresses, setCurrentAddresses] = useState(null);
+
+  useEffect(() => {
+    setSavedAddress(saved_addresses?.addresses || null);
+    setDefaultAddress(saved_addresses?.default || 0);
+  }, [saved_addresses]);
+
+  useEffect(() => {
+    if (SavedAddresses)
+      setCurrentAddresses(
+        SavedAddresses.filter((e) => e.k === DefaultAddresses)[0]
+      );
+  }, [SavedAddresses, DefaultAddresses]);
+
   return (
     <FlatList
       contentContainerStyle={{
@@ -49,20 +45,34 @@ export default function AddAddressScreen({ navigation }) {
           <TopView
             navigation={navigation}
             title={
-              <View>
+              CurrentAddresses ? (
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 600,
+                    }}
+                  >
+                    {CurrentAddresses?.t == 0
+                      ? "Home"
+                      : CurrentAddresses?.t == 1
+                      ? "Work"
+                      : "Other"}
+                  </Text>
+                  <Text>
+                    {CurrentAddresses?.h.toUpperCase() +
+                      ", " +
+                      CurrentAddresses?.l.toUpperCase()}
+                  </Text>
+                </View>
+              ) : (
                 <Text
                   style={{
                     fontWeight: 600,
                   }}
                 >
-                  {CurrentAddress.t == 0
-                    ? "Home"
-                    : CurrentAddress.t == 1
-                    ? "Work"
-                    : "Other"}
+                  Please add an address
                 </Text>
-                <Text>{CurrentAddress.h}</Text>
-              </View>
+              )
             }
             position="relative"
             style={{
@@ -73,7 +83,7 @@ export default function AddAddressScreen({ navigation }) {
           <Text>Your Saved Address</Text>
         </View>
       }
-      data={saved_addresses}
+      data={SavedAddresses}
       ListFooterComponent={
         <View
           style={{
@@ -96,7 +106,7 @@ export default function AddAddressScreen({ navigation }) {
       }
       keyExtractor={(e) => e.k}
       renderItem={({ item }) => (
-        <View
+        <Pressable
           style={{
             flexDirection: "row",
             gap: 5,
@@ -104,10 +114,22 @@ export default function AddAddressScreen({ navigation }) {
             padding: 10,
             borderRadius: 10,
             elevation: 5,
+            borderWidth: 2,
+            borderColor:
+              DefaultAddresses === item.k
+                ? GlobalColors.themeColor
+                : "transparent",
+          }}
+          onPress={() => {
+            dispatch(changeDefaultAddress(item.k));
           }}
         >
           <Feather name="map-pin" size={24} color="black" />
-          <View>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
             <Text
               style={{
                 fontWeight: 500,
@@ -119,10 +141,20 @@ export default function AddAddressScreen({ navigation }) {
               {item.n} {item.p}
             </Text>
             <Text>
-              {item.h} {item.l} {item.pi}
+              {item.h.toUpperCase() +
+                ", " +
+                item.l.toUpperCase() +
+                ", " +
+                item.pi}
             </Text>
           </View>
-        </View>
+          <AntDesign
+            name="closecircleo"
+            size={24}
+            color={GlobalColors.themeColor}
+            onPress={() => dispatch(removeAddress(item.k))}
+          />
+        </Pressable>
       )}
     />
   );

@@ -11,11 +11,12 @@ import { useState } from "react";
 import TopView from "../../../Components/TopView";
 import AddToCart2 from "../../../Components/AddToCart2";
 import { useSelector } from "react-redux";
+import BottomOrderBar from "../../../Components/BottomOrderBar";
 
 const CategoryItems = ({ navigation, route }) => {
   const { category } = route.params;
   const AllProducts = useSelector((state) => state.AllProducts);
-
+  const selector = useSelector((state) => state.Cart)?.items;
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   const handlePress = () => {
@@ -191,7 +192,7 @@ const CategoryItems = ({ navigation, route }) => {
                       </View>
                     )}
 
-                    <AddToCart2 />
+                    <AddToCart2 Quantity={selector[item.k]?.qty} item={item} />
                   </View>
                 </View>
               ))}
@@ -199,6 +200,7 @@ const CategoryItems = ({ navigation, route }) => {
           </View>
         </ScrollView>
       </View>
+      <BottomOrderBar navigation={navigation} />
     </View>
   );
 };

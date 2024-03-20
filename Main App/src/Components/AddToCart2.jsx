@@ -1,11 +1,16 @@
 import { Pressable, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { addInCart } from "../Services/Slices/CartSlice";
+import { useDispatch } from "react-redux";
 
 export default function AddToCart2({
   Quantity = 0,
   setQuantity = () => null,
   variant = 0,
+  item,
 }) {
+  const dispatch = useDispatch();
+
   return Quantity == 0 ? (
     <Pressable
       style={{
@@ -21,6 +26,17 @@ export default function AddToCart2({
         paddingVertical: 5,
         backgroundColor: "rgb(240,220,220)",
         minWidth: 100,
+      }}
+      onPress={() => {
+        item
+          ? dispatch(
+              addInCart({
+                ...item,
+                qty: 1,
+                total: item.p,
+              })
+            )
+          : setQuantity(1);
       }}
     >
       <Text
@@ -52,7 +68,17 @@ export default function AddToCart2({
           elevation: 3,
           borderColor: "#406090",
         }}
-        onPress={() => Quantity > 0 && setQuantity(Quantity - 1)}
+        onPress={() => {
+          Quantity > 0 && item
+            ? dispatch(
+                addInCart({
+                  ...item,
+                  qty: Quantity - 1,
+                  total: (Quantity - 1) * item.p,
+                })
+              )
+            : setQuantity(Quantity - 1);
+        }}
       >
         <Feather name="minus" size={variant == 0 ? 26 : 14} color="#406090" />
       </Pressable>
@@ -86,7 +112,17 @@ export default function AddToCart2({
           elevation: 3,
           borderColor: "#406090",
         }}
-        onPress={() => setQuantity(Quantity + 1)}
+        onPress={() => {
+          item
+            ? dispatch(
+                addInCart({
+                  ...item,
+                  qty: Quantity + 1,
+                  total: (Quantity + 1) * item.p,
+                })
+              )
+            : setQuantity(Quantity + 1);
+        }}
       >
         <Feather name="plus" size={variant == 0 ? 26 : 14} color="#406090" />
       </Pressable>

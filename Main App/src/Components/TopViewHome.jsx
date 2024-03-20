@@ -1,10 +1,30 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 import { Input } from "@ui-kitten/components";
+import { useSelector } from "react-redux";
+import { firebaseAuth } from "../Infrastructure/firebase.config";
 
 export const TopViewHome = ({ navigation }) => {
+  const saved_addresses = useSelector((state) => state.Address);
+
+  const [SavedAddresses, setSavedAddress] = useState(null);
+  const [DefaultAddresses, setDefaultAddress] = useState(0);
+  const [CurrentAddresses, setCurrentAddresses] = useState(null);
+
+  useEffect(() => {
+    setSavedAddress(saved_addresses?.addresses || null);
+    setDefaultAddress(saved_addresses?.default || 0);
+  }, [saved_addresses]);
+
+  useEffect(() => {
+    if (SavedAddresses)
+      setCurrentAddresses(
+        SavedAddresses.filter((e) => e.k === DefaultAddresses)[0]
+      );
+  }, [SavedAddresses, DefaultAddresses]);
+
   return (
     <View
       style={{
@@ -21,7 +41,7 @@ export const TopViewHome = ({ navigation }) => {
           color: "#fff",
         }}
       >
-        Hi, Jason
+        Hi, {firebaseAuth?.currentUser?.displayName}
       </Text>
       <View style={styles.header}>
         <View style={styles.location}>
@@ -39,7 +59,20 @@ export const TopViewHome = ({ navigation }) => {
                 color: "#fff",
               }}
             >
-              New Lamka, Vengnuam
+              {CurrentAddresses ? (
+                CurrentAddresses?.h.toUpperCase() +
+                ", " +
+                CurrentAddresses?.l.toUpperCase()
+              ) : (
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    color: "#fff",
+                  }}
+                >
+                  Click to add an address
+                </Text>
+              )}
             </Text>
           </Pressable>
         </View>
