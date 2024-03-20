@@ -20,6 +20,7 @@ export default function AddToCart2({
         marginTop: -28,
         paddingVertical: 5,
         backgroundColor: "rgb(240,220,220)",
+        minWidth: 100,
       }}
     >
       <Text

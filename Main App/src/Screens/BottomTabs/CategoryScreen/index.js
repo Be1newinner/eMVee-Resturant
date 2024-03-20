@@ -7,11 +7,13 @@ import {
   Pressable,
 } from "react-native";
 import React from "react";
-import { TotalCategoryList } from "../../../Services/OfflineDataToLive";
 import { TopViewHome } from "../../../Components/TopViewHome";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { useSelector } from "react-redux";
 
 const CategoryScreen = ({ navigation }) => {
+  const TotalCategoryList = useSelector((state) => state.AllCategories);
+
   return (
     <View
       style={{
@@ -32,6 +34,7 @@ const CategoryScreen = ({ navigation }) => {
             }}
           ></View>
         }
+        keyExtractor={(e) => e.k}
         ListHeaderComponent={
           <View>
             <TopViewHome navigation={navigation} />
@@ -77,7 +80,7 @@ const CategoryScreen = ({ navigation }) => {
                   marginRight: 13,
                 }}
               >
-                {item.title}
+                {item.t}
               </Text>
             </View>
             <View
@@ -95,7 +98,7 @@ const CategoryScreen = ({ navigation }) => {
                   borderRadius: 10,
                   backgroundColor: "rgba(240,48,64,0.15)",
                 }}
-                source={item.image}
+                source={item.i}
               />
             </View>
           </Pressable>

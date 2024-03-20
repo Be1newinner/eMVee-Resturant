@@ -1,10 +1,11 @@
 import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-import { AllProductsData } from "../../../Services/OfflineDataToLive";
+import { useSelector } from "react-redux";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderDetail = route.params?.order;
+  const AllProductsData = useSelector(state=>state.AllProducts)
 
   const OrdersItems = {
     orderID: 124596,

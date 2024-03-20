@@ -2,13 +2,8 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import ProfileTopView from "../../../Components/ProfileTopView";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-// import { useDispatch, useSelector } from "react-redux";
-// import { decrement, increment } from "../../../Services/ReduxService/store";
 
 export default function SettingScreen({ navigation }) {
-  // const counter = useSelector((state) => state.counter.counter);
-  // const dispatch = useDispatch();
-
   const MenuItems = [
     {
       title: "Your Profile",
@@ -69,7 +64,7 @@ export default function SettingScreen({ navigation }) {
               style={{
                 backgroundColor: "#fff",
                 padding: 20,
-                marginHorizontal: 20,
+                marginHorizontal: 10,
                 borderRadius: 20,
                 elevation: 5,
                 flexDirection: "row",
@@ -104,25 +99,6 @@ export default function SettingScreen({ navigation }) {
             </Pressable>
           ))}
         </View>
-        {/* <Text>{counter}</Text>
-
-        <Pressable
-          onPress={() => {
-            dispatch(increment());
-            console.log("--");
-          }}
-        >
-          <Text>+</Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() => {
-            dispatch(decrement());
-            console.log("--");
-          }}
-        >
-          <Text>-</Text>
-        </Pressable> */}
       </View>
     </ScrollView>
   );

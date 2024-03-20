@@ -1,16 +1,24 @@
-import { Dimensions, FlatList, Image, Pressable, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import ProductSearchBar from "../../../Components/ProductSearchBar";
 import { useEffect, useState } from "react";
-import {
-  PopularItems,
-  AllProductsData,
-} from "../../../Services/OfflineDataToLive";
 import { AntDesign } from "@expo/vector-icons";
 import TopView from "../../../Components/TopView";
+import { useSelector } from "react-redux";
+
 export default function ProductSearchScreen({ navigation }) {
   const [value, setValue] = useState("");
+  
   const [filteredArray, setFilteredArray] = useState(null);
+  const AllProductsData = useSelector((state) => state.AllProducts);
+  const PopularItems = AllProductsData.filter((e) => e.s === true);
 
   useEffect(() => {
     if (value.length > 1) {

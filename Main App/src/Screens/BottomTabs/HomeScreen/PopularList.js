@@ -7,14 +7,15 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { PopularItems } from "../../../Services/OfflineDataToLive";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { useSelector } from "react-redux";
 
 const PopularList = ({ children, navigation }) => {
+  const PopularItems = useSelector((state) => state.AllProducts);
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
-      data={PopularItems}
+      data={PopularItems.filter((e) => e.s === true)}
       numColumns={2}
       ListHeaderComponent={children}
       contentContainerStyle={{
@@ -38,7 +39,9 @@ const PopularList = ({ children, navigation }) => {
               gap: 5,
             },
           ]}
-          onPress={() => navigation.navigate("ProductDetail")}
+          onPress={() =>
+            navigation.navigate("ProductDetail", { product: item })
+          }
         >
           <Image
             style={{
@@ -47,13 +50,13 @@ const PopularList = ({ children, navigation }) => {
               resizeMode: "cover",
               borderRadius: 10,
             }}
-            source={item.image}
+            source={item.i}
           />
           <Text style={{ fontSize: 17, fontWeight: "500", marginLeft: 5 }}>
-            {item.title}
+            {item.t}
           </Text>
           <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
-            {item.Description}
+            {item.v}
           </Text>
           <Text
             style={{
@@ -62,7 +65,7 @@ const PopularList = ({ children, navigation }) => {
               marginLeft: 5,
             }}
           >
-            ₹{item.Price}/-
+            ₹{item.p}/-
           </Text>
         </Pressable>
       )}

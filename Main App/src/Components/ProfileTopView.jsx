@@ -9,7 +9,7 @@ export default function ProfileTopView() {
         flexDirection: "row",
         gap: 15,
         padding: 30,
-        margin: 20,
+        margin: 10,
         borderRadius: 20,
         alignItems: "center",
         elevation: 5,

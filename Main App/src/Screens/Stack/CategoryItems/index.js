@@ -5,78 +5,60 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  Pressable,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
 import TopView from "../../../Components/TopView";
 import AddToCart2 from "../../../Components/AddToCart2";
+import { useSelector } from "react-redux";
 
 const CategoryItems = ({ navigation, route }) => {
   const { category } = route.params;
-
-  const items = [
-    {
-      title: "Cheese Burger Chicken",
-      key: 0,
-      image: require("../../../../assets/images/category/drinks.webp"),
-      mrp: 770,
-      price: 550,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-    {
-      title: "Ham Burger Chicken",
-      key: 1,
-      image: require("../../../../assets/images/category/drinks.webp"),
-      mrp: 770,
-      price: 550,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-  ];
+  const AllProducts = useSelector((state) => state.AllProducts);
 
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   const handlePress = () => {
     setIsButtonActive(!isButtonActive);
   };
-  const [quantity, setQuantity] = useState(1);
-
-  if (!quantity < 0) {
-  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#e34" }}>
       <TopView
         position={"relative"}
-        title={category.title}
+        title={category.t}
         navigation={navigation}
       />
       <View
         style={{
           height: 120,
         }}
-      />
-      <View style={styles.imageBox}>
+      >
         <View
           style={{
-            marginTop: -100,
+            top: 50,
             position: "absolute",
+            left: Dimensions.get("screen").width / 4 + 20,
+            elevation: 5,
+            zIndex: 2,
+            backgroundColor: "white",
+            borderRadius: 150,
+            overflow: "hidden",
           }}
         >
           <Image
             style={{
-              width: 200,
-              height: 200,
+              width: 150,
+              height: 150,
               objectFit: "contain",
             }}
             width={500}
             height={500}
-            source={category.image}
+            source={category.i}
           />
         </View>
-
+      </View>
+      <View style={styles.imageBox}>
         <ScrollView
           style={{
             paddingTop: 80,
@@ -92,7 +74,7 @@ const CategoryItems = ({ navigation, route }) => {
                 textAlign: "center",
               }}
             >
-              {category.title}
+              {category.t}
             </Text>
             <View
               style={{
@@ -102,10 +84,10 @@ const CategoryItems = ({ navigation, route }) => {
                 paddingBottom: 80,
               }}
             >
-              {items?.map((item) => (
+              {AllProducts?.filter((e) => e.c == category.k)?.map((item) => (
                 <View
                   onPress={handlePress}
-                  key={item.key}
+                  key={item.k}
                   style={{
                     justifyContent: "space-between",
                     flexDirection: "row",
@@ -127,7 +109,7 @@ const CategoryItems = ({ navigation, route }) => {
                         // fontWeight: 400,
                       }}
                     >
-                      {item.title}
+                      {item.t}
                     </Text>
                     <View
                       style={{
@@ -141,7 +123,7 @@ const CategoryItems = ({ navigation, route }) => {
                           fontSize: 18,
                         }}
                       >
-                        ₹{item.price}
+                        ₹{item.p}
                       </Text>
                       <Text
                         style={{
@@ -149,7 +131,7 @@ const CategoryItems = ({ navigation, route }) => {
                           textDecorationLine: "line-through",
                         }}
                       >
-                        ₹{item.mrp}
+                        ₹{item.m}
                       </Text>
                     </View>
                     <Text
@@ -158,34 +140,37 @@ const CategoryItems = ({ navigation, route }) => {
                         fontSize: 16,
                       }}
                     >
-                      {item.description}
+                      {item.d}
                     </Text>
                   </View>
                   <View
                     style={{
                       gap: 10,
+                      justifyContent: "center",
                     }}
                   >
-                    <View
-                      style={{
-                        overflow: "hidden",
-                        borderRadius: 10,
-                        elevation: 5,
-                      }}
-                    >
-                      <Image
+                    {item.i && (
+                      <View
                         style={{
-                          width: 130,
-                          height: 130,
-                          borderWidth: 2,
-                          borderColor: "rgba(0,0,0,0.1)",
+                          overflow: "hidden",
                           borderRadius: 10,
+                          elevation: 5,
                         }}
-                        source={item.image}
-                      />
-                    </View>
+                      >
+                        <Image
+                          style={{
+                            width: 130,
+                            height: 130,
+                            borderWidth: 2,
+                            borderColor: "rgba(0,0,0,0.1)",
+                            borderRadius: 10,
+                          }}
+                          source={item.i}
+                        />
+                      </View>
+                    )}
 
-                   <AddToCart2 />
+                    <AddToCart2 />
                   </View>
                 </View>
               ))}
@@ -208,5 +193,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 5,
     height: Dimensions.get("screen").height - 150,
+    overflow: "hidden",
   },
 });

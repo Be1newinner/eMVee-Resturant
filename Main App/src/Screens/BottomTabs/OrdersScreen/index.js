@@ -1,9 +1,12 @@
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-import { AllProductsData } from "../../../Services/OfflineDataToLive";
+import { useSelector } from "react-redux";
 
 export default function OrdersScreen({ navigation }) {
+
+  const AllProductsData = useSelector(state=>state.AllProducts)
+
   const OrdersItems = [
     {
       orderID: 124596,

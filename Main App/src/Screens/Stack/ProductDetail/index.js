@@ -6,15 +6,8 @@ import AddToCart from "../../../Components/AddToCart";
 import BottomOrderBar from "../../../Components/BottomOrderBar";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 
-export default function ProductDetail({ navigation, item = [] }) {
-  const ProductData = {
-    image: require("../../../../assets/images/category/drinks.webp"),
-    title: "Chicken Biryani",
-    mrp: 770,
-    price: 550,
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  };
+export default function ProductDetail({ navigation, product, route }) {
+  const ProductData = route.params.product;
 
   const [Quantity, setQuantity] = useState(0);
 
@@ -84,7 +77,7 @@ export default function ProductDetail({ navigation, item = [] }) {
           }}
         />
         <Image
-          source={ProductData.image}
+          source={ProductData.i}
           style={{
             width: Dimensions.get("screen").width,
             height: "auto",
@@ -110,7 +103,7 @@ export default function ProductDetail({ navigation, item = [] }) {
             fontWeight: 600,
           }}
         >
-          {ProductData.title}
+          {ProductData.t}
         </Text>
         <Text
           style={{
@@ -118,7 +111,7 @@ export default function ProductDetail({ navigation, item = [] }) {
             lineHeight: 18,
           }}
         >
-          {ProductData.description}
+          {ProductData.d}
         </Text>
 
         <View
@@ -151,7 +144,7 @@ export default function ProductDetail({ navigation, item = [] }) {
                   fontSize: 26,
                 }}
               >
-                ₹{ProductData.price}
+                ₹{ProductData.p}
               </Text>
               <Text
                 style={{
@@ -160,7 +153,7 @@ export default function ProductDetail({ navigation, item = [] }) {
                   textDecorationLine: "line-through",
                 }}
               >
-                ₹{ProductData.mrp}
+                ₹{ProductData.m}
               </Text>
             </View>
           </View>
