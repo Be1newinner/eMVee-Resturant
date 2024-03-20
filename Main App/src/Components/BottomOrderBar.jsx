@@ -1,14 +1,17 @@
 import { Button } from "@ui-kitten/components";
 import { Dimensions, Text, View } from "react-native";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
+import { useSelector } from "react-redux";
 
 export default function BottomOrderBar({ bottom = 0, navigation }) {
+  const selector = useSelector((state) => state.Cart);
+
   const totalData = {
-    price: 140,
-    items: 2,
+    price: selector.subtotal,
+    items: selector.qty,
   };
 
-  return (
+  return selector.qty ? (
     <View
       style={{
         width: Dimensions.get("screen").width - 20,
@@ -56,5 +59,5 @@ export default function BottomOrderBar({ bottom = 0, navigation }) {
         View Cart
       </Button>
     </View>
-  );
+  ) : null;
 }

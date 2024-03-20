@@ -70,6 +70,7 @@ const CategoryScreen = ({ navigation }) => {
                 height: "100%",
                 backgroundColor: "rgba(0,0,0,0.5)",
                 justifyContent: "center",
+                padding: 20,
               }}
             >
               <Text
@@ -91,15 +92,26 @@ const CategoryScreen = ({ navigation }) => {
                 borderColor: "rgba(0,0,0,0.1)",
               }}
             >
-              <Image
-                style={{
-                  width: Dimensions.get("screen").width / 2 - 17,
-                  height: Dimensions.get("screen").width / 2 - 17,
-                  borderRadius: 10,
-                  backgroundColor: "rgba(240,48,64,0.15)",
-                }}
-                source={item.i}
-              />
+              {item.i ? (
+                <Image
+                  style={{
+                    width: Dimensions.get("screen").width / 2 - 17,
+                    height: Dimensions.get("screen").width / 2 - 17,
+                    borderRadius: 10,
+                    backgroundColor: "rgba(240,48,64,0.15)",
+                  }}
+                  source={item.i}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: Dimensions.get("screen").width / 2 - 17,
+                    height: Dimensions.get("screen").width / 2 - 17,
+                    borderRadius: 10,
+                    backgroundColor: "rgba(240,48,64,0.15)",
+                  }}
+                />
+              )}
             </View>
           </Pressable>
         )}

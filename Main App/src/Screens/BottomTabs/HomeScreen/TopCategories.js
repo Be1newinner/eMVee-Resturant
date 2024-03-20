@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 
 const ProductItems = () => {
   const navigation = useNavigation();
@@ -16,19 +17,56 @@ const ProductItems = () => {
   return (
     <View>
       <FlatList
-        style={styles.product}
+        contentContainerStyle={{
+          gap: 20,
+        }}
         showsHorizontalScrollIndicator={false}
         data={TotalCategoryList.filter((e) => e.s === true)}
         horizontal
-        renderItem={({ item, index }) => (
+        keyExtractor={(e) => e.k}
+        renderItem={({ item }) => (
           <Pressable
             onPress={() =>
               navigation.navigate("CategoryItems", { category: item })
             }
-            style={styles.imageList}
+            style={{
+              maxWidth: 100,
+              alignItems: "center",
+            }}
           >
-            <Image style={styles.productImage} source={item.i} />
-            <Text style={{ marginTop: 10, fontSize: 12 }}>{item.t}</Text>
+            {item.i ? (
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                }}
+                source={item.i}
+              />
+            ) : (
+              <View
+                style={{
+                  width: 50,
+                  height: 50,
+                  backgroundColor: GlobalColors.themeColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 50,
+                  elevation: 5,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.t.slice(0, 1)}
+                </Text>
+              </View>
+            )}
+            <Text style={{ marginTop: 10, fontSize: 12, textAlign: "center" }}>
+              {item.t}
+            </Text>
           </Pressable>
         )}
       />
@@ -37,15 +75,3 @@ const ProductItems = () => {
 };
 
 export default ProductItems;
-
-const styles = StyleSheet.create({
-  imageList: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 25,
-  },
-  productImage: {
-    width: 50,
-    height: 45,
-  },
-});

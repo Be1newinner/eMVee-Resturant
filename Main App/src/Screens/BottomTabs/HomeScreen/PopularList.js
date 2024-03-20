@@ -5,6 +5,7 @@ import {
   FlatList,
   Pressable,
   Image,
+  Dimensions,
 } from "react-native";
 import React from "react";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
@@ -37,21 +38,44 @@ const PopularList = ({ children, navigation }) => {
               marginRight: index % 2 ? 10 : 0,
               marginLeft: 10,
               gap: 5,
+              maxWidth: Dimensions.get("screen").width / 2 - 15,
             },
           ]}
           onPress={() =>
             navigation.navigate("ProductDetail", { product: item })
           }
         >
-          <Image
-            style={{
-              width: "100%",
-              height: 130,
-              resizeMode: "cover",
-              borderRadius: 10,
-            }}
-            source={item.i}
-          />
+          {item.i ? (
+            <Image
+              style={{
+                width: "100%",
+                height: 130,
+                resizeMode: "cover",
+                borderRadius: 10,
+              }}
+              source={item.i}
+            />
+          ) : (
+            <View
+              style={{
+                width: "100%",
+                height: 130,
+                resizeMode: "cover",
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 34,
+                  fontWeight: 700,
+                }}
+              >
+                {item.t.slice(0, 1)}
+              </Text>
+            </View>
+          )}
           <Text style={{ fontSize: 17, fontWeight: "500", marginLeft: 5 }}>
             {item.t}
           </Text>

@@ -46,16 +46,37 @@ const CategoryItems = ({ navigation, route }) => {
             overflow: "hidden",
           }}
         >
-          <Image
-            style={{
-              width: 150,
-              height: 150,
-              objectFit: "contain",
-            }}
-            width={500}
-            height={500}
-            source={category.i}
-          />
+          {category.i ? (
+            <Image
+              style={{
+                width: 150,
+                height: 150,
+                objectFit: "contain",
+              }}
+              width={500}
+              height={500}
+              source={category.i}
+            />
+          ) : (
+            <View
+              style={{
+                width: 150,
+                height: 150,
+                objectFit: "contain",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                {category.t}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
       <View style={styles.imageBox}>

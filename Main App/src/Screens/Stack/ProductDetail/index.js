@@ -1,15 +1,38 @@
 import { Dimensions, Image, Pressable, Text, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import AddToCart from "../../../Components/AddToCart";
 import BottomOrderBar from "../../../Components/BottomOrderBar";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { useDispatch, useSelector } from "react-redux";
+import { addInCart } from "../../../Services/Slices/CartSlice";
 
-export default function ProductDetail({ navigation, product, route }) {
+export default function ProductDetail({ navigation, route }) {
   const ProductData = route.params.product;
+  const selector = useSelector((state) => state.Cart);
 
-  const [Quantity, setQuantity] = useState(0);
+  const [Quantity, setQuantity] = useState(
+    selector.items[ProductData.k]?.qty || 0
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (Quantity >= 0) {
+      dispatch(
+        addInCart({
+          ...ProductData,
+          qty: Quantity,
+          total: Quantity * ProductData.p,
+        })
+      );
+    }
+  }, [Quantity]);
+
+  useEffect(() => {
+    setQuantity(selector.items[ProductData.k]?.qty || 0);
+  }, [selector]);
 
   return (
     <View
@@ -76,18 +99,43 @@ export default function ProductDetail({ navigation, product, route }) {
             borderBottomRightRadius: 20,
           }}
         />
-        <Image
-          source={ProductData.i}
-          style={{
-            width: Dimensions.get("screen").width,
-            height: "auto",
-            aspectRatio: 1.3,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-            borderColor: "rgba(64,96,144,0.3)",
-            borderWidth: 2,
-          }}
-        />
+        {ProductData.i ? (
+          <Image
+            source={ProductData.i}
+            style={{
+              width: Dimensions.get("screen").width,
+              height: "auto",
+              aspectRatio: 1.3,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              borderColor: "rgba(64,96,144,0.3)",
+              borderWidth: 2,
+            }}
+          />
+        ) : (
+          <View
+            style={{
+              width: Dimensions.get("screen").width,
+              height: "auto",
+              aspectRatio: 1.3,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              borderColor: "rgba(64,96,144,0.3)",
+              borderWidth: 2,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: 700,
+                fontSize: 22,
+              }}
+            >
+              {ProductData.t}
+            </Text>
+          </View>
+        )}
       </View>
       <View
         style={{

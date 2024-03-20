@@ -6,45 +6,20 @@ import AddToCart from "../../../Components/AddToCart";
 import { AntDesign } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
 import { OrderConfirmModal } from "../../../Components/OrderConfirmModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addInCart } from "../../../Services/Slices/CartSlice";
 
 export default function CartScreen({ navigation }) {
-  const CartData = [
-    {
-      image: require("../../../../assets/images/category/drinks.webp"),
-      title: "Spicy Chiken Wings",
-      quantity: 2,
-      price: 120,
-      key: 0,
-    },
-    {
-      image: require("../../../../assets/images/category/drinks.webp"),
-      title: "Spicy Chiken Wings",
-      quantity: 2,
-      price: 120,
-      key: 1,
-    },
-    {
-      image: require("../../../../assets/images/category/drinks.webp"),
-      title: "Spicy Chiken Wings",
-      quantity: 2,
-      price: 120,
-      key: 2,
-    },
-    {
-      image: require("../../../../assets/images/category/drinks.webp"),
-      title: "Spicy Chiken Wings",
-      quantity: 2,
-      price: 120,
-      key: 3,
-    },
-  ];
+  const selector = useSelector((state) => state.Cart);
+  const dispatch = useDispatch();
 
   const cartTotal = {
-    total: 150,
-    subtotal: 150,
-    tax: 10,
-    delivery: 0,
+    total: selector?.total || 0,
+    subtotal: selector?.subtotal || 0,
+    tax: selector?.tax || 0,
+    delivery: selector?.delivery || 0,
+    discount: selector?.discount || 0,
   };
 
   const ConfirmOrder = () => {
@@ -52,6 +27,12 @@ export default function CartScreen({ navigation }) {
   };
 
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (Object.values(selector.items).filter((e) => e.qty > 0).length < 1) {
+      navigation.goBack();
+    }
+  }, [selector]);
 
   return (
     <ScrollView
@@ -74,78 +55,113 @@ export default function CartScreen({ navigation }) {
           gap: 10,
         }}
       >
-        {CartData?.map((item) => (
-          <View
-            key={item.key}
-            style={{
-              padding: 10,
-              backgroundColor: "#fff",
-              borderRadius: 20,
-              elevation: 5,
-              flexDirection: "row",
-              gap: 20,
-            }}
-          >
+        {Object.values(selector.items)
+          .filter((e) => e.qty > 0)
+          ?.map((item) => (
             <View
+              key={item.k}
               style={{
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: "rgba(0,0,0,0.25)",
+                padding: 10,
+                backgroundColor: "#fff",
+                borderRadius: 20,
+                elevation: 5,
+                flexDirection: "row",
+                gap: 20,
               }}
             >
-              <Image
-                source={item.image}
+              <View
                 style={{
-                  width: 80,
-                  height: 80,
                   borderRadius: 10,
-                }}
-              />
-            </View>
-            <View
-              style={{
-                justifyContent: "space-between",
-                flex: 1,
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: 500,
-                  fontSize: 16,
-                  color: GlobalColors.themeColor,
+                  borderWidth: 2,
+                  borderColor: "rgba(0,0,0,0.25)",
                 }}
               >
-                {item.title}
-              </Text>
-              <Text>
-                {item.quantity} x ₹{item.price}
-              </Text>
-              <AddToCart Quantity={1} variant={1} />
-            </View>
-            <View
-              style={{
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-                marginRight: 5,
-              }}
-            >
-              <AntDesign
-                name="closecircleo"
-                size={24}
-                color={GlobalColors.themeColor}
-              />
-              <Text
+                {item.i ? (
+                  <Image
+                    source={item.i}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 10,
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 10,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      elevation: 5,
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 500,
+                        fontSize: 32,
+                        color: GlobalColors.themeColor,
+                      }}
+                    >
+                      {item.t.slice(0, 1)}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <View
                 style={{
-                  fontWeight: 600,
-                  color: GlobalColors.themeColor,
-                  fontSize: 16,
+                  justifyContent: "space-between",
+                  flex: 1,
                 }}
               >
-                ₹{item.price * item.quantity}/-
-              </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                    color: GlobalColors.themeColor,
+                  }}
+                >
+                  {item.t}
+                </Text>
+                <Text>
+                  {item.qty} x ₹{item.p}
+                </Text>
+                <AddToCart Quantity={item.qty} item={item} variant={1} />
+              </View>
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                  marginRight: 5,
+                }}
+              >
+                <AntDesign
+                  name="closecircleo"
+                  size={24}
+                  color={GlobalColors.themeColor}
+                  onPress={() => {
+                    dispatch(
+                      addInCart({
+                        ...item,
+                        qty: 0,
+                        total: 0,
+                      })
+                    );
+                  }}
+                />
+                <Text
+                  style={{
+                    fontWeight: 600,
+                    color: GlobalColors.themeColor,
+                    fontSize: 16,
+                  }}
+                >
+                  ₹{item.p * item.qty}/-
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
 
         <View
           style={{
@@ -180,6 +196,31 @@ export default function CartScreen({ navigation }) {
               ₹{cartTotal.subtotal}/-
             </Text>
           </View>
+          {cartTotal.discount && (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                flex: 1,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                Discount
+              </Text>
+              <Text
+                style={{
+                  fontWeight: 500,
+                }}
+              >
+                - ₹{cartTotal.discount}/-
+              </Text>
+            </View>
+          )}
           <View
             style={{
               flexDirection: "row",
@@ -225,7 +266,9 @@ export default function CartScreen({ navigation }) {
                   cartTotal.delivery == 0 ? GlobalColors.themeColor : "black",
               }}
             >
-              {cartTotal.delivery == 0 ? "Free" : cartTotal.delivery}
+              {cartTotal.delivery == 0
+                ? "Free"
+                : "₹" + cartTotal.delivery + "/-"}
             </Text>
           </View>
           <View
@@ -265,6 +308,7 @@ export default function CartScreen({ navigation }) {
           position: "relative",
           bottom: 0,
           left: 10,
+          marginBottom: 40,
         }}
         onPress={() => setVisible(true)}
       >
