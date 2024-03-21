@@ -7,7 +7,6 @@ import { firebaseAuth } from "../../../Infrastructure/firebase.config";
 import {
   fetchAllCategories,
   fetchAllProducts,
-  fetchPopularProducts,
 } from "../../../Services/AllProducts/AllProductsService";
 import { addProducts } from "../../../Services/Slices/AllProductsSlice";
 import { addCategories } from "../../../Services/Slices/AllCategoriesSlice";

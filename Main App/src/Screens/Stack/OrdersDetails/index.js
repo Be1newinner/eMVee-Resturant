@@ -4,26 +4,27 @@ import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
 
 export default function OrdersDetails({ navigation, route }) {
-  const OrderDetail = route.params?.order;
-  const AllProductsData = useSelector(state=>state.AllProducts)
+  const OrderID = route.params?.order;
+  const OrdersSelector = useSelector((state) => state.Orders);
+  const OrderDetails = OrdersSelector[OrderID];
+  console.log(OrderID, Object.keys(OrderDetails.status).includes("0"));
 
   const OrdersItems = {
-    orderID: 124596,
-    status: 0,
-    items: AllProductsData.slice(0, 2).map((e) => ({
-      ...e,
-      quantity: Math.floor(Math.random() * 10),
-      mrp: e.Price + 50,
-    })),
-    subtotal: 500,
-    taxes: 55,
-    delivery: 0,
-    total: 555,
-    saving: 50,
+    status: Object.keys(OrderDetails.status).includes("2")
+      ? 2
+      : Object.keys(OrderDetails.status).includes("1")
+      ? 1
+      : 0,
+    items: Object.values(OrderDetails?.i) || [],
+    subtotal: OrderDetails?.p?.s,
+    taxes: OrderDetails?.p?.x,
+    delivery: OrderDetails?.p?.c,
+    total: OrderDetails?.p?.t,
+    saving: 0,
     date: new Date().toLocaleString(),
-    contact: 8130506284,
-    deliver:
-      "Home, H80/9, M1 Block, Near Hunar Hospital, Sangam Vihar, New Delhi, 110062",
+    contact: OrderDetails?.u?.p,
+    reciever: OrderDetails?.u?.n,
+    deliver: OrderDetails?.u?.a,
   };
 
   return (
@@ -49,7 +50,7 @@ export default function OrdersDetails({ navigation, route }) {
                 fontWeight: 800,
               }}
             >
-              Order ID #{OrderDetail?.orderID}
+              Order ID #{OrderID}
             </Text>
           }
           position="relative"
@@ -125,9 +126,9 @@ export default function OrdersDetails({ navigation, route }) {
                 }}
               >
                 {OrdersItems.status === 1
-                  ? "On Delivery"
+                  ? "Out for Delivery"
                   : OrdersItems.status === 1
-                  ? "Your Order is Delivered"
+                  ? "Order Delivered"
                   : "Processing"}
               </Text>
             </View>
@@ -147,14 +148,37 @@ export default function OrdersDetails({ navigation, route }) {
                 key={index}
                 style={{ height: "auto", flexDirection: "row", gap: 10 }}
               >
-                <Image
-                  source={product.image}
-                  style={{
-                    height: 70,
-                    width: 70,
-                    borderRadius: 8,
-                  }}
-                />
+                {product.i ? (
+                  <Image
+                    source={product.i}
+                    style={{
+                      height: 70,
+                      width: 70,
+                      borderRadius: 8,
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: GlobalColors.themeColor,
+                      height: "auto",
+                      aspectRatio: 1,
+                      borderRadius: 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 700,
+                        color: "#fff",
+                      }}
+                    >
+                      {product.t.slice(0, 1)}
+                    </Text>
+                  </View>
+                )}
                 <View
                   style={{
                     gap: 5,
@@ -168,7 +192,7 @@ export default function OrdersDetails({ navigation, route }) {
                       fontWeight: 600,
                     }}
                   >
-                    {product.title}
+                    {product.t}
                   </Text>
                   <View
                     style={{
@@ -183,18 +207,20 @@ export default function OrdersDetails({ navigation, route }) {
                         fontWeight: 600,
                       }}
                     >
-                      ₹{product?.Price}/-
+                      ₹{product?.p}/-
                     </Text>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: GlobalColors.productText,
-                        fontWeight: 600,
-                        textDecorationLine: "line-through",
-                      }}
-                    >
-                      ₹{product?.mrp}/-
-                    </Text>
+                    {product?.m && (
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: GlobalColors.productText,
+                          fontWeight: 600,
+                          textDecorationLine: "line-through",
+                        }}
+                      >
+                        ₹{product?.m}/-
+                      </Text>
+                    )}
                   </View>
                 </View>
                 <View
@@ -210,7 +236,7 @@ export default function OrdersDetails({ navigation, route }) {
                       fontWeight: 600,
                     }}
                   >
-                    x{product?.quantity}/-
+                    x{product?.qty}/-
                   </Text>
                 </View>
               </View>
@@ -312,30 +338,32 @@ export default function OrdersDetails({ navigation, route }) {
               </Text>
             </View>
 
-            <View
-              appearance="outline"
-              status="danger"
-              style={{
-                width: Dimensions.get("screen").width - 100,
-                marginLeft: "auto",
-                marginRight: "auto",
-                marginVertical: 10,
-                borderWidth: 1,
-                borderColor: GlobalColors.themeColor,
-                backgroundColor: "rgba(240,24,64,0.11)",
-                borderRadius: 5,
-                padding: 5,
-                alignItems: "center",
-              }}
-            >
-              <Text
+            {OrdersItems.saving != 0 && (
+              <View
+                appearance="outline"
+                status="danger"
                 style={{
-                  color: GlobalColors.themeColor,
+                  width: Dimensions.get("screen").width - 100,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  marginVertical: 10,
+                  borderWidth: 1,
+                  borderColor: GlobalColors.themeColor,
+                  backgroundColor: "rgba(240,24,64,0.11)",
+                  borderRadius: 5,
+                  padding: 5,
+                  alignItems: "center",
                 }}
               >
-                Total Saving{"   "}₹{OrdersItems.saving}/-
-              </Text>
-            </View>
+                <Text
+                  style={{
+                    color: GlobalColors.themeColor,
+                  }}
+                >
+                  Total Saving{"   "}₹{OrdersItems.saving}/-
+                </Text>
+              </View>
+            )}
           </View>
           <View
             style={{
@@ -365,7 +393,7 @@ export default function OrdersDetails({ navigation, route }) {
                   fontSize: 16,
                 }}
               >
-                {OrdersItems?.orderID}
+                {OrderID}
               </Text>
             </View>
             <View>
@@ -391,7 +419,7 @@ export default function OrdersDetails({ navigation, route }) {
                   color: "rgba(0,0,0,0.7)",
                 }}
               >
-                Contact Number
+                Receiver Name
               </Text>
               <Text
                 style={{
@@ -399,7 +427,24 @@ export default function OrdersDetails({ navigation, route }) {
                   fontSize: 16,
                 }}
               >
-                {OrdersItems?.contact.toString().slice(0, 5)}xxxxx
+                {OrdersItems?.reciever}
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  color: "rgba(0,0,0,0.7)",
+                }}
+              >
+                Receiver Number
+              </Text>
+              <Text
+                style={{
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                {OrdersItems?.contact.toString()}
               </Text>
             </View>
             <View>
@@ -416,7 +461,7 @@ export default function OrdersDetails({ navigation, route }) {
                   fontSize: 16,
                 }}
               >
-                {OrdersItems?.deliver}
+                {OrdersItems?.deliver.toUpperCase()}
               </Text>
             </View>
           </View>

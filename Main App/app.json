@@ -23,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.be1newinner.emveerestaurant",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/logo.png"

@@ -1,15 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { produce } from "immer";
 
-const initialState = [];
+const initialState = {};
 
 export const OrdersSlice = createSlice({
   name: "Orders",
   initialState,
   reducers: {
-    addNewOrder(state, action) {
-      state.push(...action.payload);
+    addOrder(state, action) {
+      return produce(state, (draft) => {
+        let payload = {};
+        try {
+          payload = JSON.parse(action.payload);
+        } catch (error) {
+          console.log("unknwon error!");
+        }
+
+        if (payload.key)
+          draft[payload.key] = {
+            ...state[payload.key],
+            ...payload.value,
+            orderID: payload.key,
+          };
+      });
     },
   },
 });
 
-export const { addNewOrder } = OrdersSlice.actions;
+export const { addOrder } = OrdersSlice.actions;

@@ -4,12 +4,14 @@ import {
   firebaseAuth,
   firestoreDB,
 } from "../../Infrastructure/firebase.config";
+import { useDispatch } from "react-redux";
+import { addOrder } from "../Slices/OrdersSlice";
 
 export default function RealtimeOrdersController() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     (async function () {
-      const Orders = {};
-
       const q = await query(
         collection(firestoreDB, "or4"),
         where("ui", "==", firebaseAuth.currentUser.uid)
@@ -21,21 +23,27 @@ export default function RealtimeOrdersController() {
 
       onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          Orders[doc.id] = {
-            ...doc.data(),
-            id: doc.id,
-          };
+          dispatch(
+            addOrder(
+              JSON.stringify({
+                key: doc.id,
+                value: doc.data(),
+              })
+            )
+          );
         });
-        console.log("Current orders: ", Orders, "\n\n");
       });
       onSnapshot(q1, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          Orders[doc.id] = {
-            ...Orders[doc.id],
-            status: { ...doc.data() },
-          };
+          dispatch(
+            addOrder(
+              JSON.stringify({
+                key: doc.id,
+                value: { status: doc.data() },
+              })
+            )
+          );
         });
-        console.log("Current orders: ", Orders);
       });
     })();
   }, []);
