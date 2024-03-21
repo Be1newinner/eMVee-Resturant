@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, ButtonGroup, Card, Modal, Text } from "@ui-kitten/components";
+import { Button, Card, Modal, Text } from "@ui-kitten/components";
 import { View } from "react-native";
 
 export const OrderConfirmModal = ({
@@ -32,6 +32,9 @@ export const OrderConfirmModal = ({
               fontWeight: 700,
             }}
           >
+            {/* <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
+              {item.v}
+            </Text> */}
             Confirm Order?
           </Text>
           <Text>Order Can not be cancelled!</Text>
@@ -66,8 +69,8 @@ export const OrderConfirmModal = ({
           </Button>
           <Button
             onPress={() => {
-              setVisible(false);
               onConfirm();
+              setVisible(false);
             }}
             status="danger"
             style={{

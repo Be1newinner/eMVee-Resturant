@@ -9,10 +9,13 @@ import { OrderConfirmModal } from "../../../Components/OrderConfirmModal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addInCart } from "../../../Services/Slices/CartSlice";
+// import { addNewOrder } from "../../../Services/Slices/OrdersSlice";
+import addOrderController from "../../../Services/OrdersController/addOrderController";
 
 export default function CartScreen({ navigation }) {
   const selector = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
+  const AddressSelector = useSelector((state) => state.Address);
 
   const cartTotal = {
     total: selector?.total || 0,
@@ -22,8 +25,16 @@ export default function CartScreen({ navigation }) {
     discount: selector?.discount || 0,
   };
 
-  const ConfirmOrder = () => {
-    navigation.navigate("OrderConfirm");
+  const ConfirmOrder = async () => {
+    const response = await addOrderController({
+      CartSelector: selector,
+      AddressSelector,
+    });
+
+    if (response.status === 200) {
+      navigation.navigate("OrderConfirm", { orderID: response.orderID });
+      // dispatch(addInCart(null));
+    }
   };
 
   const [visible, setVisible] = useState(false);
@@ -55,6 +66,14 @@ export default function CartScreen({ navigation }) {
           gap: 10,
         }}
       >
+        <Text
+          style={{
+            fontWeight: 600,
+            marginLeft: 10,
+          }}
+        >
+          Cart Items
+        </Text>
         {Object.values(selector.items)
           .filter((e) => e.qty > 0)
           ?.map((item) => (
@@ -163,6 +182,18 @@ export default function CartScreen({ navigation }) {
             </View>
           ))}
 
+        {/* ------------------------------------------------------------------ */}
+
+        <Text
+          style={{
+            fontWeight: 600,
+            marginLeft: 10,
+            marginTop: 10,
+          }}
+        >
+          Cart Total
+        </Text>
+
         <View
           style={{
             padding: 10,
@@ -170,7 +201,6 @@ export default function CartScreen({ navigation }) {
             borderRadius: 10,
             elevation: 5,
             gap: 10,
-            marginTop: 20,
           }}
         >
           <View
@@ -300,6 +330,119 @@ export default function CartScreen({ navigation }) {
             </Text>
           </View>
         </View>
+
+        {/* ------------------------------------------------------------------ */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginHorizontal: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: 600,
+              marginTop: 10,
+            }}
+          >
+            Reciever Details
+          </Text>
+          <Text
+            style={{
+              fontWeight: 600,
+              marginTop: 10,
+              color: "rgb(50,100,256)",
+            }}
+            onPress={() => navigation.navigate("AddAddressScreen")}
+          >
+            Change Details
+          </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            backgroundColor: "#fff",
+            borderRadius: 10,
+            elevation: 5,
+            gap: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              flex: 1,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: 500,
+                fontSize: 16,
+              }}
+            >
+              Name
+            </Text>
+            <Text
+              style={{
+                fontWeight: 500,
+              }}
+            >
+              {AddressSelector.addresses[AddressSelector.default]?.n}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              flex: 1,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: 500,
+                fontSize: 16,
+              }}
+            >
+              Phone
+            </Text>
+            <Text
+              style={{
+                fontWeight: 500,
+              }}
+            >
+              {AddressSelector.addresses[AddressSelector.default]?.p}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              flex: 1,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: 500,
+                fontSize: 16,
+              }}
+            >
+              Address
+            </Text>
+            <Text
+              style={{
+                fontWeight: 500,
+              }}
+            >
+              {AddressSelector.addresses[
+                AddressSelector.default
+              ]?.h.toUpperCase() +
+                ", " +
+                AddressSelector.addresses[
+                  AddressSelector.default
+                ]?.l.toUpperCase()}
+            </Text>
+          </View>
+        </View>
       </View>
       <Button
         status="danger"
@@ -317,7 +460,7 @@ export default function CartScreen({ navigation }) {
       <OrderConfirmModal
         visible={visible}
         setVisible={setVisible}
-        onConfirm={ConfirmOrder}
+        onConfirm={() => ConfirmOrder()}
       />
     </ScrollView>
   );

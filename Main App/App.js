@@ -18,7 +18,6 @@ export default function App() {
         <SafeAreaView
           style={{
             flex: 1,
-            // marginTop: StatusBar.currentHeight,
           }}
         >
           <ApplicationProvider {...eva} theme={eva.light}>

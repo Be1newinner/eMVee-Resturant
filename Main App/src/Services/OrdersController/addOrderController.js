@@ -1,13 +1,37 @@
-import { Timestamp, collection, doc, setDoc } from "firebase/firestore";
-import { firestoreDB, addDoc } from "../../Infrastructure/firebase.config";
+import { Timestamp, collection, doc, setDoc, addDoc } from "firebase/firestore";
+import {
+  firestoreDB,
+  firebaseAuth,
+} from "../../Infrastructure/firebase.config";
 
-export default async function addOrderController({ order, uid, address }) {
+export default async function addOrderController({
+  AddressSelector,
+  CartSelector,
+}) {
   try {
-    const docRef = await addDoc(collection(firestoreDB, "or4"), {
-      ...order,
-      u: uid,
-      ad: address,
-    });
+    const CurrentAddress = AddressSelector.addresses.filter(
+      (e) => e.k == AddressSelector.default
+    )[0];
+
+    const OrderToSend = {
+      p: {
+        c: CartSelector?.delivery,
+        d: CartSelector?.discount,
+        q: CartSelector?.qty,
+        s: CartSelector?.subtotal,
+        t: CartSelector?.total,
+        x: CartSelector?.tax,
+      },
+      i: CartSelector.items,
+      u: {
+        u: firebaseAuth.currentUser.uid,
+        n: CurrentAddress.n,
+        p: CurrentAddress.p,
+        a: CurrentAddress.h + ", " + CurrentAddress.l,
+      },
+    };
+
+    const docRef = await addDoc(collection(firestoreDB, "or4"), OrderToSend);
 
     const orderID = await docRef.id;
 
@@ -15,8 +39,22 @@ export default async function addOrderController({ order, uid, address }) {
       0: new Timestamp.now(),
     });
 
-    console.log("Order ID", docRef2);
+    if (orderID) {
+      return {
+        status: 200,
+        orderID,
+      };
+    } else {
+      return {
+        status: 501,
+        error: "Unknown Error!",
+      };
+    }
   } catch (error) {
-    console.log("Adding Doc Error!");
+    console.log("Creating order Error!");
+    return {
+      status: 501,
+      error: "Unknown Error!",
+    };
   }
 }

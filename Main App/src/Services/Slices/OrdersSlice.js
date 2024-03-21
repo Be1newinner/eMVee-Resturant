@@ -6,10 +6,10 @@ export const OrdersSlice = createSlice({
   name: "Orders",
   initialState,
   reducers: {
-    addAllOrders(state, action) {
+    addNewOrder(state, action) {
       state.push(...action.payload);
     },
   },
 });
 
-export const { addAllOrders } = OrdersSlice.actions;
+export const { addNewOrder } = OrdersSlice.actions;

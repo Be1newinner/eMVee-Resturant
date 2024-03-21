@@ -2,10 +2,17 @@ import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 
 export default function OrdersScreen({ navigation }) {
+  const AllProductsData = useSelector((state) => state.AllProducts);
 
-  const AllProductsData = useSelector(state=>state.AllProducts)
+  const OrdersSelector = useSelector((state) => state.Orders);
+
+  useEffect(() => {
+    console.log("OrdersSelector => ", OrdersSelector);
+  }, [OrdersSelector]);
 
   const OrdersItems = [
     {
@@ -40,13 +47,16 @@ export default function OrdersScreen({ navigation }) {
   return (
     <FlatList
       ListHeaderComponent={
-        <TopView
-          navigation={navigation}
-          title="My Orders"
-          position="relative"
-          color="#000"
-          style={{ marginBottom: 20 }}
-        />
+        <>
+          <TopView
+            navigation={navigation}
+            title="My Orders"
+            position="relative"
+            color="#000"
+            style={{ marginBottom: 20 }}
+          />
+          <RealtimeOrdersController />
+        </>
       }
       ListFooterComponent={
         <View

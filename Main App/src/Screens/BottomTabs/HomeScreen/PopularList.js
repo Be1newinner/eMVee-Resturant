@@ -76,12 +76,16 @@ const PopularList = ({ children, navigation }) => {
               </Text>
             </View>
           )}
-          <Text style={{ fontSize: 17, fontWeight: "500", marginLeft: 5 }}>
+          <Text
+            style={{ fontSize: 17, fontWeight: "500", marginLeft: 5, flex: 1 }}
+          >
             {item.t}
           </Text>
-          <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
-            {item.v}
-          </Text>
+          {item.v && (
+            <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
+              {item.v}
+            </Text>
+          )}
           <Text
             style={{
               fontWeight: "500",
