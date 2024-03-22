@@ -33,6 +33,3 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-
-# firebase-file-to create
-src/Infrastructure/firebase.config.js

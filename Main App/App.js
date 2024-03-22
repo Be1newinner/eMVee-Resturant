@@ -8,6 +8,7 @@ import { store } from "./src/Services/store"; // Import your store
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
+  // console.log("env", process.env.EXPO_PUBLIC_apiKey);
   return (
     <Provider store={store}>
       <SafeAreaProvider
