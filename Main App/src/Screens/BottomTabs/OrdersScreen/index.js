@@ -7,179 +7,166 @@ import RealtimeOrdersController from "../../../Services/OrdersController/Realtim
 export default function OrdersScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
 
+  // console.log(OrdersSelector);
+
   return (
-    <FlatList
-      ListHeaderComponent={
-        <>
-          <TopView
-            navigation={navigation}
-            title="My Orders"
-            position="relative"
-            color="#000"
-            style={{ marginBottom: 20 }}
-          />
-          <RealtimeOrdersController />
-        </>
-      }
-      ListFooterComponent={
-        <View
-          style={{
-            height: 100,
-          }}
-        ></View>
-      }
-      data={Object.values(Object.values(OrdersSelector))}
-      contentContainerStyle={{
-        gap: 10,
-        backgroundColor: GlobalColors.primary,
-      }}
-      showsVerticalScrollIndicator={false}
-      keyExtractor={(e) => e.orderID}
-      renderItem={({ item, index }) => {
-        // console.log(index, item);
-        return (
+    <>
+      <RealtimeOrdersController />
+
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <TopView
+              navigation={navigation}
+              title="My Orders"
+              position="relative"
+              color="#000"
+              style={{ marginBottom: 20 }}
+            />
+          </>
+        }
+        ListFooterComponent={
           <View
             style={{
-              backgroundColor: "#fff",
-              padding: 10,
-              marginHorizontal: 10,
-              borderRadius: 10,
-              elevation: 5,
-              gap: 10,
+              height: 100,
             }}
-            onPress={() => item.action && navigation.navigate(item.action)}
-          >
+          />
+        }
+        data={Object.values(Object.values(OrdersSelector))}
+        contentContainerStyle={{
+          gap: 10,
+          backgroundColor: GlobalColors.primary,
+        }}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(e) => e.orderID}
+        renderItem={({ item, index }) => {
+          console.log(index, item.s.c);
+          return (
             <View
               style={{
-                flexDirection: "row",
+                backgroundColor: "#fff",
+                padding: 10,
+                marginHorizontal: 10,
+                borderRadius: 10,
+                elevation: 5,
                 gap: 10,
               }}
+              onPress={() => item.action && navigation.navigate(item.action)}
             >
-              <Text
+              <View
                 style={{
-                  fontSize: 16,
-                  color: "rgba(100,100,105,1)",
-                  flex: 1,
-                  fontWeight: 500,
+                  flexDirection: "row",
+                  gap: 10,
                 }}
-              >
-                Order ID #{item.orderID}
-              </Text>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate("OrdersDetails", { order: item.orderID })
-                }
               >
                 <Text
                   style={{
                     fontSize: 16,
-                    color: GlobalColors.productText,
-                    fontWeight: 600,
+                    color: "rgba(100,100,105,1)",
+                    flex: 1,
+                    fontWeight: 500,
                   }}
                 >
-                  Order Details
+                  Order ID #{item.orderID}
                 </Text>
-              </Pressable>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-              }}
-            >
-              <View
-                style={{
-                  width: 10,
-                  height: 10,
-                  backgroundColor: Object.keys(item.status).includes("2")
-                    ? "#5c5"
-                    : Object.keys(item.status).includes("1")
-                    ? "#f00"
-                    : "#55d",
-                  borderRadius: 10,
-                }}
-              />
-              <Text
-                style={{
-                  color: Object.keys(item.status).includes("2")
-                    ? "#5c5"
-                    : Object.keys(item.status).includes("1")
-                    ? "#f00"
-                    : "#55d",
-                  fontWeight: 500,
-                }}
-              >
-                {Object.keys(item.status).includes("2")
-                  ? "Delivered"
-                  : Object.keys(item.status).includes("1")
-                  ? "On Delivery"
-                  : "Processing"}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                gap: 10,
-                padding: 0,
-              }}
-            >
-              {Object.values(item?.i)?.map((product) => (
-                <View
-                  key={product.k}
-                  style={{ height: "auto", flexDirection: "row", gap: 10 }}
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate("OrdersDetails", {
+                      order: item.orderID,
+                    })
+                  }
                 >
-                  {product.i ? (
-                    <Image
-                      source={product.i}
-                      style={{
-                        height: 70,
-                        width: 70,
-                        borderRadius: 8,
-                      }}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: GlobalColors.themeColor,
-                        height: "auto",
-                        aspectRatio: 1,
-                        borderRadius: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 22,
-                          fontWeight: 700,
-                          color: "#fff",
-                        }}
-                      >
-                        {product.t.slice(0, 1)}
-                      </Text>
-                    </View>
-                  )}
-                  <View
+                  <Text
                     style={{
-                      gap: 5,
-                      flex: 1,
+                      fontSize: 16,
+                      color: GlobalColors.productText,
+                      fontWeight: 600,
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "rgba(0,0,0,0.75)",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {product.t}
-                    </Text>
+                    Order Details
+                  </Text>
+                </Pressable>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 5,
+                }}
+              >
+                <View
+                  style={{
+                    width: 10,
+                    height: 10,
+                    backgroundColor:
+                      item.s.c == 2 ? "#5c5" : item.s.c == 1 ? "#f00" : "#55d",
+                    borderRadius: 20,
+                  }}
+                />
+                <Text
+                  style={{
+                    color:
+                      item.s.c == 2 ? "#5c5" : item.s.c == 1 ? "#f00" : "#55d",
+                    fontWeight: 500,
+                  }}
+                >
+                  {item.s.c == 2
+                    ? "Delivered"
+                    : item.s.c == 1
+                    ? "Out for Delivery"
+                    : item.s.c == -1
+                    ? "Cancelled"
+                    : "Processing"}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  gap: 10,
+                  padding: 0,
+                }}
+              >
+                {Object.values(item?.i)?.map((product) => (
+                  <View
+                    key={product.k}
+                    style={{ height: "auto", flexDirection: "row", gap: 10 }}
+                  >
+                    {product.i ? (
+                      <Image
+                        source={product.i}
+                        style={{
+                          height: 70,
+                          width: 70,
+                          borderRadius: 8,
+                        }}
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: GlobalColors.themeColor,
+                          height: "auto",
+                          aspectRatio: 1,
+                          borderRadius: 8,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 22,
+                            fontWeight: 700,
+                            color: "#fff",
+                          }}
+                        >
+                          {product.t.slice(0, 1)}
+                        </Text>
+                      </View>
+                    )}
                     <View
                       style={{
-                        flexDirection: "row",
                         gap: 5,
+                        flex: 1,
                       }}
                     >
                       <Text
@@ -189,32 +176,48 @@ export default function OrdersScreen({ navigation }) {
                           fontWeight: 600,
                         }}
                       >
-                        ₹{product?.p}/-
+                        {product.t}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          gap: 5,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "rgba(0,0,0,0.75)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          ₹{product?.p}/-
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "space-between",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: GlobalColors.productText,
+                          fontWeight: 600,
+                        }}
+                      >
+                        x{product?.qty}/-
                       </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: GlobalColors.productText,
-                        fontWeight: 600,
-                      }}
-                    >
-                      x{product?.qty}/-
-                    </Text>
-                  </View>
-                </View>
-              ))}
+                ))}
+              </View>
             </View>
-          </View>
-        );
-      }}
-    />
+          );
+        }}
+      />
+    </>
   );
 }
