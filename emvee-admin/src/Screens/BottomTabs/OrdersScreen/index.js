@@ -1,35 +1,22 @@
 import { Dimensions, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useEffect, useState } from "react";
-import {
-  collection,
-  getCountFromServer,
-  query,
-  where,
-} from "firebase/firestore";
-import { firestoreDB } from "../../../Infrastructure/firebase.config";
 import OrdersList from "./OrdersList";
+import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+import { useSelector } from "react-redux";
 
 export default function OrdersScreen({ navigation }) {
   const [ListType, setListType] = useState(0);
-  const [ProcessingCount, setProcessingCount] = useState(10);
-  const [OFDCount, setOFDCount] = useState(8);
+  const [ProcessingCount, setProcessingCount] = useState(0);
+  const [OFDCount, setOFDCount] = useState(0);
+  const OrdersSelector = useSelector((state) => state.Orders);
 
   useEffect(() => {
-    (async function () {
-      const coll = collection(firestoreDB, "or4");
-      const q = query(coll, where("s.c", "==", 0));
-      const snapshot = await getCountFromServer(q);
-      setProcessingCount(snapshot.data().count);
-
-      const coll2 = collection(firestoreDB, "or4");
-      const q2 = query(coll2, where("s.c", "==", 1));
-      const snapshot2 = await getCountFromServer(q2);
-      setOFDCount(snapshot2.data().count);
-    })();
-
-    console.log("Count executed!");
-  }, []);
+    setOFDCount(Object.values(OrdersSelector).filter((e) => e.s.c == 1).length);
+    setProcessingCount(
+      Object.values(OrdersSelector).filter((e) => e.s.c == 0).length
+    );
+  }, [OrdersSelector]);
   return (
     <View
       style={{
@@ -37,6 +24,9 @@ export default function OrdersScreen({ navigation }) {
         flex: 1,
       }}
     >
+      <RealtimeOrdersController status={0} />
+      <RealtimeOrdersController status={1} />
+
       <View
         style={{
           width: Dimensions.get("screen").width,

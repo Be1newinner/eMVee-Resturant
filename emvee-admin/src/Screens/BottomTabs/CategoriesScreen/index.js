@@ -1,19 +1,24 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { CategoryModal } from "../../../Components/Modals/CategoryModal";
 
 export default function CategoriesScreen() {
-  const [TotalCategories, setTotalCategories] = useState(0);
   const categorySelector = useSelector((selector) => selector.AllCategories);
-
-  const [modalVisible, setModalVisible] = useState(true);
+  const productsSelector = useSelector((selector) => selector.AllProducts);
+  const [editCategory, setEditCategory] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // useEffect(() => {
-  //   console.log(categorySelector);
-  // }, []);
+  //   console.log("productsSelector => ", productsSelector);
+  // }, [productsSelector]);
+
+  // useEffect(() => {
+  //   if (editCategory) setModalVisible(true);
+  //   else setModalVisible(false);
+  // }, [editCategory]);
 
   return (
     <View
@@ -48,7 +53,7 @@ export default function CategoriesScreen() {
             }}
           >
             {" "}
-            ({TotalCategories})
+            ({categorySelector?.length || 0})
           </Text>
         </Text>
 
@@ -56,7 +61,10 @@ export default function CategoriesScreen() {
           name="pluscircle"
           size={28}
           color="#fff"
-          onPress={() => setModalVisible(true)}
+          onPress={() => {
+            setEditCategory(null);
+            setModalVisible(true);
+          }}
         />
       </View>
 
@@ -84,7 +92,7 @@ export default function CategoriesScreen() {
         renderItem={({ item, index }) => {
           // console.log(item);
           return (
-            <View
+            <Pressable
               key={item.k}
               style={{
                 backgroundColor: "#fff",
@@ -93,6 +101,10 @@ export default function CategoriesScreen() {
                 gap: 10,
                 elevation: 3,
                 borderRadius: 10,
+              }}
+              onPress={() => {
+                setEditCategory(item);
+                setModalVisible(true);
               }}
             >
               <Text
@@ -123,13 +135,18 @@ export default function CategoriesScreen() {
                   fontSize: 16,
                 }}
               >
-                ({5})
+                ({productsSelector?.filter((e) => e.c == item.k)?.length})
               </Text>
-            </View>
+            </Pressable>
           );
         }}
       />
-      <CategoryModal visible={modalVisible} setVisible={setModalVisible} />
+      <CategoryModal
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        category={editCategory}
+        setCategory={setEditCategory}
+      />
     </View>
   );
 }

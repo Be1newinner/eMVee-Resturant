@@ -101,7 +101,7 @@ const BottomTabScreen = () => {
         name="Orders"
         component={OrdersScreen}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         options={{
           tabBarLabelStyle: {
             color: "#fff",
@@ -116,7 +116,7 @@ const BottomTabScreen = () => {
         }}
         name="Users"
         component={UserScreen}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

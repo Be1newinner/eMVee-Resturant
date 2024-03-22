@@ -13,11 +13,11 @@ import { fireStorage } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
 
-export const CategoryModal = ({
+export const ProductsModal = ({
   visible,
   setVisible,
-  category = null,
-  setCategory = () => null,
+  product = null,
+  setproduct = () => null,
 }) => {
   const [Name, setName] = useState("");
   const [checked, setChecked] = useState(false);
@@ -25,9 +25,9 @@ export const CategoryModal = ({
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    if (category) {
-      if (category?.t) setName(category.t);
-      if (category?.s) setChecked(category.s);
+    if (product) {
+      if (product?.t) setName(product.t);
+      if (product?.s) setChecked(product.s);
     } else {
       setName("");
       setChecked(false);
@@ -35,10 +35,10 @@ export const CategoryModal = ({
       setImage(null);
     }
 
-    // console.log(category);
-  }, [category]);
+    // console.log(product);
+  }, [product]);
 
-  async function uploadImageAsync({ uri, categoryID }) {
+  async function uploadImageAsync({ uri, productID }) {
     try {
       const convertedBlob = await ImageManipulator.manipulateAsync(
         uri,
@@ -53,7 +53,7 @@ export const CategoryModal = ({
       }
 
       const blob = await response.blob();
-      const fileRef = ref(fireStorage, "ca", categoryID, 1);
+      const fileRef = ref(fireStorage, "ca", productID, 1);
       await uploadBytes(fileRef, blob);
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -73,9 +73,9 @@ export const CategoryModal = ({
     }
   };
 
-  // const addNewCategory = () => {};
+  // const addNewproduct = () => {};
 
-  async function addCategory() {
+  async function addproduct() {
     closingModal(null);
   }
 
@@ -85,7 +85,7 @@ export const CategoryModal = ({
     setError("");
     setImage(null);
     setVisible(false);
-    setCategory(null);
+    setproduct(null);
   };
 
   return (
@@ -116,7 +116,7 @@ export const CategoryModal = ({
               fontWeight: 700,
             }}
           >
-            {category ? "Edit" : "Add New"} Category
+            {product ? "Edit" : "Add New"} product
           </Text>
         </View>
 
@@ -134,8 +134,8 @@ export const CategoryModal = ({
 
           <Input
             value={Name}
-            label="Category Name"
-            placeholder="enter category name"
+            label="product Name"
+            placeholder="enter product name"
             // accessoryLeft={() => <Entypo name="email" size={24} color="black" />}
             status={Error?.Name ? "danger" : "basic"}
             caption={
@@ -167,7 +167,7 @@ export const CategoryModal = ({
             }}
             status="danger"
           >
-            Mark as Popular Category
+            Mark as Popular product
           </CheckBox>
           {image && (
             <Image
@@ -214,14 +214,14 @@ export const CategoryModal = ({
           </Button>
           <Button
             onPress={() => {
-              addCategory();
+              addproduct();
             }}
             status="danger"
             style={{
               flex: 1,
             }}
           >
-            Add Category
+            Add product
           </Button>
         </View>
       </Card>
