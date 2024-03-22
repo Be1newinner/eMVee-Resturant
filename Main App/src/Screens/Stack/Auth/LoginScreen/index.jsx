@@ -39,6 +39,8 @@ export default function LoginScreen({ navigation }) {
                 password: password,
               });
             });
+          } else {
+            navigation.replace("BottomTab");
           }
         }
       );

@@ -2,19 +2,22 @@ import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
+import { Button } from "@ui-kitten/components";
+import { doc, updateDoc } from "firebase/firestore";
+import { firestoreDB } from "../../../Infrastructure/firebase.config";
+import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+import { OrderModal } from "../../../Components/Modals/OrderModal";
+import { useState } from "react";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
   const OrderDetails = OrdersSelector[OrderID];
-  console.log(OrderID, Object.keys(OrderDetails.status).includes("0"));
+  const [CancelModal, setCancelModal] = useState(true);
+  const [AcceptModal, setAcceptModal] = useState(false);
 
   const OrdersItems = {
-    status: Object.keys(OrderDetails.status).includes("2")
-      ? 2
-      : Object.keys(OrderDetails.status).includes("1")
-      ? 1
-      : 0,
+    status: OrderDetails?.s.c,
     items: Object.values(OrderDetails?.i) || [],
     subtotal: OrderDetails?.p?.s,
     taxes: OrderDetails?.p?.x,
@@ -27,6 +30,13 @@ export default function OrdersDetails({ navigation, route }) {
     deliver: OrderDetails?.u?.a,
   };
 
+  const cancelOrder = async ({ OrderID }) => {
+    const docRef = await doc(firestoreDB, "or4", OrderID);
+    const response = await updateDoc(docRef, {
+      "s.c": -1,
+    });
+  };
+
   return (
     <ScrollView
       style={{
@@ -34,6 +44,7 @@ export default function OrdersDetails({ navigation, route }) {
         backgroundColor: GlobalColors.primary,
       }}
     >
+      <RealtimeOrdersController />
       <View
         style={{
           paddingBottom: 50,
@@ -109,7 +120,7 @@ export default function OrdersDetails({ navigation, route }) {
                   backgroundColor:
                     OrdersItems.status === 1
                       ? "#f00"
-                      : OrdersItems.status === 1
+                      : OrdersItems.status === 2
                       ? "#0f0"
                       : "#55d",
                   borderRadius: 10,
@@ -120,15 +131,17 @@ export default function OrdersDetails({ navigation, route }) {
                   color:
                     OrdersItems.status === 1
                       ? "#f00"
-                      : OrdersItems.status === 1
+                      : OrdersItems.status === 2
                       ? "#0f0"
                       : "#55d",
                 }}
               >
                 {OrdersItems.status === 1
                   ? "Out for Delivery"
-                  : OrdersItems.status === 1
+                  : OrdersItems.status === 2
                   ? "Order Delivered"
+                  : OrdersItems.status === -1
+                  ? "Order Cancelled!"
                   : "Processing"}
               </Text>
             </View>
@@ -466,6 +479,58 @@ export default function OrdersDetails({ navigation, route }) {
             </View>
           </View>
         </View>
+
+        <View
+          status="danger"
+          style={{
+            marginHorizontal: 10,
+            marginTop: 10,
+            flex: 1,
+            flexDirection: "row",
+            gap: 10,
+          }}
+        >
+          <Button
+            style={{
+              flex: 1,
+            }}
+            status="danger"
+            appearance="outline"
+            onPress={() => {
+              setAcceptModal(false);
+              setCancelModal(true);
+            }}
+          >
+            cancel order
+          </Button>
+          <Button
+            style={{
+              flex: 1,
+            }}
+            status="danger"
+            onPress={() => {
+              setAcceptModal(true);
+              setCancelModal(false);
+            }}
+          >
+            Mark as OFD
+          </Button>
+        </View>
+
+        <OrderModal
+          title="Do you want to cancel Order?"
+          // subTitle="Do you want to cancel Order?"
+          onConfirm={() => cancelOrder({ OrderID })}
+          visible={CancelModal}
+          setVisible={setCancelModal}
+        />
+        <OrderModal
+          title="Mark OFD?"
+          subTitle="Mark the order as Out for Delivery!"
+          onConfirm={null}
+          visible={AcceptModal}
+          setVisible={setAcceptModal}
+        />
       </View>
     </ScrollView>
   );

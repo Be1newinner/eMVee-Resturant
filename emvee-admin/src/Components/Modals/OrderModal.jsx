@@ -2,11 +2,13 @@ import React from "react";
 import { Button, Card, Modal, Text } from "@ui-kitten/components";
 import { View } from "react-native";
 
-export const OrderConfirmModal = ({
+export const OrderModal = ({
   visible,
   setVisible,
-  onConfirm,
-}): React.ReactElement => {
+  onConfirm = () => null,
+  title = "",
+  subTitle = "",
+}) => {
   return (
     <Modal
       visible={visible}
@@ -32,23 +34,9 @@ export const OrderConfirmModal = ({
               fontWeight: 700,
             }}
           >
-            {/* <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
-              {item.v}
-            </Text> */}
-            Confirm Order?
+            {title}
           </Text>
-          <Text>Order Can not be cancelled!</Text>
-          <Text>
-            This is{" "}
-            <Text
-              style={{
-                fontWeight: 700,
-              }}
-            >
-              Cash on Delivery
-            </Text>{" "}
-            order!
-          </Text>
+          {subTitle && <Text>{subTitle}</Text>}
         </View>
 
         <View

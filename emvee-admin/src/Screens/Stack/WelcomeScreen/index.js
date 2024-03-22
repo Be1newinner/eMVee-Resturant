@@ -19,10 +19,8 @@ const WelcomeScreen = ({ navigation }) => {
       if (user) {
         if (user.emailVerified) {
           navigation.replace("BottomTab");
-          console.log("User is verified!");
         } else {
           navigation.navigate("VerifyEmail");
-          console.log("User is not verified!");
         }
       }
     });

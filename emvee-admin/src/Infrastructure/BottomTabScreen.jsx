@@ -1,10 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import CategoryScreen from "../Screens/BottomTabs/CategoryScreen";
-import HomeScreen from "../Screens/BottomTabs/HomeScreen";
-import SettingScreen from "../Screens/BottomTabs/SettingScreen";
+import CategoriesScreen from "../Screens/BottomTabs/CategoriesScreen";
+import HomeScreen from "../Screens/BottomTabs/DashboardScreen";
+import UserScreen from "../Screens/BottomTabs/UsersScreen";
 import OrdersScreen from "../Screens/BottomTabs/OrdersScreen";
+import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
@@ -57,6 +58,23 @@ const BottomTabScreen = () => {
           headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
             <Ionicons
+              name={focused ? "fast-food-sharp" : "fast-food-outline"}
+              size={24}
+              color="white"
+            />
+          ),
+        }}
+        name="Products"
+        component={ProductsScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabelStyle: {
+            color: "#fff",
+          },
+          headerTitleAlign: "center",
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
               name={focused ? "shapes-sharp" : "shapes-outline"}
               size={24}
               color="white"
@@ -64,7 +82,7 @@ const BottomTabScreen = () => {
           ),
         }}
         name="Category"
-        component={CategoryScreen}
+        component={CategoriesScreen}
       />
       <Tab.Screen
         options={{
@@ -96,8 +114,8 @@ const BottomTabScreen = () => {
             />
           ),
         }}
-        name="Profile"
-        component={SettingScreen}
+        name="Users"
+        component={UserScreen}
       />
     </Tab.Navigator>
   );

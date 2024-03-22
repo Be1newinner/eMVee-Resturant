@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import React, { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
@@ -19,10 +27,8 @@ const WelcomeScreen = ({ navigation }) => {
       if (user) {
         if (user.emailVerified) {
           navigation.replace("BottomTab");
-          console.log("User is verified!");
         } else {
           navigation.navigate("VerifyEmail");
-          console.log("User is not verified!");
         }
       }
     });
@@ -42,16 +48,18 @@ const WelcomeScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.img} source={{ uri: "assets:/food.png" }} />
-      <Text style={styles.text}>100+ Recipe</Text>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("SignIn")}
-        style={styles.buttonContainer}
-      >
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <Image style={styles.img} source={{ uri: "assets:/food.png" }} />
+        <Text style={styles.text}>100+ Recipe</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("LoginScreen")}
+          style={styles.buttonContainer}
+        >
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 export default WelcomeScreen;
@@ -61,6 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "#E5002B",
+    maxHeight: Dimensions.get("screen").height,
   },
   img: {
     width: "100%",
