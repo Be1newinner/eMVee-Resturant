@@ -20,13 +20,13 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.be1newinner.emveeadmin",
+      "package": "com.shipsar.emveeadmin",
       "versionCode": 3
     },
     "web": {
       "favicon": "./assets/logo.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": ["expo-router", "expo-image-picker"],
     "extra": {
       "router": {
         "origin": false

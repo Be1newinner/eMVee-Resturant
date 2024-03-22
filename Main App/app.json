@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.be1newinner.emveerestaurant",
+      "package": "com.shipsar.emveerestaurant",
       "versionCode": 3
     },
     "web": {
