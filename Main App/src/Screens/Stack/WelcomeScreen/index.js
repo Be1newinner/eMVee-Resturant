@@ -9,19 +9,9 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { useDispatch } from "react-redux";
-
 import { firebaseAuth } from "../../../Infrastructure/firebase.config";
-import {
-  fetchAllCategories,
-  fetchAllProducts,
-} from "../../../Services/AllProducts/AllProductsService";
-import { addProducts } from "../../../Services/Slices/AllProductsSlice";
-import { addCategories } from "../../../Services/Slices/AllCategoriesSlice";
 
 const WelcomeScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
@@ -33,19 +23,6 @@ const WelcomeScreen = ({ navigation }) => {
       }
     });
   }, [firebaseAuth]);
-
-  const LoadingApp = () => {
-    (async function () {
-      const data = await fetchAllProducts();
-      const cat = await fetchAllCategories();
-      dispatch(addProducts(data));
-      dispatch(addCategories(cat));
-    })();
-  };
-
-  useEffect(() => {
-    LoadingApp();
-  }, []);
 
   return (
     <ScrollView>

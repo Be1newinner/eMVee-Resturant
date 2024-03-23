@@ -8,14 +8,17 @@ import { Button } from "@ui-kitten/components";
 import { OrderConfirmModal } from "../../../Components/OrderConfirmModal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addInCart } from "../../../Services/Slices/CartSlice";
+import { addInCart, resetCart } from "../../../Services/Slices/CartSlice";
 // import { addNewOrder } from "../../../Services/Slices/OrdersSlice";
 import addOrderController from "../../../Services/OrdersController/addOrderController";
+import { LoadingModal } from "../../../Components/LoadingModal";
 
 export default function CartScreen({ navigation }) {
   const selector = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const AddressSelector = useSelector((state) => state.Address);
+  const [LoadingScreen, setLoadingScreen] = useState(false);
+  const [ConfirmClicked, setConfirmClicked] = useState(false);
 
   const cartTotal = {
     total: selector?.total || 0,
@@ -26,22 +29,29 @@ export default function CartScreen({ navigation }) {
   };
 
   const ConfirmOrder = async () => {
+    setLoadingScreen(true);
     const response = await addOrderController({
       CartSelector: selector,
       AddressSelector,
     });
 
     if (response.status === 200) {
-      navigation.navigate("OrderConfirm", { orderID: response.orderID });
-      // dispatch(addInCart(null));
+      setConfirmClicked(true);
+      dispatch(resetCart());
+      navigation.replace("OrderConfirm", { orderID: response?.orderID });
     }
+    setLoadingScreen(false);
   };
 
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (Object.values(selector.items).filter((e) => e.qty > 0).length < 1) {
-      navigation.goBack();
+    if (ConfirmClicked) {
+      if (
+        Object.values(selector?.items)?.filter((e) => e.qty > 0)?.length < 1
+      ) {
+        navigation.replace("BottomTab");
+      }
     }
   }, [selector]);
 
@@ -74,8 +84,8 @@ export default function CartScreen({ navigation }) {
         >
           Cart Items
         </Text>
-        {Object.values(selector.items)
-          .filter((e) => e.qty > 0)
+        {Object.values(selector?.items)
+          ?.filter((e) => e?.qty > 0)
           ?.map((item) => (
             <View
               key={item.k}
@@ -95,7 +105,7 @@ export default function CartScreen({ navigation }) {
                   borderColor: "rgba(0,0,0,0.25)",
                 }}
               >
-                {item.i ? (
+                {item?.i ? (
                   <Image
                     source={item.i}
                     style={{
@@ -123,7 +133,7 @@ export default function CartScreen({ navigation }) {
                         color: GlobalColors.themeColor,
                       }}
                     >
-                      {item.t.slice(0, 1)}
+                      {item?.t?.slice(0, 1)}
                     </Text>
                   </View>
                 )}
@@ -141,12 +151,12 @@ export default function CartScreen({ navigation }) {
                     color: GlobalColors.themeColor,
                   }}
                 >
-                  {item.t}
+                  {item?.t}
                 </Text>
                 <Text>
-                  {item.qty} x ₹{item.p}
+                  {item?.qty} x ₹{item?.p}
                 </Text>
-                <AddToCart Quantity={item.qty} item={item} variant={1} />
+                <AddToCart Quantity={item?.qty} item={item} variant={1} />
               </View>
               <View
                 style={{
@@ -176,7 +186,7 @@ export default function CartScreen({ navigation }) {
                     fontSize: 16,
                   }}
                 >
-                  ₹{item.p * item.qty}/-
+                  ₹{item?.p * item?.qty}/-
                 </Text>
               </View>
             </View>
@@ -223,10 +233,10 @@ export default function CartScreen({ navigation }) {
                 fontWeight: 500,
               }}
             >
-              ₹{cartTotal.subtotal}/-
+              ₹{cartTotal?.subtotal}/-
             </Text>
           </View>
-          {cartTotal.discount && (
+          {cartTotal?.discount ? (
             <View
               style={{
                 flexDirection: "row",
@@ -247,10 +257,10 @@ export default function CartScreen({ navigation }) {
                   fontWeight: 500,
                 }}
               >
-                - ₹{cartTotal.discount}/-
+                - ₹{cartTotal?.discount}/-
               </Text>
             </View>
-          )}
+          ) : null}
           <View
             style={{
               flexDirection: "row",
@@ -271,7 +281,7 @@ export default function CartScreen({ navigation }) {
                 fontWeight: 500,
               }}
             >
-              ₹{cartTotal.tax}/-
+              ₹{cartTotal?.tax}/-
             </Text>
           </View>
           <View
@@ -293,12 +303,12 @@ export default function CartScreen({ navigation }) {
               style={{
                 fontWeight: 500,
                 color:
-                  cartTotal.delivery == 0 ? GlobalColors.themeColor : "black",
+                  cartTotal?.delivery == 0 ? GlobalColors.themeColor : "black",
               }}
             >
-              {cartTotal.delivery == 0
+              {cartTotal?.delivery == 0
                 ? "Free"
-                : "₹" + cartTotal.delivery + "/-"}
+                : "₹" + cartTotal?.delivery + "/-"}
             </Text>
           </View>
           <View
@@ -326,7 +336,7 @@ export default function CartScreen({ navigation }) {
                 fontSize: 18,
               }}
             >
-              ₹{cartTotal.total}/-
+              ₹{cartTotal?.total}/-
             </Text>
           </View>
         </View>
@@ -387,7 +397,7 @@ export default function CartScreen({ navigation }) {
                 fontWeight: 500,
               }}
             >
-              {AddressSelector.addresses[AddressSelector.default]?.n}
+              {AddressSelector?.addresses[AddressSelector.default]?.n}
             </Text>
           </View>
           <View
@@ -410,7 +420,7 @@ export default function CartScreen({ navigation }) {
                 fontWeight: 500,
               }}
             >
-              {AddressSelector.addresses[AddressSelector.default]?.p}
+              {AddressSelector?.addresses[AddressSelector.default]?.p}
             </Text>
           </View>
           <View
@@ -462,6 +472,7 @@ export default function CartScreen({ navigation }) {
         setVisible={setVisible}
         onConfirm={() => ConfirmOrder()}
       />
+      <LoadingModal visible={LoadingScreen} />
     </ScrollView>
   );
 }

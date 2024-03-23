@@ -3,14 +3,17 @@ import { ScrollView } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
+// import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 
-export default function OrderConfirm({ navigation }) {
+export default function OrderConfirm({ navigation, route }) {
+  // console.log("Order ID ", route?.params?.orderID);
   return (
     <ScrollView
       style={{
         backgroundColor: GlobalColors.primary,
       }}
     >
+      {/* <RealtimeOrdersController /> */}
       <Pressable
         style={{
           marginLeft: 15,
@@ -72,7 +75,13 @@ export default function OrderConfirm({ navigation }) {
             Go to Home
           </Button>
 
-          <Pressable>
+          <Pressable
+            onPress={() =>
+              navigation.replace("OrdersDetails", {
+                order: route?.params?.orderID,
+              })
+            }
+          >
             <Text
               style={{
                 textAlign: "center",
@@ -83,6 +92,15 @@ export default function OrderConfirm({ navigation }) {
               View Order Details
             </Text>
           </Pressable>
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 13,
+              marginTop: -15,
+            }}
+          >
+            {route?.params?.orderID}
+          </Text>
         </View>
       </View>
     </ScrollView>

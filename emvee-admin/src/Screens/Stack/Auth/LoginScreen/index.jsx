@@ -1,11 +1,15 @@
 import { Dimensions, View } from "react-native";
 import { ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input, Spinner, Text } from "@ui-kitten/components";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
 import { firebaseAuth } from "../../../../Infrastructure/firebase.config";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 export default function LoginScreen({ navigation }) {
   const [emailID, setEmailID] = useState("");
@@ -44,6 +48,18 @@ export default function LoginScreen({ navigation }) {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          navigation.replace("BottomTab");
+        } else {
+          navigation.navigate("VerifyEmail");
+        }
+      }
+    });
+  }, [firebaseAuth]);
 
   const validation = () => {
     const error = {};

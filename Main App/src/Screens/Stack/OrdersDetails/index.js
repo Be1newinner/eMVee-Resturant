@@ -2,30 +2,41 @@ import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+// import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
-  const OrderDetails = OrdersSelector[OrderID];
-  console.log(OrderID, Object.keys(OrderDetails.status).includes("0"));
 
-  const OrdersItems = {
-    status: Object.keys(OrderDetails.status).includes("2")
-      ? 2
-      : Object.keys(OrderDetails.status).includes("1")
-      ? 1
-      : 0,
-    items: Object.values(OrderDetails?.i) || [],
-    subtotal: OrderDetails?.p?.s,
-    taxes: OrderDetails?.p?.x,
-    delivery: OrderDetails?.p?.c,
-    total: OrderDetails?.p?.t,
-    saving: 0,
-    date: new Date().toLocaleString(),
-    contact: OrderDetails?.u?.p,
-    reciever: OrderDetails?.u?.n,
-    deliver: OrderDetails?.u?.a,
-  };
+  const [OrdersItems, setOrderItems] = useState(null);
+
+  useEffect(() => {
+    const OrderDetails = OrdersSelector[OrderID];
+    if (OrderDetails) {
+      setOrderItems({
+        status:
+          OrderDetails.s.c == 2
+            ? 2
+            : OrderDetails.s.c == 1
+            ? 1
+            : OrderDetails.s.c == -1
+            ? -1
+            : 0,
+        items: Object.values(OrderDetails?.i) || [],
+        subtotal: OrderDetails?.p?.s,
+        taxes: OrderDetails?.p?.x,
+        delivery: OrderDetails?.p?.c,
+        total: OrderDetails?.p?.t,
+        saving: 0,
+        date: new Date().toLocaleString(),
+        contact: OrderDetails?.u?.p,
+        reciever: OrderDetails?.u?.n,
+        deliver: OrderDetails?.u?.a,
+      });
+    }
+    console.log(OrderID, OrderDetails?.s?.c);
+  }, [OrdersSelector]);
 
   return (
     <ScrollView
@@ -34,6 +45,7 @@ export default function OrdersDetails({ navigation, route }) {
         backgroundColor: GlobalColors.primary,
       }}
     >
+      {/* <RealtimeOrdersController /> */}
       <View
         style={{
           paddingBottom: 50,
@@ -107,9 +119,9 @@ export default function OrdersDetails({ navigation, route }) {
                   width: 10,
                   height: 10,
                   backgroundColor:
-                    OrdersItems.status === 1
+                    OrdersItems?.status == 1
                       ? "#f00"
-                      : OrdersItems.status === 1
+                      : OrdersItems?.status == 2
                       ? "#0f0"
                       : "#55d",
                   borderRadius: 10,
@@ -118,17 +130,19 @@ export default function OrdersDetails({ navigation, route }) {
               <Text
                 style={{
                   color:
-                    OrdersItems.status === 1
+                    OrdersItems?.status == 1
                       ? "#f00"
-                      : OrdersItems.status === 1
+                      : OrdersItems?.status == 2
                       ? "#0f0"
                       : "#55d",
                 }}
               >
-                {OrdersItems.status === 1
+                {OrdersItems?.status == 1
                   ? "Out for Delivery"
-                  : OrdersItems.status === 1
+                  : OrdersItems?.status == 2
                   ? "Order Delivered"
+                  : OrdersItems?.status == -1
+                  ? "Order Cancelled"
                   : "Processing"}
               </Text>
             </View>
@@ -338,7 +352,7 @@ export default function OrdersDetails({ navigation, route }) {
               </Text>
             </View>
 
-            {OrdersItems.saving != 0 && (
+            {OrdersItems?.saving != 0 && (
               <View
                 appearance="outline"
                 status="danger"
@@ -360,7 +374,7 @@ export default function OrdersDetails({ navigation, route }) {
                     color: GlobalColors.themeColor,
                   }}
                 >
-                  Total Saving{"   "}₹{OrdersItems.saving}/-
+                  Total Saving{"   "}₹{OrdersItems?.saving}/-
                 </Text>
               </View>
             )}

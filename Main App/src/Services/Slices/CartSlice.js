@@ -45,7 +45,15 @@ export const CartSlice = createSlice({
     },
     decreaseCart(state, action) {},
     removeFromCart(state, action) {},
+    resetCart(state) {
+      try {
+        Object.assign(state, initialState);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });
 
-export const { addInCart, decreaseCart, removeFromCart } = CartSlice.actions;
+export const { addInCart, decreaseCart, removeFromCart, resetCart } =
+  CartSlice.actions;

@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addInCart } from "../Services/Slices/CartSlice";
 
 export default function AddToCart({
@@ -9,11 +9,8 @@ export default function AddToCart({
   setQuantity = () => null,
   variant = 0,
   item,
+  onClickAdd = () => null,
 }) {
-  // const Quantity = 0;
-  // useSelector((selector) => selector.Cart).items[item.k]?.qty || 0;
-
-  // console.log("item => ", item);
   const dispatch = useDispatch();
   return Quantity == 0 ? (
     <Button
@@ -42,7 +39,7 @@ export default function AddToCart({
           elevation: 3,
           borderColor: "#406090",
         }}
-        onPress={() =>
+        onPress={() => {
           Quantity > 0 && item
             ? dispatch(
                 addInCart({
@@ -51,8 +48,9 @@ export default function AddToCart({
                   total: (Quantity - 1) * item.p,
                 })
               )
-            : setQuantity(Quantity - 1)
-        }
+            : setQuantity(Quantity - 1);
+          onClickAdd();
+        }}
       >
         <Feather name="minus" size={variant == 0 ? 26 : 14} color="#406090" />
       </Pressable>

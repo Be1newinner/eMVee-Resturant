@@ -4,7 +4,8 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 import { Input } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
-import { firebaseAuth } from "../Infrastructure/firebase.config";
+import { firebaseAuth, firestoreDB } from "../Infrastructure/firebase.config";
+import { Timestamp, doc, onSnapshot } from "firebase/firestore";
 
 export const TopViewHome = ({ navigation }) => {
   const saved_addresses = useSelector((state) => state.Address);
@@ -12,6 +13,14 @@ export const TopViewHome = ({ navigation }) => {
   const [SavedAddresses, setSavedAddress] = useState(null);
   const [DefaultAddresses, setDefaultAddress] = useState(0);
   const [CurrentAddresses, setCurrentAddresses] = useState(null);
+  const [StoreStatus, setStoreStatus] = useState(true);
+  const [passedDate, setpassedDate] = useState(null);
+  const [timeDiff, setTimeDiff] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     setSavedAddress(saved_addresses?.addresses || null);
@@ -24,6 +33,42 @@ export const TopViewHome = ({ navigation }) => {
         SavedAddresses.filter((e) => e.k === DefaultAddresses)[0]
       );
   }, [SavedAddresses, DefaultAddresses]);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(firestoreDB, "ot", "s"), (doc) => {
+      const data = doc.data();
+      setpassedDate(new Timestamp(data.t.seconds, data.t.nanoseconds).toDate());
+    });
+  }, []);
+
+  useEffect(() => {
+    if (passedDate) {
+      const CheckNow = new Date();
+      const checkTimeDiffInMs = passedDate - CheckNow;
+      if (checkTimeDiffInMs > 0) {
+        setStoreStatus(false);
+        const intervalId = setInterval(() => {
+          const now = new Date();
+          const timeDiffInMs = passedDate - now;
+          console.log("timeDiffInMs => ", timeDiffInMs);
+          const days = Math.floor(timeDiffInMs / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (timeDiffInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (timeDiffInMs % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((timeDiffInMs % (1000 * 60)) / 1000);
+
+          setTimeDiff({ days, hours, minutes, seconds });
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+      } else {
+        setStoreStatus(true);
+      }
+    }
+  }, [passedDate]);
 
   return (
     <View
@@ -91,44 +136,49 @@ export const TopViewHome = ({ navigation }) => {
         defaultValue=""
         onPressIn={() => navigation.navigate("ProductSearchScreen")}
       />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          marginTop: 10,
-        }}
-      >
+      {!StoreStatus ? (
         <View
           style={{
             flexDirection: "row",
-            backgroundColor: "#e53a75",
-            alignItems: "center",
-            gap: 5,
-            padding: 5,
-            paddingHorizontal: 20,
-            borderRadius: 20,
-            elevation: 5,
+            justifyContent: "center",
+            marginTop: 10,
           }}
         >
           <View
             style={{
-              backgroundColor: "rgb(255,255,255)",
-              height: 10,
-              width: 10,
-              borderRadius: 10,
-            }}
-          />
-          <Text
-            style={{
-              fontWeight: 600,
-              fontSize: 13,
-              color: "rgb(255,255,255)",
+              flexDirection: "row",
+              backgroundColor: "#e53a75",
+              alignItems: "center",
+              gap: 5,
+              padding: 5,
+              paddingHorizontal: 20,
+              borderRadius: 20,
+              elevation: 5,
             }}
           >
-            Store Closed
-          </Text>
+            <View
+              style={{
+                backgroundColor: "rgb(255,255,255)",
+                height: 10,
+                width: 10,
+                borderRadius: 10,
+              }}
+            />
+            <Text
+              style={{
+                fontWeight: 600,
+                fontSize: 13,
+                color: "rgb(255,255,255)",
+              }}
+            >
+              Store Closed{" "}
+              {`${timeDiff.days ? timeDiff.days + "," : ""} ${timeDiff.hours}:${
+                timeDiff.minutes
+              }:${timeDiff.seconds}`}
+            </Text>
+          </View>
         </View>
-      </View>
+      ) : null}
     </View>
   );
 };

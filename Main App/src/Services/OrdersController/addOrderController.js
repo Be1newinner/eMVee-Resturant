@@ -1,4 +1,4 @@
-import { Timestamp, collection, doc, setDoc, addDoc } from "firebase/firestore";
+import { Timestamp, collection, addDoc } from "firebase/firestore";
 import {
   firestoreDB,
   firebaseAuth,
@@ -9,8 +9,8 @@ export default async function addOrderController({
   CartSelector,
 }) {
   try {
-    const CurrentAddress = AddressSelector.addresses.filter(
-      (e) => e.k == AddressSelector.default
+    const CurrentAddress = AddressSelector?.addresses?.filter(
+      (e) => e.k == AddressSelector?.default
     )[0];
 
     const OrderToSend = {
@@ -22,22 +22,22 @@ export default async function addOrderController({
         t: CartSelector?.total,
         x: CartSelector?.tax,
       },
-      i: CartSelector.items,
+      i: CartSelector?.items,
       u: {
         u: firebaseAuth.currentUser.uid,
-        n: CurrentAddress.n,
-        p: CurrentAddress.p,
-        a: CurrentAddress.h + ", " + CurrentAddress.l,
+        n: CurrentAddress?.n,
+        p: CurrentAddress?.p,
+        a: CurrentAddress?.h + ", " + CurrentAddress?.l,
+      },
+      s: {
+        0: new Timestamp.now(),
+        c: 0,
       },
     };
 
     const docRef = await addDoc(collection(firestoreDB, "or4"), OrderToSend);
 
     const orderID = await docRef.id;
-
-    const docRef2 = await setDoc(doc(firestoreDB, "or5", orderID), {
-      0: new Timestamp.now(),
-    });
 
     if (orderID) {
       return {
@@ -51,7 +51,7 @@ export default async function addOrderController({
       };
     }
   } catch (error) {
-    console.log("Creating order Error!");
+    console.log("Creating order Error!", error);
     return {
       status: 501,
       error: "Unknown Error!",

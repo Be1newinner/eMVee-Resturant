@@ -13,7 +13,7 @@ export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
   const OrderDetails = OrdersSelector[OrderID];
-  const [CancelModal, setCancelModal] = useState(true);
+  const [CancelModal, setCancelModal] = useState(false);
   const [AcceptModal, setAcceptModal] = useState(false);
 
   const OrdersItems = {

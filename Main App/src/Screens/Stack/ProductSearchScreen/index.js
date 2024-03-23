@@ -15,20 +15,26 @@ import { useSelector } from "react-redux";
 
 export default function ProductSearchScreen({ navigation }) {
   const [value, setValue] = useState("");
-  
+
   const [filteredArray, setFilteredArray] = useState(null);
   const AllProductsData = useSelector((state) => state.AllProducts);
+  const AllCategories = useSelector((state) => state.AllCategories);
+
   const PopularItems = AllProductsData.filter((e) => e.s === true);
 
   useEffect(() => {
-    if (value.length > 1) {
+    if (value?.length > 1) {
       const data = AllProductsData.filter((e) =>
-        e.title.toLowerCase().includes(value.toLowerCase())
+        e?.t?.toLowerCase().includes(value?.toLowerCase())
       );
 
       setFilteredArray(data);
     }
   }, [value]);
+
+  // useEffect(() => {
+  //   console.log("AllCategories =>", AllCategories);
+  // }, [AllCategories]);
 
   return (
     <View
@@ -66,79 +72,16 @@ export default function ProductSearchScreen({ navigation }) {
             </Text>
           }
           data={PopularItems}
-          keyExtractor={(e) => e.id}
-          contentContainerStyle={{
-            gap: 10,
-            paddingBottom: 40,
-            padding: 10,
-          }}
-          renderItem={({ item }) => (
-            <Pressable
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#fff",
-                padding: 10,
-                borderRadius: 10,
-                elevation: 5,
-                gap: 10,
-              }}
-              onPress={() => navigation.navigate("ProductDetail")}
-            >
-              <Image
-                source={item.image}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 10,
-                }}
-              />
-              <View
-                style={{
-                  flex: 1,
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: 500,
-                  }}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={{
-                    color: GlobalColors.productText,
-                  }}
-                >
-                  In {item?.category ? item?.category : "Burger"} Category
-                </Text>
-              </View>
-              <View
-                style={{
-                  justifyContent: "center",
-                }}
-              >
-                <AntDesign
-                  name="right"
-                  size={24}
-                  color={GlobalColors.productText}
-                />
-              </View>
-            </Pressable>
-          )}
-        />
-      ) : (
-        <FlatList
-          data={filteredArray}
-          keyExtractor={(e) => e.id}
+          keyExtractor={(e) => e.k}
           contentContainerStyle={{
             gap: 10,
             paddingBottom: 40,
             padding: 10,
           }}
           renderItem={({ item }) => {
-            const name = item.title.toLowerCase();
+            // console.log(item);
             return (
-              <View
+              <Pressable
                 style={{
                   flexDirection: "row",
                   backgroundColor: "#fff",
@@ -147,15 +90,136 @@ export default function ProductSearchScreen({ navigation }) {
                   elevation: 5,
                   gap: 10,
                 }}
+                onPress={() =>
+                  navigation.navigate("ProductDetail", { product: item })
+                }
               >
-                <Image
-                  source={item.image}
+                {item.i ? (
+                  <Image
+                    source={item.i}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 10,
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      backgroundColor: GlobalColors.themeColor,
+                      borderRadius: 10,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 50,
+                      height: 50,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 20,
+                        color: "#fff",
+                      }}
+                    >
+                      {item.t.slice(0, 1)}
+                    </Text>
+                  </View>
+                )}
+                <View
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 10,
+                    flex: 1,
                   }}
-                />
+                >
+                  <Text
+                    style={{
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item.t}
+                  </Text>
+                  <Text
+                    style={{
+                      color: GlobalColors.productText,
+                    }}
+                  >
+                    In{" "}
+                    {item?.c
+                      ? AllCategories?.filter((e) => e.k == item?.c)[0]?.t
+                      : ""}{" "}
+                    Category
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    justifyContent: "center",
+                  }}
+                >
+                  <AntDesign
+                    name="right"
+                    size={24}
+                    color={GlobalColors.productText}
+                  />
+                </View>
+              </Pressable>
+            );
+          }}
+        />
+      ) : (
+        <FlatList
+          data={filteredArray}
+          keyExtractor={(e) => e.k}
+          contentContainerStyle={{
+            gap: 10,
+            paddingBottom: 40,
+            padding: 10,
+          }}
+          renderItem={({ item }) => {
+            const name = item.t.toLowerCase();
+            return (
+              <Pressable
+                style={{
+                  flexDirection: "row",
+                  backgroundColor: "#fff",
+                  padding: 10,
+                  borderRadius: 10,
+                  elevation: 5,
+                  gap: 10,
+                }}
+                onPress={() =>
+                  navigation.navigate("ProductDetail", { product: item })
+                }
+              >
+                {item.i ? (
+                  <Image
+                    source={item.i}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 10,
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      backgroundColor: GlobalColors.themeColor,
+                      borderRadius: 10,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 50,
+                      height: 50,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 20,
+                        color: "#fff",
+                      }}
+                    >
+                      {item.t.slice(0, 1)}
+                    </Text>
+                  </View>
+                )}
                 <View
                   style={{
                     flex: 1,
@@ -184,7 +248,11 @@ export default function ProductSearchScreen({ navigation }) {
                       color: GlobalColors.productText,
                     }}
                   >
-                    In {item?.category ? item?.category : "Burger"} Category
+                    In{" "}
+                    {item?.c
+                      ? AllCategories?.filter((e) => e.k == item?.c)[0]?.t
+                      : ""}
+                    Category
                   </Text>
                 </View>
                 <View
@@ -198,7 +266,7 @@ export default function ProductSearchScreen({ navigation }) {
                     color={GlobalColors.productText}
                   />
                 </View>
-              </View>
+              </Pressable>
             );
           }}
         />
