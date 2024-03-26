@@ -13,7 +13,7 @@ import {
 } from "../../Services/AllProducts/AllProductsService";
 import { addProducts } from "../../Services/Slices/AllProductsSlice";
 import { addCategories } from "../../Services/Slices/AllCategoriesSlice";
-import { onAuthStateChanged } from "firebase/auth";
+// import { onAuthStateChanged } from "firebase/auth";
 
 export default function RealtimeOrdersController() {
   const dispatch = useDispatch();
@@ -29,29 +29,24 @@ export default function RealtimeOrdersController() {
 
   useEffect(() => {
     (async function () {
-      onAuthStateChanged(firebaseAuth, async (user) => {
-        // console.log(" a ", user.uid);
-        if (user) {
-          LoadingApp();
+      LoadingApp();
 
-          const q = await query(
-            collection(firestoreDB, "or4"),
-            where("u.u", "==", user.uid)
+      const q = await query(
+        collection(firestoreDB, "or4"),
+        where("u.u", "==", user.uid)
+      );
+
+      onSnapshot(q, (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          dispatch(
+            addOrder(
+              JSON.stringify({
+                key: doc.id,
+                value: doc.data(),
+              })
+            )
           );
-
-          onSnapshot(q, (querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              dispatch(
-                addOrder(
-                  JSON.stringify({
-                    key: doc.id,
-                    value: doc.data(),
-                  })
-                )
-              );
-            });
-          });
-        }
+        });
       });
     })();
   }, [firebaseAuth]);

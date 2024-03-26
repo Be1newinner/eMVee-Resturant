@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
-import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { MaterialIcons, AntDesign, Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 import { Input } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
@@ -43,32 +43,32 @@ export const TopViewHome = ({ navigation }) => {
 
   useEffect(() => {
     if (passedDate) {
-      const CheckNow = new Date();
-      const checkTimeDiffInMs = passedDate - CheckNow;
-      if (checkTimeDiffInMs > 0) {
-        setStoreStatus(false);
-        const intervalId = setInterval(() => {
-          const now = new Date();
-          const timeDiffInMs = passedDate - now;
-          console.log("timeDiffInMs => ", timeDiffInMs);
-          const days = Math.floor(timeDiffInMs / (1000 * 60 * 60 * 24));
-          const hours = Math.floor(
-            (timeDiffInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          );
-          const minutes = Math.floor(
-            (timeDiffInMs % (1000 * 60 * 60)) / (1000 * 60)
-          );
-          const seconds = Math.floor((timeDiffInMs % (1000 * 60)) / 1000);
+      try {
+        const CheckNow = new Date();
+        const checkTimeDiffInMs = passedDate - CheckNow;
+        if (checkTimeDiffInMs > 0) {
+          setStoreStatus(false);
+          const intervalId = setInterval(() => {
+            const now = new Date();
+            const timeDiffInMs = passedDate - now;
+            const days = Math.floor(timeDiffInMs / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(timeDiffInMs % 24);
+            const minutes = Math.floor(timeDiffInMs % 60);
+            const seconds = Math.floor(timeDiffInMs % 60);
 
-          setTimeDiff({ days, hours, minutes, seconds });
-        }, 1000);
+            setTimeDiff({ days, hours, minutes, seconds });
+          }, 1000);
 
-        return () => clearInterval(intervalId);
-      } else {
-        setStoreStatus(true);
+          return () => clearInterval(intervalId);
+        } else {
+          setStoreStatus(true);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }, [passedDate]);
+  
 
   return (
     <View
@@ -80,49 +80,58 @@ export const TopViewHome = ({ navigation }) => {
         gap: 5,
       }}
     >
-      <Text
+      <View
         style={{
-          fontSize: 16,
-          color: "#fff",
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        Hi, {firebaseAuth?.currentUser?.displayName}
-      </Text>
-      <View style={styles.header}>
-        <View style={styles.location}>
-          <Pressable
+        <View>
+          <Text
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginLeft: -3,
+              fontSize: 16,
+              color: "#fff",
             }}
-            onPress={() => navigation.navigate("AddAddressScreen")}
           >
-            <MaterialIcons name="place" size={17} color="#fff" />
-            <Text
-              style={{
-                color: "#fff",
-              }}
-            >
-              {CurrentAddresses ? (
-                CurrentAddresses?.h.toUpperCase() +
-                ", " +
-                CurrentAddresses?.l.toUpperCase()
-              ) : (
+            Hi, {firebaseAuth?.currentUser?.displayName || "User"}
+          </Text>
+          <View style={styles.header}>
+            <View style={styles.location}>
+              <Pressable
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginLeft: -3,
+                }}
+                onPress={() => navigation.navigate("AddAddressScreen")}
+              >
+                <MaterialIcons name="place" size={17} color="#fff" />
                 <Text
                   style={{
-                    fontWeight: 500,
                     color: "#fff",
                   }}
                 >
-                  Click to add an address
+                  {CurrentAddresses ? (
+                    CurrentAddresses?.h.toUpperCase() +
+                    ", " +
+                    CurrentAddresses?.l.toUpperCase()
+                  ) : (
+                    <Text
+                      style={{
+                        fontWeight: 500,
+                        color: "#fff",
+                      }}
+                    >
+                      Click to add an address
+                    </Text>
+                  )}
                 </Text>
-              )}
-            </Text>
-          </Pressable>
+              </Pressable>
+            </View>
+          </View>
         </View>
+        <Ionicons name="cart-outline" size={34} color="#fff" />
       </View>
-
       <Input
         placeholder="Search for dishes"
         style={{

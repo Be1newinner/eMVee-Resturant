@@ -6,10 +6,13 @@ import { useSelector } from "react-redux";
 export default function OrdersScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
 
-  // console.log(OrdersSelector);
-
   return (
-    <>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: GlobalColors.primary,
+      }}
+    >
       <FlatList
         ListHeaderComponent={
           <>
@@ -32,7 +35,6 @@ export default function OrdersScreen({ navigation }) {
         data={Object.values(OrdersSelector)}
         contentContainerStyle={{
           gap: 10,
-          backgroundColor: GlobalColors.primary,
         }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(e) => e.orderID}
@@ -215,6 +217,6 @@ export default function OrdersScreen({ navigation }) {
           );
         }}
       />
-    </>
+    </View>
   );
 }

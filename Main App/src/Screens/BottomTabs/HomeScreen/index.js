@@ -1,12 +1,25 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import TopCategories from "./TopCategories";
 import PopularList from "./PopularList";
 
 import { TopViewHome } from "../../../Components/TopViewHome";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { useSelector } from "react-redux";
+import * as SplashScreend from "expo-splash-screen";
 
 const HomeScreen = ({ navigation }) => {
+  const PopularItems = useSelector((state) => state.AllProducts);
+
+  useEffect(() => {
+    (async function () {
+      if (PopularItems.length > 0) {
+        // console.log(PopularItems);
+        await SplashScreend.hideAsync();
+      }
+    })();
+  }, [PopularItems]);
+
   return (
     <View style={styles.container}>
       <PopularList

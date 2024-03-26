@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import WelcomeScreen from "../Screens/Stack/WelcomeScreen";
+// import WelcomeScreen from "../Screens/Stack/WelcomeScreen";
 
 // Auth
-import RegisterScreen from "../Screens/Stack/Auth/RegisterScreen";
-import LoginScreen from "../Screens/Stack/Auth/LoginScreen";
-import VerifyEmail from "../Screens/Stack/Auth/VerifyEmail";
+// import RegisterScreen from "../Screens/Stack/Auth/RegisterScreen";
+// import LoginScreen from "../Screens/Stack/Auth/LoginScreen";
+// import VerifyEmail from "../Screens/Stack/Auth/VerifyEmail";
 
 import BurgerScreen from "../Screens/Stack/BurgerScreen";
 import CategoryItems from "../Screens/Stack/CategoryItems";
@@ -22,6 +22,7 @@ import AddAddressScreen from "../Screens/Stack/AddAddressScreen";
 import AboutUs from "../Screens/Stack/AboutUs";
 import TermsCondition from "../Screens/Stack/TermsCondition";
 import PrivacyPolicy from "../Screens/Stack/PrivacyPolicy";
+import SplashScreen from "../Screens/Stack/SplashScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,17 +30,17 @@ export default function StackScreens() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Welcome"
+        initialRouteName="BottomTab"
         screenOptions={{
           headerShown: false,
         }}
       >
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        {/* <Stack.Screen name="Welcome" component={SplashScreen} /> */}
 
         {/* Auth  */}
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        {/* <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
-        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} /> */}
 
         <Stack.Screen name="BottomTab" component={BottomTabNavigation} />
         <Stack.Screen name="ProductDetail" component={ProductDetail} />
