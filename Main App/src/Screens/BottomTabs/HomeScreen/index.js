@@ -1,24 +1,54 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect } from "react";
+import * as SplashScreend from "expo-splash-screen";
+import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import TopCategories from "./TopCategories";
 import PopularList from "./PopularList";
-
 import { TopViewHome } from "../../../Components/TopViewHome";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import { useSelector } from "react-redux";
-import * as SplashScreend from "expo-splash-screen";
+import { login } from "../../../Services/Slices/AuthSlice";
+import GetProductsController from "../../../Services/OrdersController/GetProductsController";
+import GetAddressController from "../../../Services/OrdersController/GetAddressController";
+import { addProducts } from "../../../Services/Slices/AllProductsSlice";
+import { addCategories } from "../../../Services/Slices/AllCategoriesSlice";
+import { addAddressArray } from "../../../Services/Slices/AddressSlice";
 
 const HomeScreen = ({ navigation }) => {
-  const PopularItems = useSelector((state) => state.AllProducts);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     (async function () {
-      if (PopularItems.length > 0) {
-        // console.log(PopularItems);
-        await SplashScreend.hideAsync();
+      // try {
+      //   const data = await GetProductsController();
+      //   dispatch(addProducts(data?.products));
+      //   dispatch(addCategories(data?.category));
+      // } catch (error) {
+      //   console.log(error);
+      // }
+
+      try {
+        const data = await AsyncStorage.getItem("auth");
+        const data2 = await AsyncStorage.getItem("user");
+        const phone_no = JSON.parse(data)?.phone_no;
+        console.log("phone_no  => ", phone_no);
+
+        const addresses = await GetAddressController({
+          phone_no,
+        });
+
+        // console.log("addresses => ", addresses);
+
+        // console.log("addresses => ", addresses);
+        dispatch(addAddressArray(addresses));
+        dispatch(login(JSON.stringify({ auth: data, user: data2 })));
+      } catch (error) {
+        console.log("LOGIN ERROR!", error);
       }
+
+      await SplashScreend.hideAsync();
     })();
-  }, [PopularItems]);
+  }, []);
 
   return (
     <View style={styles.container}>

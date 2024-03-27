@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 
-export default function ProfileTopView() {
+export default function ProfileTopView({ name = "User", phone = "" }) {
   return (
     <View
       style={{
@@ -29,10 +29,10 @@ export default function ProfileTopView() {
           style={{
             fontSize: 32,
             fontWeight: 600,
-            color:  GlobalColors.themeColor,
+            color: GlobalColors.themeColor,
           }}
         >
-          V
+          {name.slice(0, 1).toUpperCase() || "U"}
         </Text>
       </View>
       <View>
@@ -42,9 +42,9 @@ export default function ProfileTopView() {
             fontSize: 24,
           }}
         >
-          Vijay
+          {name || "User"}
         </Text>
-        <Text>be1newinner@gmail.com</Text>
+        <Text>{phone || "Please Login"}</Text>
       </View>
     </View>
   );

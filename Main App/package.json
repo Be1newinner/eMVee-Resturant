@@ -18,6 +18,8 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@types/react": "~18.2.45",
     "@ui-kitten/components": "^5.3.1",
+    "axios": "^1.6.8",
+    "base-64": "^1.0.0",
     "eas-cli": "7.5.0",
     "expo": "~50.0.13",
     "expo-constants": "~15.4.5",

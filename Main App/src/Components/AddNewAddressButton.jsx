@@ -5,28 +5,34 @@ import {
   Modal,
   Radio,
   RadioGroup,
+  Spinner,
   Text,
 } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addNewAddress } from "../Services/Slices/AddressSlice";
+import { addDoc, collection } from "firebase/firestore";
+import { firestoreDB } from "../Infrastructure/firebase.config";
 
 export default function AddNewAddressButton() {
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
+  const AuthSelector = useSelector((state) => state.Authentication);
 
   const [Name, setName] = useState("");
   const [Contact, setContact] = useState("");
   const [Address, setAddress] = useState("");
   const [Landmark, setLandmark] = useState("");
-  const [PinCode, setPinCode] = useState("795006");
+  const [PinCode] = useState("795006");
   const [AddType, setAddType] = useState(0);
 
   const [Errors, setErrors] = useState({
-    Name: "Error",
+    Name: "",
   });
+
+  const [Loading, setLoading] = useState(false);
 
   const validation = () => {
     const error = {};
@@ -66,7 +72,7 @@ export default function AddNewAddressButton() {
     }
   };
 
-  const addAddress = () => {
+  const addAddress = async ({ phone_no = "" }) => {
     if (!validation()) {
       console.log("Inputs Error!");
     } else {
@@ -77,22 +83,57 @@ export default function AddNewAddressButton() {
         Landmark,
         PinCode,
         AddType,
+        phone_no,
       });
-      dispatch(
-        addNewAddress({
+
+      if (phone_no.length != 10) {
+        console.log("Invalid Authentication => ", phone_no);
+        return null;
+      }
+
+      try {
+        setLoading(true);
+        const docRef = collection(firestoreDB, "ur57");
+
+        const docID = await addDoc(docRef, {
           n: Name,
           p: Contact,
           h: Address,
           l: Landmark,
           pi: PinCode,
           t: AddType,
-        })
-      );
+          u: phone_no,
+        });
+
+        console.log(docID.id);
+
+        dispatch(
+          addNewAddress({
+            n: Name,
+            p: Contact,
+            h: Address,
+            l: Landmark,
+            pi: PinCode,
+            t: AddType,
+            u: phone_no,
+            k: docID.id,
+          })
+        );
+
+        setLoading(false);
+        setVisible(false);
+        return docID.id || null;
+      } catch (error) {
+        setLoading(true);
+        return null;
+      }
     }
   };
 
   return (
     <>
+      
+
       <Modal
         visible={visible}
         backdropStyle={{
@@ -278,18 +319,37 @@ export default function AddNewAddressButton() {
                 >
                   Cancel
                 </Button>
-                <Button
-                  status="danger"
-                  style={{
-                    fontSize: 12,
-                    marginTop: 3,
-                    fontWeight: 700,
-                    flex: 1,
-                  }}
-                  onPress={addAddress}
-                >
-                  Save Address
-                </Button>
+                {Loading ? (
+                  <View
+                    style={{
+                      fontSize: 12,
+                      marginTop: 3,
+                      fontWeight: 700,
+                      flex: 1,
+                      backgroundColor: GlobalColors.themeColor,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 5,
+                    }}
+                  >
+                    <Spinner status="control" />
+                  </View>
+                ) : (
+                  <Button
+                    status="danger"
+                    style={{
+                      fontSize: 12,
+                      marginTop: 3,
+                      fontWeight: 700,
+                      flex: 1,
+                    }}
+                    onPress={() =>
+                      addAddress({ phone_no: AuthSelector?.auth?.phone_no })
+                    }
+                  >
+                    Save Address
+                  </Button>
+                )}
               </View>
             </View>
           </ScrollView>

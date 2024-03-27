@@ -51,9 +51,20 @@ export const AddressSlice = createSlice({
       return produce(state, (draft) => {
         draft.addresses.push({
           ...action.payload,
-          k: state.addresses.length + 1,
         });
         draft.default = state.addresses.length + 1;
+      });
+    },
+    addAddressArray(state, action) {
+      return produce(state, (draft) => {
+        action.payload?.slice(0, 4)?.map((item, index) => {
+          draft.addresses.push({
+            ...item,
+            k: index,
+          });
+        });
+
+        draft.default = 0;
       });
     },
     removeAddress(state, action) {
@@ -77,5 +88,9 @@ export const AddressSlice = createSlice({
   },
 });
 
-export const { addNewAddress, changeDefaultAddress, removeAddress } =
-  AddressSlice.actions;
+export const {
+  addNewAddress,
+  changeDefaultAddress,
+  removeAddress,
+  addAddressArray,
+} = AddressSlice.actions;

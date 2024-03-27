@@ -68,7 +68,6 @@ export const TopViewHome = ({ navigation }) => {
       }
     }
   }, [passedDate]);
-  
 
   return (
     <View
@@ -130,7 +129,12 @@ export const TopViewHome = ({ navigation }) => {
             </View>
           </View>
         </View>
-        <Ionicons name="cart-outline" size={34} color="#fff" />
+        <Ionicons
+          name="cart-outline"
+          size={34}
+          color="#fff"
+          onPress={() => navigation.navigate("CartScreen")}
+        />
       </View>
       <Input
         placeholder="Search for dishes"

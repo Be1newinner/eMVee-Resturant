@@ -18,6 +18,7 @@ const CategoryScreen = ({ navigation }) => {
     <View
       style={{
         backgroundColor: GlobalColors.primary,
+        flex: 1,
       }}
     >
       <FlatList

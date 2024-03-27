@@ -22,7 +22,7 @@ import AddAddressScreen from "../Screens/Stack/AddAddressScreen";
 import AboutUs from "../Screens/Stack/AboutUs";
 import TermsCondition from "../Screens/Stack/TermsCondition";
 import PrivacyPolicy from "../Screens/Stack/PrivacyPolicy";
-import SplashScreen from "../Screens/Stack/SplashScreen";
+import LoginWithPhone from "../Screens/Stack/Auth/LoginWithPhone";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +43,7 @@ export default function StackScreens() {
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} /> */}
 
         <Stack.Screen name="BottomTab" component={BottomTabNavigation} />
+        <Stack.Screen name="LoginWithPhone" component={LoginWithPhone} />
         <Stack.Screen name="ProductDetail" component={ProductDetail} />
         <Stack.Screen name="CategoryItems" component={CategoryItems} />
         <Stack.Screen name="EditProfile" component={ProfileScreen} />

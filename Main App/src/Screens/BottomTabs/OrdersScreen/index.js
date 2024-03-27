@@ -15,7 +15,7 @@ export default function OrdersScreen({ navigation }) {
     >
       <FlatList
         ListHeaderComponent={
-          <>
+          <View style={{ gap: 20 }}>
             <TopView
               navigation={navigation}
               title="My Orders"
@@ -23,7 +23,32 @@ export default function OrdersScreen({ navigation }) {
               color="#000"
               style={{ marginBottom: 20 }}
             />
-          </>
+            {Object.values(OrdersSelector).length ? null : (
+              <>
+                <Image
+                  source={require("../../../../assets/cart-empty.webp")}
+                  width={300}
+                  height={300}
+                  style={{
+                    width: 300,
+                    height: 300,
+                    objectFit: "contain",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                />
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                    textAlign: "center",
+                  }}
+                >
+                  You do not have any order with us.
+                </Text>
+              </>
+            )}
+          </View>
         }
         ListFooterComponent={
           <View
