@@ -1,4 +1,11 @@
-import { Dimensions, FlatList, Pressable, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { Button, Card, Modal } from "@ui-kitten/components";
 import { Feather } from "@expo/vector-icons";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
@@ -8,19 +15,23 @@ import AddNewAddressButton from "../../../Components/AddNewAddressButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
+  addAddressArray,
   changeDefaultAddress,
   removeAddress,
 } from "../../../Services/Slices/AddressSlice";
 import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
 import { firestoreDB } from "../../../Infrastructure/firebase.config";
+import GetAddressController from "../../../Services/OrdersController/GetAddressController";
 
 export default function AddAddressScreen({ navigation }) {
   const saved_addresses = useSelector((state) => state.Address);
+  const AuthSelector = useSelector((state) => state.Authentication);
   const dispatch = useDispatch();
-  
+
   const [ConfirmVisible, setConfirmVisible] = useState(false);
   const [ItemKey, setItemKey] = useState(null);
+  const [IsLoggedIn, setIsLoggedIn] = useState(false);
 
   const [SavedAddresses, setSavedAddress] = useState(null);
   const [DefaultAddresses, setDefaultAddress] = useState(0);
@@ -29,7 +40,7 @@ export default function AddAddressScreen({ navigation }) {
   useEffect(() => {
     setSavedAddress(saved_addresses?.addresses || null);
     setDefaultAddress(saved_addresses?.default || 0);
-    console.log("addresses => ", saved_addresses?.addresses);
+    // console.log("addresses => ", saved_addresses?.addresses);
   }, [saved_addresses]);
 
   useEffect(() => {
@@ -39,11 +50,24 @@ export default function AddAddressScreen({ navigation }) {
       );
   }, [SavedAddresses, DefaultAddresses]);
 
+  useEffect(() => {
+    (async function () {
+      const auth = AuthSelector.auth;
+      if (auth?.phone_no?.length == 10) {
+        setIsLoggedIn(true);
+      }
+    })();
+  }, [AuthSelector]);
+
   const deleteThisAddress = async () => {
-    // await deleteDoc(doc(firestoreDB, "ur57", ));
-    // dispatch(removeAddress(ItemKey));
-    // setConfirmVisible(false);
-    console.log("ItemKey => ", ItemKey);
+    try {
+      await deleteDoc(doc(firestoreDB, "ur57", ItemKey));
+      dispatch(removeAddress(ItemKey));
+      setConfirmVisible(false);
+      // console.log("ItemKey => ", ItemKey, "response => ", response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -95,29 +119,60 @@ export default function AddAddressScreen({ navigation }) {
               }}
               color="black"
             />
-            <Text>Your Saved Address</Text>
+            {IsLoggedIn ? <Text>Your Saved Addresses</Text> : null}
           </View>
         }
         data={SavedAddresses}
         ListFooterComponent={
-          <View
-            style={{
-              gap: 10,
-            }}
-          >
+          IsLoggedIn ? (
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
+                gap: 10,
               }}
             >
-              <Divider style={{ flex: 1, backgroundColor: "grey" }} />
-              <Text>or</Text>
-              <Divider style={{ flex: 1, backgroundColor: "grey" }} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 5,
+                }}
+              >
+                <Divider style={{ flex: 1, backgroundColor: "grey" }} />
+                <Text>or</Text>
+                <Divider style={{ flex: 1, backgroundColor: "grey" }} />
+              </View>
+              <AddNewAddressButton />
             </View>
-            <AddNewAddressButton />
-          </View>
+          ) : (
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={require("../../../../assets/images/login.webp")}
+                style={{
+                  width: Dimensions.get("screen").width / 2,
+                  height: Dimensions.get("screen").width / 2,
+                  minWidth: 250,
+                  minHeight: 250,
+                  objectFit: "contain",
+                  marginBottom: 10,
+                }}
+              />
+              <Text>Please Login to Save Addresses</Text>
+              <Button
+                status="danger"
+                style={{
+                  marginTop: 10,
+                  width: 200,
+                }}
+                onPress={() => navigation.navigate("LoginWithPhone")}
+              >
+                Log in
+              </Button>
+            </View>
+          )
         }
         keyExtractor={(e) => e.k}
         renderItem={({ item }) => (
@@ -177,7 +232,7 @@ export default function AddAddressScreen({ navigation }) {
       />
 
       <Modal
-        visible={false}
+        visible={ConfirmVisible}
         backdropStyle={{
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}

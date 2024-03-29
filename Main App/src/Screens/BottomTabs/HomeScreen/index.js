@@ -30,18 +30,17 @@ const HomeScreen = ({ navigation }) => {
       try {
         const data = await AsyncStorage.getItem("auth");
         const data2 = await AsyncStorage.getItem("user");
-        const phone_no = JSON.parse(data)?.phone_no;
-        console.log("phone_no  => ", phone_no);
 
-        const addresses = await GetAddressController({
-          phone_no,
-        });
-
-        // console.log("addresses => ", addresses);
-
-        // console.log("addresses => ", addresses);
-        dispatch(addAddressArray(addresses));
-        dispatch(login(JSON.stringify({ auth: data, user: data2 })));
+        if (data) {
+          if (data2) {
+            const phone_no = JSON.parse(data)?.phone_no;
+            const addresses = await GetAddressController({
+              phone_no,
+            });
+            dispatch(addAddressArray(addresses));
+            dispatch(login(JSON.stringify({ auth: data, user: data2 })));
+          }
+        }
       } catch (error) {
         console.log("LOGIN ERROR!", error);
       }

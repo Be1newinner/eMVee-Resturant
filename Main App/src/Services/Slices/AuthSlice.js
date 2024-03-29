@@ -41,9 +41,6 @@ export const AuthSlice = createSlice({
       } catch (error) {
         console.log("unknwon error!", error);
       }
-
-      // if (auth?.phone_no) state.auth = auth;
-      // if (user) state.user = user;
     },
     logout(state) {
       state.auth = null;

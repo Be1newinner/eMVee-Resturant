@@ -52,7 +52,7 @@ export const AddressSlice = createSlice({
         draft.addresses.push({
           ...action.payload,
         });
-        draft.default = state.addresses.length + 1;
+        draft.default = action.payload?.k;
       });
     },
     addAddressArray(state, action) {
@@ -60,15 +60,14 @@ export const AddressSlice = createSlice({
         action.payload?.slice(0, 4)?.map((item, index) => {
           draft.addresses.push({
             ...item,
-            k: index,
           });
         });
 
-        draft.default = 0;
+        draft.default = action.payload[0]?.k;
       });
     },
     removeAddress(state, action) {
-      console.log("remove clicked!");
+      // console.log("remove clicked!");
       return produce(state, (draft) => {
         draft.addresses = state.addresses.filter((e) => e.k != action.payload);
         if (action.payload === state.default) {
@@ -79,6 +78,10 @@ export const AddressSlice = createSlice({
           }
         }
       });
+    },
+    resetAddress(state) {
+      state.addresses = [];
+      state.default = 0;
     },
     changeDefaultAddress(state, action) {
       return produce(state, (draft) => {
@@ -93,4 +96,5 @@ export const {
   changeDefaultAddress,
   removeAddress,
   addAddressArray,
+  resetAddress,
 } = AddressSlice.actions;

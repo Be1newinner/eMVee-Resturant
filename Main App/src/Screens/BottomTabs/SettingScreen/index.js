@@ -5,7 +5,10 @@ import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../Services/Slices/AuthSlice";
+import { resetCart } from "../../../Services/Slices/CartSlice";
+import { resetAddress } from "../../../Services/Slices/AddressSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingScreen({ navigation }) {
   const AuthSelector = useSelector((state) => state.Authentication);
@@ -17,7 +20,7 @@ export default function SettingScreen({ navigation }) {
   useEffect(() => {
     try {
       const auth = AuthSelector.auth;
-      console.log("a", AuthSelector);
+      // console.log("a", AuthSelector);
       // const user = AuthSelector.user;
       // console.log(auth);
       setAuthState(auth);
@@ -29,9 +32,9 @@ export default function SettingScreen({ navigation }) {
     }
   }, [AuthSelector.auth, AuthSelector.user]);
 
-  useEffect(() => {
-    console.log("authState", authState?.phone_no);
-  }, [authState]);
+  // useEffect(() => {
+  //   console.log("authState", authState?.phone_no);
+  // }, [authState]);
 
   const MenuItems = [
     {
@@ -58,16 +61,21 @@ export default function SettingScreen({ navigation }) {
       key: 4,
       icon: "",
     },
-    // {
-    //   title: authState?.phone_no?.length == 10 ? "Log Out" : "Log In",
-    //   action: authState?.phone_no?.length == 10 ? null : "LoginWithPhone",
-    //   key: 6,
-    //   icon: "",
-    //   action2: async () => {
-    //     dispatch(logout());
-    //     console.log("log Out Function");
-    //   },
-    // },
+    {
+      title: authState?.phone_no?.length == 10 ? "Log Out" : "Log In",
+      action: authState?.phone_no?.length == 10 ? null : "LoginWithPhone",
+      key: 6,
+      icon: "",
+      action2: async () => {
+        await AsyncStorage.removeItem("user");
+        await AsyncStorage.removeItem("auth");
+        // await AsyncStorage.removeItem("address");
+        dispatch(logout());
+        dispatch(resetCart());
+        dispatch(resetAddress());
+        // console.log("log Out Function");
+      },
+    },
   ];
 
   return (
