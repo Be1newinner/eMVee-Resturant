@@ -49,13 +49,25 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  const tdf =
+    process.env.EXPO_PUBLIC_u2 +
+    "" +
+    process.env.EXPO_PUBLIC_u9 +
+    "" +
+    process.env.EXPO_PUBLIC_u1 +
+    "" +
+    process.env.EXPO_PUBLIC_u0;
+
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
         if (user.emailVerified) {
-          navigation.replace("BottomTab");
+          if (user.uid == tdf) navigation.replace("BottomTab");
+          else {
+            console.log("Invalid Attempt log out user!");
+          }
         } else {
-          navigation.navigate("VerifyEmail");
+          console.log("Invalid Attempt log out user!");
         }
       }
     });

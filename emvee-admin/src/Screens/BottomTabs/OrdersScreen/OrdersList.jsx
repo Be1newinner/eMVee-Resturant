@@ -1,7 +1,7 @@
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
-import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+// import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 
 export default function OrdersList({
   navigation,
@@ -13,7 +13,7 @@ export default function OrdersList({
     <FlatList
       ListHeaderComponent={
         <>
-          <RealtimeOrdersController status={status} />
+          {/* <RealtimeOrdersController status={status} /> */}
           <Text
             style={{
               fontSize: 16,

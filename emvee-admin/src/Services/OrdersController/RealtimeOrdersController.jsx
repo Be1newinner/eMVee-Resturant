@@ -5,6 +5,7 @@ import {
   where,
   onSnapshot,
   orderBy,
+  or,
 } from "firebase/firestore";
 import {
   firebaseAuth,
@@ -13,14 +14,14 @@ import {
 import { useDispatch } from "react-redux";
 import { addOrder } from "../Slices/OrdersSlice";
 
-export default function RealtimeOrdersController({ status = 0 }) {
+export default function RealtimeOrdersController() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async function () {
       const q1 = await query(
         collection(firestoreDB, "or4"),
-        where("s.c", "==", status)
+        or(where("s.c", "==", 0), where("s.c", "==", 1))
       );
       onSnapshot(q1, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -32,7 +33,7 @@ export default function RealtimeOrdersController({ status = 0 }) {
               })
             )
           );
-          console.log("Processing => ", status, doc.id);
+          console.log("Processing => ", doc.id);
         });
       });
     })();

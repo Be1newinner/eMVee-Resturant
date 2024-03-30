@@ -24,9 +24,6 @@ export default function OrdersScreen({ navigation }) {
         flex: 1,
       }}
     >
-      <RealtimeOrdersController status={0} />
-      <RealtimeOrdersController status={1} />
-
       <View
         style={{
           width: Dimensions.get("screen").width,

@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+// import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { firestoreDB } from "../../../Infrastructure/firebase.config";
@@ -9,7 +9,6 @@ import {
   where,
   getCountFromServer,
   query,
-  and,
   Timestamp,
 } from "firebase/firestore";
 
@@ -64,7 +63,7 @@ export default function DashboardScreen() {
       try {
         const data = await getCount({ column: "us7" });
         setTotalUsers(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -75,14 +74,14 @@ export default function DashboardScreen() {
           value: -1,
         });
         setCancelOrders(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
       try {
         const data = await getCount({ column: "us7" });
         setTotalUsers(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -90,7 +89,7 @@ export default function DashboardScreen() {
         const startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
         const startTimestamp = Timestamp.fromDate(startDate);
-        console.log("Today", startDate);
+        // console.log("Today", startDate);
         const data = await getCount({
           column: "or4",
           queryD: "s.c",
@@ -98,7 +97,7 @@ export default function DashboardScreen() {
           value2: startTimestamp,
         });
         setTodayDelivered(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -107,7 +106,7 @@ export default function DashboardScreen() {
         const sevenDaysBefore = DaysBefore(startDate, 7);
         sevenDaysBefore.setHours(0, 0, 0, 0);
         const startTimestamp = Timestamp.fromDate(sevenDaysBefore);
-        console.log("week", sevenDaysBefore);
+        // console.log("week", sevenDaysBefore);
 
         const data = await getCount({
           column: "or4",
@@ -116,7 +115,7 @@ export default function DashboardScreen() {
           value2: startTimestamp,
         });
         setWeekDelivered(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -125,7 +124,7 @@ export default function DashboardScreen() {
         const ThirtyDaysBefore = DaysBefore(startDate, 30);
         ThirtyDaysBefore.setHours(0, 0, 0, 0);
         const startTimestamp = Timestamp.fromDate(ThirtyDaysBefore);
-        console.log("month", ThirtyDaysBefore);
+        // console.log("month", ThirtyDaysBefore);
 
         const data = await getCount({
           column: "or4",
@@ -134,7 +133,7 @@ export default function DashboardScreen() {
           value2: startTimestamp,
         });
         setMonthDelivered(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -145,10 +144,11 @@ export default function DashboardScreen() {
           value: 2,
         });
         setTotalDelivered(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
+      console.log("useEffect executed!");
     })();
   }, []);
 
@@ -160,8 +160,8 @@ export default function DashboardScreen() {
         padding: 10,
       }}
     >
-      <RealtimeOrdersController status={0} />
-      <RealtimeOrdersController status={1} />
+      {/* <RealtimeOrdersController status={0} />
+      <RealtimeOrdersController status={1} /> */}
       <Text
         style={{
           fontWeight: 600,
@@ -216,7 +216,6 @@ export default function DashboardScreen() {
             <Text
               style={{
                 color: "#fff",
-                fontSize: 16,
                 fontWeight: 700,
               }}
             >
@@ -243,7 +242,6 @@ export default function DashboardScreen() {
             <Text
               style={{
                 color: "#fff",
-                fontSize: 16,
                 fontWeight: 700,
               }}
             >
@@ -270,7 +268,6 @@ export default function DashboardScreen() {
             <Text
               style={{
                 color: "#fff",
-                fontSize: 16,
                 fontWeight: 700,
               }}
             >
@@ -314,7 +311,6 @@ export default function DashboardScreen() {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16,
                   fontWeight: 700,
                 }}
               >
@@ -341,7 +337,6 @@ export default function DashboardScreen() {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16,
                   fontWeight: 700,
                 }}
               >
@@ -368,7 +363,6 @@ export default function DashboardScreen() {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16,
                   fontWeight: 700,
                 }}
               >
@@ -395,7 +389,6 @@ export default function DashboardScreen() {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16,
                   fontWeight: 700,
                 }}
               >
@@ -444,7 +437,6 @@ export default function DashboardScreen() {
             <Text
               style={{
                 color: "#fff",
-                fontSize: 16,
                 fontWeight: 700,
               }}
             >
@@ -471,7 +463,6 @@ export default function DashboardScreen() {
             <Text
               style={{
                 color: "#fff",
-                fontSize: 16,
                 fontWeight: 700,
               }}
             >
@@ -498,7 +489,6 @@ export default function DashboardScreen() {
             <Text
               style={{
                 color: "#fff",
-                fontSize: 16,
                 fontWeight: 700,
               }}
             >
