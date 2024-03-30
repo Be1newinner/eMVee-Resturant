@@ -19,28 +19,26 @@ const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async function () {
-      // try {
-      //   const data = await GetProductsController();
-      //   dispatch(addProducts(data?.products));
-      //   dispatch(addCategories(data?.category));
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      try {
+        const data = await GetProductsController();
+        dispatch(addProducts(data?.products));
+        dispatch(addCategories(data?.category));
+      } catch (error) {
+        console.log(error);
+      }
 
       try {
         const data = await AsyncStorage.getItem("auth");
         const data2 = await AsyncStorage.getItem("user");
 
-        if (data) {
-          if (data2) {
-            const phone_no = JSON.parse(data)?.phone_no;
-            const addresses = await GetAddressController({
-              phone_no,
-            });
-            dispatch(addAddressArray(addresses));
-            dispatch(login(JSON.stringify({ auth: data, user: data2 })));
-          }
-        }
+        // console.log("login in Homescreen => ", { data, data2 });
+
+        const phone_no = JSON.parse(data)?.phone_no;
+        const addresses = await GetAddressController({
+          phone_no,
+        });
+        dispatch(login(JSON.stringify({ auth: data, user: data2 })));
+        dispatch(addAddressArray(addresses));
       } catch (error) {
         console.log("LOGIN ERROR!", error);
       }

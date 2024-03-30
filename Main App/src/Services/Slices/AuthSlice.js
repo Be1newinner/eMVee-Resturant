@@ -15,6 +15,7 @@ export const AuthSlice = createSlice({
       let user = null;
       try {
         let parsedPayload = {};
+        console.log("LOGIN SLICE DATA => ", action.payload);
         if (typeof action.payload == "string") {
           const payloadL1 = JSON.parse(action.payload);
 

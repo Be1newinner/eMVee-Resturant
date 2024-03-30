@@ -22,6 +22,7 @@ export default function CartScreen({ navigation }) {
   const [CartData, setCartData] = useState(null);
   const [cartTotal, setCartTotal] = useState(null);
   const [authState, setAuthState] = useState(null);
+  const [RecieverAddress, setRecieverAddress] = useState(null);
   // const [userState, setUserState] = useState(null);
 
   const ConfirmOrder = async () => {
@@ -30,6 +31,7 @@ export default function CartScreen({ navigation }) {
     const response = await addOrderController({
       CartSelector: selector,
       AddressSelector,
+      authState,
     });
 
     if (response.status === 200) {
@@ -74,9 +76,17 @@ export default function CartScreen({ navigation }) {
   }, [selector]);
 
   useEffect(() => {
+    setRecieverAddress(
+      AddressSelector?.addresses?.filter(
+        (e) => e.k == AddressSelector.default
+      )[0]
+    );
+  }, [AddressSelector]);
+
+  useEffect(() => {
     try {
       const auth = AuthSelector.auth;
-      console.log("a", AuthSelector);
+      // console.log("a", AuthSelector);
       // const user = AuthSelector.user;
       // console.log(auth);
       setAuthState(auth);
@@ -383,119 +393,117 @@ export default function CartScreen({ navigation }) {
 
               {/* ------------------------------------------------------------------ */}
               {authState?.phone_no ? (
-                <>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginHorizontal: 10,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontWeight: 600,
-                        marginTop: 10,
-                      }}
-                    >
-                      Reciever Details
-                    </Text>
-                    <Text
-                      style={{
-                        fontWeight: 600,
-                        marginTop: 10,
-                        color: "rgb(50,100,256)",
-                      }}
-                      onPress={() => navigation.navigate("AddAddressScreen")}
-                    >
-                      Change Details
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      padding: 10,
-                      backgroundColor: "#fff",
-                      borderRadius: 10,
-                      elevation: 5,
-                      gap: 10,
-                    }}
-                  >
+                RecieverAddress ? (
+                  <>
                     <View
                       style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        flex: 1,
+                        marginHorizontal: 10,
                       }}
                     >
                       <Text
                         style={{
-                          fontWeight: 500,
-                          fontSize: 16,
+                          fontWeight: 600,
+                          marginTop: 10,
                         }}
                       >
-                        Name
+                        Reciever Details
                       </Text>
                       <Text
                         style={{
-                          fontWeight: 500,
+                          fontWeight: 600,
+                          marginTop: 10,
+                          color: "rgb(50,100,256)",
                         }}
+                        onPress={() => navigation.navigate("AddAddressScreen")}
                       >
-                        {AddressSelector?.addresses[AddressSelector.default]?.n}
+                        Change Details
                       </Text>
                     </View>
                     <View
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        flex: 1,
+                        padding: 10,
+                        backgroundColor: "#fff",
+                        borderRadius: 10,
+                        elevation: 5,
+                        gap: 10,
                       }}
                     >
-                      <Text
+                      <View
                         style={{
-                          fontWeight: 500,
-                          fontSize: 16,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          flex: 1,
                         }}
                       >
-                        Phone
-                      </Text>
-                      <Text
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 16,
+                          }}
+                        >
+                          Name
+                        </Text>
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                          }}
+                        >
+                          {RecieverAddress?.n}
+                        </Text>
+                      </View>
+                      <View
                         style={{
-                          fontWeight: 500,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          flex: 1,
                         }}
                       >
-                        {AddressSelector?.addresses[AddressSelector.default]?.p}
-                      </Text>
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 16,
+                          }}
+                        >
+                          Phone
+                        </Text>
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                          }}
+                        >
+                          {RecieverAddress?.p}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          flex: 1,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 16,
+                          }}
+                        >
+                          Address
+                        </Text>
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                          }}
+                        >
+                          {RecieverAddress?.h.toUpperCase() +
+                            ", " +
+                            RecieverAddress?.l.toUpperCase()}
+                        </Text>
+                      </View>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        flex: 1,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontWeight: 500,
-                          fontSize: 16,
-                        }}
-                      >
-                        Address
-                      </Text>
-                      <Text
-                        style={{
-                          fontWeight: 500,
-                        }}
-                      >
-                        {AddressSelector.addresses[
-                          AddressSelector.default
-                        ]?.h.toUpperCase() +
-                          ", " +
-                          AddressSelector.addresses[
-                            AddressSelector.default
-                          ]?.l.toUpperCase()}
-                      </Text>
-                    </View>
-                  </View>
-                </>
+                  </>
+                ) : null
               ) : null}
             </View>
             <Button
@@ -509,15 +517,21 @@ export default function CartScreen({ navigation }) {
               }}
               onPress={() => {
                 if (authState?.phone_no?.length == 10) {
-                  setVisible(true);
+                  if (RecieverAddress) {
+                    setVisible(true);
+                  } else {
+                    navigation.navigate("AddAddressScreen");
+                  }
                 } else {
                   navigation.navigate("LoginWithPhone");
-                  console.log("Logging in");
+                  // console.log("Logging in");
                 }
               }}
             >
               {authState?.phone_no?.length == 10
-                ? "Confirm Order"
+                ? RecieverAddress
+                  ? "Confirm Order"
+                  : "Add Address"
                 : "Login to Order"}
             </Button>
             <OrderConfirmModal

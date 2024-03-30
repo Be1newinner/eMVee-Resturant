@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import {
-  firebaseAuth,
-  firestoreDB,
-} from "../../Infrastructure/firebase.config";
+import { firestoreDB } from "../../Infrastructure/firebase.config";
 import { useDispatch, useSelector } from "react-redux";
 import { addOrder } from "../Slices/OrdersSlice";
 
@@ -14,6 +11,7 @@ export default function RealtimeOrdersController() {
   useEffect(() => {
     (async function () {
       if (AuthSelector?.auth?.phone_no?.length == 10) {
+        console.log("phone in orders", AuthSelector?.auth?.phone_no);
         const q = await query(
           collection(firestoreDB, "or4"),
           where("u.u", "==", AuthSelector?.auth?.phone_no)
@@ -31,9 +29,11 @@ export default function RealtimeOrdersController() {
             );
           });
         });
+      } else {
+        console.log("no phone in orders", AuthSelector?.auth?.phone_no);
       }
     })();
-  }, [firebaseAuth]);
+  }, [AuthSelector]);
 
   return null;
 }

@@ -7,8 +7,10 @@ import {
 export default async function addOrderController({
   AddressSelector,
   CartSelector,
+  authState,
 }) {
   try {
+    console.log("authState => ", authState?.phone_no, authState);
     const CurrentAddress = AddressSelector?.addresses?.filter(
       (e) => e.k == AddressSelector?.default
     )[0];
@@ -28,7 +30,7 @@ export default async function addOrderController({
       },
       i: items,
       u: {
-        u: firebaseAuth.currentUser.uid,
+        u: authState?.phone_no,
         n: CurrentAddress?.n,
         p: CurrentAddress?.p,
         a: CurrentAddress?.h + ", " + CurrentAddress?.l,
