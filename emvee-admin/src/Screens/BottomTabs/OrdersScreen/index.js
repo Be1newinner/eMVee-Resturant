@@ -2,7 +2,7 @@ import { Dimensions, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useEffect, useState } from "react";
 import OrdersList from "./OrdersList";
-import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+// import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { useSelector } from "react-redux";
 
 export default function OrdersScreen({ navigation }) {

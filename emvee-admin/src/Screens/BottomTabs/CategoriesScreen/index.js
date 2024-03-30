@@ -1,6 +1,6 @@
 import { FlatList, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { CategoryModal } from "../../../Components/Modals/CategoryModal";

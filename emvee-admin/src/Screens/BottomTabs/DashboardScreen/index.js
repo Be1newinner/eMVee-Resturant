@@ -3,7 +3,10 @@ import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { firestoreDB } from "../../../Infrastructure/firebase.config";
+import {
+  firebaseAuth,
+  firestoreDB,
+} from "../../../Infrastructure/firebase.config";
 import {
   collection,
   where,
@@ -11,6 +14,8 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
+import { FontAwesome } from "@expo/vector-icons";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function DashboardScreen() {
   const OrdersSelector = useSelector((state) => state.Orders);
@@ -50,6 +55,11 @@ export default function DashboardScreen() {
   useEffect(() => {
     setTotalCategories(categorySelector?.length || 0);
     setTotalProducts(productsSelector?.length || 0);
+    // console.log(
+    //   "PRO AND CATS => ",
+    //   productsSelector?.length,
+    //   categorySelector?.length
+    // );
   }, [productsSelector, categorySelector]);
 
   function DaysBefore(date, days) {
@@ -162,14 +172,30 @@ export default function DashboardScreen() {
     >
       {/* <RealtimeOrdersController status={0} />
       <RealtimeOrdersController status={1} /> */}
-      <Text
+      <View
         style={{
-          fontWeight: 600,
-          fontSize: 20,
+          flexDirection: "row",
+          gap: 10,
+          justifyContent: "space-between",
         }}
       >
-        eMVee Dashboard
-      </Text>
+        <Text
+          style={{
+            fontWeight: 600,
+            fontSize: 20,
+          }}
+        >
+          eMVee Dashboard
+        </Text>
+        <FontAwesome
+          name="sign-out"
+          size={28}
+          color="black"
+          onPress={() => {
+            signOut(firebaseAuth);
+          }}
+        />
+      </View>
 
       <View
         style={{

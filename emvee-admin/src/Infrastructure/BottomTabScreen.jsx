@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CategoriesScreen from "../Screens/BottomTabs/CategoriesScreen";
@@ -10,10 +10,40 @@ import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
 import { Dimensions } from "react-native";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { firebaseAuth } from "./firebase.config";
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabScreen = () => {
+const tdf =
+  process.env.EXPO_PUBLIC_u2 +
+  "" +
+  process.env.EXPO_PUBLIC_u9 +
+  "" +
+  process.env.EXPO_PUBLIC_u1 +
+  "" +
+  process.env.EXPO_PUBLIC_u0;
+
+const BottomTabScreen = ({ navigation }) => {
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, async (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          if (user.uid != tdf) {
+            await signOut(firebaseAuth);
+            navigation.replace("LoginScreen");
+          }
+        } else {
+          await signOut(firebaseAuth);
+          navigation.replace("LoginScreen");
+        }
+      } else {
+        await signOut(firebaseAuth);
+        navigation.replace("LoginScreen");
+      }
+    });
+  }, [firebaseAuth]);
+
   return (
     <Tab.Navigator
       screenOptions={{

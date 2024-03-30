@@ -1,7 +1,4 @@
-import {
-  fetchAllCategories,
-  fetchAllProducts,
-} from "../AllProducts/AllProductsService";
+import { fetchAllCategories, fetchAllProducts } from "./AllProductsService";
 
 export default async function GetProductsController() {
   try {

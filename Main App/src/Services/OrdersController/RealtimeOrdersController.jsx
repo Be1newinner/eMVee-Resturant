@@ -11,7 +11,7 @@ export default function RealtimeOrdersController() {
   useEffect(() => {
     (async function () {
       if (AuthSelector?.auth?.phone_no?.length == 10) {
-        console.log("phone in orders", AuthSelector?.auth?.phone_no);
+        // console.log("phone in orders", AuthSelector?.auth?.phone_no);
         const q = await query(
           collection(firestoreDB, "or4"),
           where("u.u", "==", AuthSelector?.auth?.phone_no)

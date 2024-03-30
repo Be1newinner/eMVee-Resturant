@@ -19,9 +19,9 @@ export default function StackScreens() {
       >
         {/* Auth  */}
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-
         <Stack.Screen name="BottomTab" component={BottomTabNavigation} />
         <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
