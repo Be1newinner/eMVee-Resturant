@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { ProductsModal } from "../../../Components/Modals/ProductsModal";
-import ImageComponent from "./ImageComponent";
+import ImageComponent from "../../../Components/ImageComponent";
 
 export default function ProductsScreen() {
   const categorySelector = useSelector((selector) => selector.AllCategories);

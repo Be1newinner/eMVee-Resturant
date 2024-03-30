@@ -3,14 +3,14 @@ import { ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { Button, Input, Spinner, Text } from "@ui-kitten/components";
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
-import { firebaseAuth } from "../../../../Infrastructure/firebase.config";
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { firebaseAuth } from "../../../Infrastructure/firebase.config";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import LogOut from "../../../../Services/LogOut";
+import LogOut from "../../../Services/LogOut";
 import { useDispatch } from "react-redux";
-import { resetOrders } from "../../../../Services/Slices/OrdersSlice";
-import { resetProducts } from "../../../../Services/Slices/AllProductsSlice";
-import { resetCategories } from "../../../../Services/Slices/AllCategoriesSlice";
+import { resetOrders } from "../../../Services/Slices/OrdersSlice";
+import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
+import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
 
 export default function LoginScreen({ navigation }) {
   const [emailID, setEmailID] = useState("");

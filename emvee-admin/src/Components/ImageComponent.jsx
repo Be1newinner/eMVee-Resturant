@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Image, Text, View } from "react-native";
-import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { GlobalColors } from "../Infrastructure/GlobalVariables";
 
 export default function ImageComponent({ itemKey, title }) {
   const [Error, setError] = useState(true);

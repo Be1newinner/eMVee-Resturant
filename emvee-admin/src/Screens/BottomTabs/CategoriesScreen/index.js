@@ -1,10 +1,10 @@
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { CategoryModal } from "../../../Components/Modals/CategoryModal";
-import ImageComponent from "./ImageComponent";
+import ImageComponent from "../../../Components/ImageComponent";
 
 export default function CategoriesScreen() {
   const categorySelector = useSelector((selector) => selector.AllCategories);

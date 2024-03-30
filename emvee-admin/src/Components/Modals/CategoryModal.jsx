@@ -9,9 +9,10 @@ import {
 } from "@ui-kitten/components";
 import { Dimensions, Image, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { fireStorage } from "../../Infrastructure/firebase.config";
+import { fireStorage, firestoreDB } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
+import { addDoc, collection, doc } from "firebase/firestore";
 
 export const CategoryModal = ({
   visible,
@@ -34,8 +35,6 @@ export const CategoryModal = ({
       setError("");
       setImage(null);
     }
-
-    // console.log(category);
   }, [category]);
 
   async function uploadImageAsync({ uri, categoryID }) {
@@ -76,6 +75,15 @@ export const CategoryModal = ({
   // const addNewCategory = () => {};
 
   async function addCategory() {
+    if (category?.k) {
+      console.log("Edit Category function! ", category?.k);
+    } else {
+      const newDoc = await addDoc(collection(firestoreDB, "ca8"), {
+        t: Name,
+      });
+      console.log("Add Category function!", newDoc.id);
+    }
+
     closingModal(null);
   }
 
