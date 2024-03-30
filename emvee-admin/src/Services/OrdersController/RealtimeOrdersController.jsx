@@ -27,34 +27,49 @@ export default function RealtimeOrdersController() {
     process.env.EXPO_PUBLIC_u0;
 
   useEffect(() => {
+    let snapshot;
     onAuthStateChanged(firebaseAuth, async (user) => {
-      if (user.uid == tdf) {
-        const q1 = await query(
-          collection(firestoreDB, "or4"),
-          or(where("s.c", "==", 0), where("s.c", "==", 1))
-        );
-        onSnapshot(q1, (querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            dispatch(
-              addOrder(
-                JSON.stringify({
-                  key: doc.id,
-                  value: doc.data(),
-                })
-              )
-            );
+      if (user?.uid == tdf) {
+        console.log("A2");
+        try {
+          const q1 = await query(
+            collection(firestoreDB, "or4"),
+            or(where("s.c", "==", 0), where("s.c", "==", 1))
+          );
+          snapshot = onSnapshot(q1, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              dispatch(
+                addOrder(
+                  JSON.stringify({
+                    key: doc.id,
+                    value: doc.data(),
+                  })
+                )
+              );
+            });
           });
-        });
+        } catch (error) {
+          console.log("REALTIME ERROR!");
+        }
       } else {
+        if (snapshot) {
+          let data = snapshot();
+          console.log("Unsubscription => ", data);
+        }
         console.log("Logged out Data");
       }
     });
+
+    return () => {
+      console.log("Listener Unsubscription!");
+    };
   }, [firebaseAuth]);
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, async (user) => {
-      if (user.uid == tdf) {
-        if (productsSelector?.length == 0) {
+      if (user?.uid == tdf) {
+        // console.log("A1");
+        if (productsSelector?.data?.length == 0) {
           const products = await fetchAllProducts();
           // console.log("Dispatching to products!");
           dispatch(addProducts(products));
@@ -62,7 +77,7 @@ export default function RealtimeOrdersController() {
           console.log("ProductSelector => ", productsSelector?.length);
         }
 
-        if (categorySelector?.length == 0) {
+        if (categorySelector?.data?.length == 0) {
           const category = await fetchAllCategories();
           // console.log("Dispatching to categories!");
           dispatch(addCategories(category));

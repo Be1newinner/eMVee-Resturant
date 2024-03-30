@@ -1,24 +1,16 @@
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { CategoryModal } from "../../../Components/Modals/CategoryModal";
+import ImageComponent from "./ImageComponent";
 
 export default function CategoriesScreen() {
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
   const [editCategory, setEditCategory] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-
-  // useEffect(() => {
-  //   console.log("productsSelector => ", productsSelector);
-  // }, [productsSelector]);
-
-  // useEffect(() => {
-  //   if (editCategory) setModalVisible(true);
-  //   else setModalVisible(false);
-  // }, [editCategory]);
 
   return (
     <View
@@ -52,8 +44,7 @@ export default function CategoriesScreen() {
               color: "#fff",
             }}
           >
-            {" "}
-            ({categorySelector?.length || 0})
+            ({categorySelector?.data?.length || 0})
           </Text>
         </Text>
 
@@ -70,9 +61,10 @@ export default function CategoriesScreen() {
 
       <FlatList
         contentContainerStyle={{
-          gap: 10,
+          gap: 20,
           padding: 10,
         }}
+        initialNumToRender={6}
         ListHeaderComponent={
           <View
             style={{
@@ -87,56 +79,67 @@ export default function CategoriesScreen() {
             }}
           />
         }
-        data={categorySelector}
+        data={categorySelector?.data}
         keyExtractor={(k) => k.k}
-        renderItem={({ item, index }) => {
-          // console.log(item);
+        renderItem={({ item }) => {
           return (
             <Pressable
               key={item.k}
               style={{
                 backgroundColor: "#fff",
-                padding: 20,
                 flexDirection: "row",
-                gap: 10,
                 elevation: 3,
                 borderRadius: 10,
+                overflow: "hidden",
               }}
               onPress={() => {
                 setEditCategory(item);
                 setModalVisible(true);
               }}
             >
-              <Text
+              <ImageComponent itemKey={item.k} title={item.t} />
+              <View
                 style={{
-                  fontWeight: 500,
-                }}
-              >
-                {index + 1}.
-              </Text>
-              <Text
-                style={{
-                  fontWeight: 500,
+                  flexDirection: "row",
                   flex: 1,
+                  padding: 5,
+                  paddingRight: 10,
+                  gap: 5,
                 }}
               >
-                {item?.t}
-              </Text>
-              {item?.s && (
-                <AntDesign
-                  name="star"
-                  size={24}
-                  color={GlobalColors.themeColor}
-                />
-              )}
-              <Text
-                style={{
-                  fontWeight: 700,
-                  fontSize: 16,
-                }}
-              >
-                ({productsSelector?.filter((e) => e.c == item.k)?.length})
-              </Text>
+                <View
+                  style={{
+                    flex: 1,
+                    gap: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item?.t}
+                  </Text>
+                  <Text
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 16,
+                    }}
+                  >
+                    {
+                      productsSelector?.data?.filter((e) => e.c == item.k)
+                        ?.length
+                    }
+                  </Text>
+                </View>
+                {item?.s && (
+                  <AntDesign
+                    name="star"
+                    size={24}
+                    color={GlobalColors.themeColor}
+                  />
+                )}
+              </View>
             </Pressable>
           );
         }}

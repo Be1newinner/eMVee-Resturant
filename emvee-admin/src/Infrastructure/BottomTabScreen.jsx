@@ -10,8 +10,13 @@ import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
 import { Dimensions } from "react-native";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "./firebase.config";
+import LogOut from "../Services/LogOut";
+import { resetOrders } from "../Services/Slices/OrdersSlice";
+import { resetProducts } from "../Services/Slices/AllProductsSlice";
+import { resetCategories } from "../Services/Slices/AllCategoriesSlice";
+import { useDispatch } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,20 +30,31 @@ const tdf =
   process.env.EXPO_PUBLIC_u0;
 
 const BottomTabScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, async (user) => {
       if (user) {
         if (user.emailVerified) {
           if (user.uid != tdf) {
-            await signOut(firebaseAuth);
+            await dispatch(resetOrders());
+            await dispatch(resetProducts());
+            await dispatch(resetCategories());
+            await LogOut();
             navigation.replace("LoginScreen");
           }
         } else {
-          await signOut(firebaseAuth);
+          await dispatch(resetOrders());
+          await dispatch(resetProducts());
+          await dispatch(resetCategories());
+          await LogOut();
           navigation.replace("LoginScreen");
         }
       } else {
-        await signOut(firebaseAuth);
+        await dispatch(resetOrders());
+        await dispatch(resetProducts());
+        await dispatch(resetCategories());
+        await LogOut();
         navigation.replace("LoginScreen");
       }
     });
@@ -131,22 +147,6 @@ const BottomTabScreen = ({ navigation }) => {
         name="Orders"
         component={OrdersScreen}
       />
-      {/* <Tab.Screen
-        options={{
-          tabBarLabelStyle: {
-            color: "#fff",
-          },
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name={focused ? "person-sharp" : "person-outline"}
-              size={24}
-              color="white"
-            />
-          ),
-        }}
-        name="Users"
-        component={UserScreen}
-      /> */}
     </Tab.Navigator>
   );
 };

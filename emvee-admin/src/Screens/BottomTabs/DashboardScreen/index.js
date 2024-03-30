@@ -1,12 +1,9 @@
 import { Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  firebaseAuth,
-  firestoreDB,
-} from "../../../Infrastructure/firebase.config";
+import { firestoreDB } from "../../../Infrastructure/firebase.config";
 import {
   collection,
   where,
@@ -15,12 +12,16 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { FontAwesome } from "@expo/vector-icons";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import LogOut from "../../../Services/LogOut";
+import { resetOrders } from "../../../Services/Slices/OrdersSlice";
+import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
+import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
 
 export default function DashboardScreen() {
   const OrdersSelector = useSelector((state) => state.Orders);
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
+  const dispatch = useDispatch();
 
   const [CancelOrders, setCancelOrders] = useState(0);
   const [TodayDelivered, setTodayDelivered] = useState(0);
@@ -53,20 +54,23 @@ export default function DashboardScreen() {
   }
 
   useEffect(() => {
-    setTotalCategories(categorySelector?.length || 0);
-    setTotalProducts(productsSelector?.length || 0);
-    // console.log(
-    //   "PRO AND CATS => ",
-    //   productsSelector?.length,
-    //   categorySelector?.length
-    // );
-  }, [productsSelector, categorySelector]);
+    setTotalCategories(categorySelector?.data?.length || 0);
+    setTotalProducts(productsSelector?.data?.length || 0);
+    console.log("PRO AND CATS => ", categorySelector);
+  }, [productsSelector, categorySelector?.data]);
 
   function DaysBefore(date, days) {
     const newDate = new Date(date); // Create a copy of the date
     newDate.setDate(newDate.getDate() - days); // Subtract 7 days
     return newDate;
   }
+
+  const logOutUser = async () => {
+    await dispatch(resetOrders());
+    await dispatch(resetProducts());
+    await dispatch(resetCategories());
+    await LogOut();
+  };
 
   useEffect(() => {
     (async function () {
@@ -191,9 +195,7 @@ export default function DashboardScreen() {
           name="sign-out"
           size={28}
           color="black"
-          onPress={() => {
-            signOut(firebaseAuth);
-          }}
+          onPress={async () => logOutUser()}
         />
       </View>
 

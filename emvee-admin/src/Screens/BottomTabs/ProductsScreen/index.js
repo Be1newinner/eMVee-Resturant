@@ -1,9 +1,10 @@
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { ProductsModal } from "../../../Components/Modals/ProductsModal";
+import ImageComponent from "./ImageComponent";
 
 export default function ProductsScreen() {
   const categorySelector = useSelector((selector) => selector.AllCategories);
@@ -44,7 +45,7 @@ export default function ProductsScreen() {
             }}
           >
             {" "}
-            ({productsSelector?.length || 0})
+            ({productsSelector?.data?.length || 0})
           </Text>
         </Text>
 
@@ -61,9 +62,10 @@ export default function ProductsScreen() {
 
       <FlatList
         contentContainerStyle={{
-          gap: 10,
+          gap: 20,
           padding: 10,
         }}
+        initialNumToRender={6}
         ListHeaderComponent={
           <View
             style={{
@@ -78,7 +80,7 @@ export default function ProductsScreen() {
             }}
           />
         }
-        data={productsSelector}
+        data={productsSelector?.data}
         keyExtractor={(k) => k.k}
         renderItem={({ item, index }) => {
           // console.log(item);
@@ -97,37 +99,7 @@ export default function ProductsScreen() {
                 setModalVisible(true);
               }}
             >
-              <View>
-                {item.i ? (
-                  <Image
-                    source={item.i}
-                    style={{
-                      width: 80,
-                      height: 80,
-                    }}
-                  />
-                ) : (
-                  <View
-                    style={{
-                      backgroundColor: GlobalColors.themeColor,
-                      minHeight: 80,
-                      minWidth: 80,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 28,
-                        fontWeight: 700,
-                        color: "#fff",
-                      }}
-                    >
-                      {item.t.slice(0, 1)}
-                    </Text>
-                  </View>
-                )}
-              </View>
+              <ImageComponent itemKey={item.k} title={item.t} />
               <View
                 style={{
                   flexDirection: "row",
@@ -155,7 +127,12 @@ export default function ProductsScreen() {
                       flex: 1,
                     }}
                   >
-                    ({categorySelector.filter((e) => e.k == item?.c)[0]?.t})
+                    (
+                    {
+                      categorySelector?.data?.filter((e) => e.k == item?.c)[0]
+                        ?.t
+                    }
+                    )
                   </Text>
                   <Text
                     style={{

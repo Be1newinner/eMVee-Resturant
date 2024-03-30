@@ -24,7 +24,12 @@ export const OrdersSlice = createSlice({
           };
       });
     },
+    resetOrders(state) {
+      state = null;
+      console.log("RESET Orders");
+    },
   },
 });
 
-export const { addOrder } = OrdersSlice.actions;
+export const { addOrder, resetOrders } = OrdersSlice.actions;
+1;

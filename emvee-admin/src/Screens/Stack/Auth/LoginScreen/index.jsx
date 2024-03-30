@@ -5,11 +5,12 @@ import { Button, Input, Spinner, Text } from "@ui-kitten/components";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
 import { firebaseAuth } from "../../../../Infrastructure/firebase.config";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import LogOut from "../../../../Services/LogOut";
+import { useDispatch } from "react-redux";
+import { resetOrders } from "../../../../Services/Slices/OrdersSlice";
+import { resetProducts } from "../../../../Services/Slices/AllProductsSlice";
+import { resetCategories } from "../../../../Services/Slices/AllCategoriesSlice";
 
 export default function LoginScreen({ navigation }) {
   const [emailID, setEmailID] = useState("");
@@ -22,6 +23,16 @@ export default function LoginScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const dispatch = useDispatch();
+
+  const tdf =
+    process.env.EXPO_PUBLIC_u2 +
+    "" +
+    process.env.EXPO_PUBLIC_u9 +
+    "" +
+    process.env.EXPO_PUBLIC_u1 +
+    "" +
+    process.env.EXPO_PUBLIC_u0;
 
   const signInUser = async ({ email, password }) => {
     setError(null);
@@ -30,10 +41,21 @@ export default function LoginScreen({ navigation }) {
       await signInWithEmailAndPassword(firebaseAuth, email, password).then(
         async ({ user }) => {
           if (!user?.emailVerified) {
-            await signOut(firebaseAuth);
+            // await signOut(firebaseAuth);
+            await dispatch(resetOrders());
+            await dispatch(resetProducts());
+            await dispatch(resetCategories());
+            await LogOut();
             setError({ other: "Access Denied!" });
           } else {
-            navigation.navigate("BottomTab");
+            if (user.uid == tdf) navigation.replace("BottomTab");
+            else {
+              await dispatch(resetOrders());
+              await dispatch(resetProducts());
+              await dispatch(resetCategories());
+              await LogOut();
+              setError({ other: "Access Denied!" });
+            }
           }
           setIsLoading(false);
         }
@@ -49,25 +71,24 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  const tdf =
-    process.env.EXPO_PUBLIC_u2 +
-    "" +
-    process.env.EXPO_PUBLIC_u9 +
-    "" +
-    process.env.EXPO_PUBLIC_u1 +
-    "" +
-    process.env.EXPO_PUBLIC_u0;
-
   useEffect(() => {
-    onAuthStateChanged(firebaseAuth, (user) => {
+    onAuthStateChanged(firebaseAuth, async (user) => {
       if (user) {
         if (user.emailVerified) {
           if (user.uid == tdf) navigation.replace("BottomTab");
           else {
+            await dispatch(resetOrders());
+            await dispatch(resetProducts());
+            await dispatch(resetCategories());
+            await LogOut();
             console.log("Invalid Attempt log out user!");
           }
         } else {
+          await dispatch(resetOrders());
+          await dispatch(resetProducts());
+          await dispatch(resetCategories());
           console.log("Invalid Attempt log out user!");
+          await LogOut();
         }
       }
     });
