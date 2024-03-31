@@ -14,7 +14,10 @@ import { ref, uploadBytes } from "firebase/storage";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
-import { addSingleCategory } from "../../Services/Slices/AllCategoriesSlice";
+import {
+  addSingleCategory,
+  editSingleCategory,
+} from "../../Services/Slices/AllCategoriesSlice";
 
 export const CategoryModal = ({
   visible,
@@ -44,7 +47,6 @@ export const CategoryModal = ({
       setChecked(false);
       setError("");
       setImage(null);
-      // setImageError(false);
     }
   }, [category]);
 
@@ -54,8 +56,6 @@ export const CategoryModal = ({
 
   async function uploadImageAsync({ uri, categoryID }) {
     try {
-      // console.log("fileURI => ", uri);
-
       const convertedBlob = await manipulateAsync(
         uri,
         [{ resize: { width: 500, height: 500 } }],
@@ -112,28 +112,28 @@ export const CategoryModal = ({
       myObject.s = true;
     }
 
-    const categoryID = Date.now();
+    let categoryID;
 
-    if (category?.k) {
-      console.log("Edit Category function! ", category?.k);
-    } else {
-      try {
-        await setDoc(doc(firestoreDB, "ca8", categoryID.toString()), myObject);
-        console.log("Add Category function 1!", categoryID);
-      } catch (error) {
-        console.log("ADDING CATEGORY ERROR 1", error);
-        return;
-      }
-      try {
-        await dispatch(addSingleCategory({ ...myObject, k: categoryID }));
-        console.log("Add Single Category!", categoryID);
-      } catch (error) {
-        console.log("ADDING CATEGORY ERROR 2", error);
-        return;
-      }
+    if (category?.k) categoryID = category?.k;
+    else categoryID = Date.now();
+
+    try {
+      await setDoc(doc(firestoreDB, "ca8", categoryID.toString()), myObject);
+    } catch (error) {
+      console.log("ADDING CATEGORY ERROR 1", error);
+      return;
+    }
+
+    try {
+      if (category?.k) {
+        dispatch(editSingleCategory({ ...myObject, k: categoryID }));
+      } else dispatch(addSingleCategory({ ...myObject, k: categoryID }));
+    } catch (error) {
+      console.log("ADDING CATEGORY ERROR 2", error);
+      return;
     }
     try {
-      if (image) {
+      if (image && !imageError) {
         await uploadImageAsync({
           uri: image,
           categoryID,
@@ -155,7 +155,7 @@ export const CategoryModal = ({
     setVisible(false);
     setCategory(null);
     setImageError(false);
-    console.log("closing modal ");
+    // console.log("closing modal ");
   };
 
   return (
@@ -250,7 +250,7 @@ export const CategoryModal = ({
               }}
               onError={() => {
                 setImageError(true);
-                console.log("SET IMAGE ERROR TO FALSE!");
+                // console.log("SET IMAGE ERROR TO FALSE!");
               }}
             />
           )}
@@ -295,7 +295,7 @@ export const CategoryModal = ({
               flex: 1,
             }}
           >
-            Add Category
+            {category ? "Save" : "Add"} Category
           </Button>
         </View>
       </Card>

@@ -56,12 +56,11 @@ export default function DashboardScreen() {
   useEffect(() => {
     setTotalCategories(categorySelector?.data?.length || 0);
     setTotalProducts(productsSelector?.data?.length || 0);
-    // console.log("PRO AND CATS => ", categorySelector);
   }, [productsSelector, categorySelector?.data]);
 
   function DaysBefore(date, days) {
-    const newDate = new Date(date); // Create a copy of the date
-    newDate.setDate(newDate.getDate() - days); // Subtract 7 days
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() - days);
     return newDate;
   }
 

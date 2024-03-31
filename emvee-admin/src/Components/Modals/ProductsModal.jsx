@@ -9,25 +9,37 @@ import {
 } from "@ui-kitten/components";
 import { Dimensions, Image, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { fireStorage } from "../../Infrastructure/firebase.config";
+import { fireStorage, firestoreDB } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import {
+  addSingleProduct,
+  editSingleProduct,
+} from "../../Services/Slices/AllProductsSlice";
 
 export const ProductsModal = ({
   visible,
   setVisible,
   product = null,
-  setproduct = () => null,
+  setProduct = () => null,
 }) => {
   const [Name, setName] = useState("");
   const [checked, setChecked] = useState(false);
   const [Error, setError] = useState("");
   const [image, setImage] = useState(null);
+  const [imageError, setImageError] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (product) {
+      const itemKey = product?.k;
       if (product?.t) setName(product.t);
       if (product?.s) setChecked(product.s);
+      setImage(
+        `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/ca%2F${itemKey}.png?alt=media`
+      );
     } else {
       setName("");
       setChecked(false);
@@ -43,7 +55,7 @@ export const ProductsModal = ({
       const convertedBlob = await ImageManipulator.manipulateAsync(
         uri,
         [{ resize: { width: 500, height: 500 } }],
-        { compress: 1, format: ImageManipulator.SaveFormat.PNG } // Adjust format if needed
+        { compress: 1, format: ImageManipulator.SaveFormat.PNG }
       );
 
       const response = await fetch(convertedBlob.uri);
@@ -53,10 +65,12 @@ export const ProductsModal = ({
       }
 
       const blob = await response.blob();
-      const fileRef = ref(fireStorage, "ca", productID, 1);
+
+      const fileRef = ref(fireStorage, `ca/${productID}.png`);
+
       await uploadBytes(fileRef, blob);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.log("Error uploading image:", error);
     }
   }
 
@@ -73,9 +87,59 @@ export const ProductsModal = ({
     }
   };
 
-  // const addNewproduct = () => {};
+  async function addProduct() {
+    const error = {};
 
-  async function addproduct() {
+    if (Name.length < 3) {
+      error.Name = "Please provide a valid Name!";
+    }
+
+    setError(error);
+
+    if (error?.Name) {
+      return;
+    }
+
+    const myObject = {
+      t: Name,
+    };
+
+    if (checked) {
+      myObject.s = true;
+    }
+
+    let productID;
+
+    if (product?.k) productID = product?.k;
+    else productID = Date.now();
+
+    try {
+      await setDoc(doc(firestoreDB, "ca8", productID.toString()), myObject);
+    } catch (error) {
+      console.log("ADDING CATEGORY ERROR 1", error);
+      return;
+    }
+
+    try {
+      if (product?.k) {
+        dispatch(editSingleProduct({ ...myObject, k: productID }));
+      } else dispatch(addSingleProduct({ ...myObject, k: productID }));
+    } catch (error) {
+      console.log("ADDING CATEGORY ERROR 2", error);
+      return;
+    }
+    try {
+      if (image && !imageError) {
+        await uploadImageAsync({
+          uri: image,
+          productID,
+        });
+      }
+    } catch (error) {
+      console.log("Image Upload Error => ", error);
+      return;
+    }
+
     closingModal(null);
   }
 
@@ -85,7 +149,8 @@ export const ProductsModal = ({
     setError("");
     setImage(null);
     setVisible(false);
-    setproduct(null);
+    setProduct(null);
+    setImageError(false);
   };
 
   return (
