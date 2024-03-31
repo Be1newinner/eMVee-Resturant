@@ -8,11 +8,13 @@ import {
   Text,
 } from "@ui-kitten/components";
 import { Dimensions, Image, View } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker";
 import { fireStorage, firestoreDB } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
-import * as ImageManipulator from "expo-image-manipulator";
-import { addDoc, collection, doc } from "firebase/firestore";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { addSingleCategory } from "../../Services/Slices/AllCategoriesSlice";
 
 export const CategoryModal = ({
   visible,
@@ -24,25 +26,40 @@ export const CategoryModal = ({
   const [checked, setChecked] = useState(false);
   const [Error, setError] = useState("");
   const [image, setImage] = useState(null);
+  const [imageError, setImageError] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (category) {
+      const itemKey = category?.k;
       if (category?.t) setName(category.t);
       if (category?.s) setChecked(category.s);
+
+      setImage(
+        `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/ca%2F${itemKey}.png?alt=media`
+      );
     } else {
       setName("");
       setChecked(false);
       setError("");
       setImage(null);
+      // setImageError(false);
     }
   }, [category]);
 
+  useEffect(() => {
+    setImageError(false);
+  }, [image]);
+
   async function uploadImageAsync({ uri, categoryID }) {
     try {
-      const convertedBlob = await ImageManipulator.manipulateAsync(
+      // console.log("fileURI => ", uri);
+
+      const convertedBlob = await manipulateAsync(
         uri,
         [{ resize: { width: 500, height: 500 } }],
-        { compress: 1, format: ImageManipulator.SaveFormat.PNG } // Adjust format if needed
+        { compress: 1, format: SaveFormat.PNG }
       );
 
       const response = await fetch(convertedBlob.uri);
@@ -52,16 +69,18 @@ export const CategoryModal = ({
       }
 
       const blob = await response.blob();
-      const fileRef = ref(fireStorage, "ca", categoryID, 1);
+
+      const fileRef = ref(fireStorage, `ca/${categoryID}.png`);
+
       await uploadBytes(fileRef, blob);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.log("Error uploading image:", error);
     }
   }
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    let result = await launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -72,16 +91,57 @@ export const CategoryModal = ({
     }
   };
 
-  // const addNewCategory = () => {};
-
   async function addCategory() {
+    const error = {};
+
+    if (Name.length < 3) {
+      error.Name = "Please provide a valid Name!";
+    }
+
+    setError(error);
+
+    if (error?.Name) {
+      return;
+    }
+
+    const myObject = {
+      t: Name,
+    };
+
+    if (checked) {
+      myObject.s = true;
+    }
+
+    const categoryID = Date.now();
+
     if (category?.k) {
       console.log("Edit Category function! ", category?.k);
     } else {
-      const newDoc = await addDoc(collection(firestoreDB, "ca8"), {
-        t: Name,
-      });
-      console.log("Add Category function!", newDoc.id);
+      try {
+        await setDoc(doc(firestoreDB, "ca8", categoryID.toString()), myObject);
+        console.log("Add Category function 1!", categoryID);
+      } catch (error) {
+        console.log("ADDING CATEGORY ERROR 1", error);
+        return;
+      }
+      try {
+        await dispatch(addSingleCategory({ ...myObject, k: categoryID }));
+        console.log("Add Single Category!", categoryID);
+      } catch (error) {
+        console.log("ADDING CATEGORY ERROR 2", error);
+        return;
+      }
+    }
+    try {
+      if (image) {
+        await uploadImageAsync({
+          uri: image,
+          categoryID,
+        });
+      }
+    } catch (error) {
+      console.log("Image Upload Error => ", error);
+      return;
     }
 
     closingModal(null);
@@ -94,6 +154,8 @@ export const CategoryModal = ({
     setImage(null);
     setVisible(false);
     setCategory(null);
+    setImageError(false);
+    console.log("closing modal ");
   };
 
   return (
@@ -181,10 +243,14 @@ export const CategoryModal = ({
             <Image
               source={{ uri: image }}
               style={{
-                width: 200,
-                height: 200,
+                width: !imageError ? 200 : 0,
+                height: !imageError ? 200 : 0,
                 objectFit: "contain",
                 marginTop: 10,
+              }}
+              onError={() => {
+                setImageError(true);
+                console.log("SET IMAGE ERROR TO FALSE!");
               }}
             />
           )}
@@ -213,7 +279,7 @@ export const CategoryModal = ({
         >
           <Button
             status="basic"
-            onPress={() => setVisible(false)}
+            onPress={() => closingModal()}
             style={{
               flex: 1,
             }}

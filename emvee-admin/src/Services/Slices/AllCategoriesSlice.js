@@ -11,6 +11,9 @@ export const AllCategoriesSlice = createSlice({
     addCategories(state, action) {
       state.data.push(...action.payload);
     },
+    addSingleCategory(state, action) {
+      state.data.push(action.payload);
+    },
     resetCategories(state) {
       state.data = [];
       length = 0;
@@ -19,4 +22,5 @@ export const AllCategoriesSlice = createSlice({
   },
 });
 
-export const { addCategories, resetCategories } = AllCategoriesSlice.actions;
+export const { addCategories, resetCategories, addSingleCategory } =
+  AllCategoriesSlice.actions;

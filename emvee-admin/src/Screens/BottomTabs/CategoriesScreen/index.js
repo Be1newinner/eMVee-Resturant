@@ -79,7 +79,11 @@ export default function CategoriesScreen() {
             }}
           />
         }
-        data={categorySelector?.data}
+        data={categorySelector?.data?.slice().sort((a, b) => {
+          if (a.t < b.t) return -1;
+          if (a.t > b.t) return 1;
+          return 0;
+        })}
         keyExtractor={(k) => k.k}
         renderItem={({ item }) => {
           return (

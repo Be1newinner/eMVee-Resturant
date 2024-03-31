@@ -80,7 +80,11 @@ export default function ProductsScreen() {
             }}
           />
         }
-        data={productsSelector?.data}
+        data={productsSelector?.data?.slice().sort((a, b) => {
+          if (a.t < b.t) return -1;
+          if (a.t > b.t) return 1;
+          return 0;
+        })}
         keyExtractor={(k) => k.k}
         renderItem={({ item, index }) => {
           // console.log(item);

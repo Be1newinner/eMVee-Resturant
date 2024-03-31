@@ -11,6 +11,9 @@ export const AllProductsSlice = createSlice({
     addProducts(state, action) {
       state.data.push(...action.payload);
     },
+    addSingleProduct(state, action) {
+      state.data.push(action.payload);
+    },
     resetProducts(state) {
       state.data = [];
       console.log("RESET Products");
@@ -18,4 +21,5 @@ export const AllProductsSlice = createSlice({
   },
 });
 
-export const { addProducts, resetProducts } = AllProductsSlice.actions;
+export const { addProducts, resetProducts, addSingleProduct } =
+  AllProductsSlice.actions;

@@ -56,7 +56,7 @@ export default function DashboardScreen() {
   useEffect(() => {
     setTotalCategories(categorySelector?.data?.length || 0);
     setTotalProducts(productsSelector?.data?.length || 0);
-    console.log("PRO AND CATS => ", categorySelector);
+    // console.log("PRO AND CATS => ", categorySelector);
   }, [productsSelector, categorySelector?.data]);
 
   function DaysBefore(date, days) {
