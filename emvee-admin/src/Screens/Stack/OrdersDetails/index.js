@@ -3,9 +3,9 @@ import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
 import { Button } from "@ui-kitten/components";
-import { doc, updateDoc } from "firebase/firestore";
+import { Timestamp, doc, updateDoc } from "firebase/firestore";
 import { firestoreDB } from "../../../Infrastructure/firebase.config";
-import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+// import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { OrderModal } from "../../../Components/Modals/OrderModal";
 import { useState } from "react";
 
@@ -15,6 +15,8 @@ export default function OrdersDetails({ navigation, route }) {
   const OrderDetails = OrdersSelector[OrderID];
   const [CancelModal, setCancelModal] = useState(false);
   const [AcceptModal, setAcceptModal] = useState(false);
+  const [isDelivered, setIsDelivered] = useState(false);
+  const [isCancelled, setIsCancelled] = useState(false);
 
   const OrdersItems = {
     status: OrderDetails?.s.c,
@@ -32,9 +34,31 @@ export default function OrdersDetails({ navigation, route }) {
 
   const cancelOrder = async ({ OrderID }) => {
     const docRef = await doc(firestoreDB, "or4", OrderID);
-    const response = await updateDoc(docRef, {
+    await updateDoc(docRef, {
       "s.c": -1,
+      "-1": new Timestamp.now(),
     });
+  };
+
+  const confirmOrder = async ({ OrderID, status }) => {
+    const docRef = await doc(firestoreDB, "or4", OrderID);
+    if (status == 1)
+      await updateDoc(docRef, {
+        "s.c": 1,
+        "s.1": new Timestamp.now(),
+      });
+
+    if (status == 2) {
+      try {
+        await updateDoc(docRef, {
+          "s.c": 2,
+          "s.2": new Timestamp.now(),
+        });
+        setIsDelivered(true);
+      } catch (error) {
+        console.log("DELIVERY ERROR ", error);
+      }
+    }
   };
 
   return (
@@ -44,7 +68,7 @@ export default function OrdersDetails({ navigation, route }) {
         backgroundColor: GlobalColors.primary,
       }}
     >
-      <RealtimeOrdersController />
+      {/* <RealtimeOrdersController /> */}
       <View
         style={{
           paddingBottom: 50,
@@ -117,26 +141,30 @@ export default function OrdersDetails({ navigation, route }) {
                 style={{
                   width: 10,
                   height: 10,
-                  backgroundColor:
-                    OrdersItems.status === 1
-                      ? "#f00"
-                      : OrdersItems.status === 2
-                      ? "#0f0"
-                      : "#55d",
+                  backgroundColor: isDelivered
+                    ? "#0f0"
+                    : OrdersItems.status === 1
+                    ? "#f00"
+                    : OrdersItems.status === 2
+                    ? "#0f0"
+                    : "#55d",
                   borderRadius: 10,
                 }}
               />
               <Text
                 style={{
-                  color:
-                    OrdersItems.status === 1
-                      ? "#f00"
-                      : OrdersItems.status === 2
-                      ? "#0f0"
-                      : "#55d",
+                  color: isDelivered
+                    ? "#0f0"
+                    : OrdersItems.status === 1
+                    ? "#f00"
+                    : OrdersItems.status === 2
+                    ? "#0f0"
+                    : "#55d",
                 }}
               >
-                {OrdersItems.status === 1
+                {isDelivered
+                  ? "Order Delivered"
+                  : OrdersItems.status === 1
                   ? "Out for Delivery"
                   : OrdersItems.status === 2
                   ? "Order Delivered"
@@ -156,61 +184,48 @@ export default function OrdersDetails({ navigation, route }) {
               marginHorizontal: 10,
             }}
           >
-            {OrdersItems?.items?.filter(e=>e.qty > 0)?.map((product, index) => (
-              <View
-                key={index}
-                style={{ height: "auto", flexDirection: "row", gap: 10 }}
-              >
-                {product.i ? (
-                  <Image
-                    source={product.i}
-                    style={{
-                      height: 70,
-                      width: 70,
-                      borderRadius: 8,
-                    }}
-                  />
-                ) : (
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: GlobalColors.themeColor,
-                      height: "auto",
-                      aspectRatio: 1,
-                      borderRadius: 8,
-                    }}
-                  >
-                    <Text
+            {OrdersItems?.items
+              ?.filter((e) => e.qty > 0)
+              ?.map((product, index) => (
+                <View
+                  key={index}
+                  style={{ height: "auto", flexDirection: "row", gap: 10 }}
+                >
+                  {product.i ? (
+                    <Image
+                      source={product.i}
                       style={{
-                        fontSize: 22,
-                        fontWeight: 700,
-                        color: "#fff",
+                        height: 70,
+                        width: 70,
+                        borderRadius: 8,
+                      }}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: GlobalColors.themeColor,
+                        height: "auto",
+                        aspectRatio: 1,
+                        borderRadius: 8,
                       }}
                     >
-                      {product.t.slice(0, 1)}
-                    </Text>
-                  </View>
-                )}
-                <View
-                  style={{
-                    gap: 5,
-                    flex: 1,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: "rgba(0,0,0,0.75)",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {product.t}
-                  </Text>
+                      <Text
+                        style={{
+                          fontSize: 22,
+                          fontWeight: 700,
+                          color: "#fff",
+                        }}
+                      >
+                        {product.t.slice(0, 1)}
+                      </Text>
+                    </View>
+                  )}
                   <View
                     style={{
-                      flexDirection: "row",
                       gap: 5,
+                      flex: 1,
                     }}
                   >
                     <Text
@@ -220,40 +235,55 @@ export default function OrdersDetails({ navigation, route }) {
                         fontWeight: 600,
                       }}
                     >
-                      ₹{product?.p}/-
+                      {product.t}
                     </Text>
-                    {product?.m && (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: 5,
+                      }}
+                    >
                       <Text
                         style={{
                           fontSize: 16,
-                          color: GlobalColors.productText,
+                          color: "rgba(0,0,0,0.75)",
                           fontWeight: 600,
-                          textDecorationLine: "line-through",
                         }}
                       >
-                        ₹{product?.m}/-
+                        ₹{product?.p}/-
                       </Text>
-                    )}
+                      {product?.m && (
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: GlobalColors.productText,
+                            fontWeight: 600,
+                            textDecorationLine: "line-through",
+                          }}
+                        >
+                          ₹{product?.m}/-
+                        </Text>
+                      )}
+                    </View>
                   </View>
-                </View>
-                <View
-                  style={{
-                    justifyContent: "space-between",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <Text
+                  <View
                     style={{
-                      fontSize: 16,
-                      color: GlobalColors.productText,
-                      fontWeight: 600,
+                      justifyContent: "space-between",
+                      alignItems: "flex-end",
                     }}
                   >
-                    x{product?.qty}/-
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: GlobalColors.productText,
+                        fontWeight: 600,
+                      }}
+                    >
+                      x{product?.qty}/-
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
           </View>
           <View
             style={{
@@ -480,42 +510,44 @@ export default function OrdersDetails({ navigation, route }) {
           </View>
         </View>
 
-        <View
-          status="danger"
-          style={{
-            marginHorizontal: 10,
-            marginTop: 10,
-            flex: 1,
-            flexDirection: "row",
-            gap: 10,
-          }}
-        >
-          <Button
-            style={{
-              flex: 1,
-            }}
+        {!isDelivered ? (
+          <View
             status="danger"
-            appearance="outline"
-            onPress={() => {
-              setAcceptModal(false);
-              setCancelModal(true);
+            style={{
+              marginHorizontal: 10,
+              marginTop: 10,
+              flex: 1,
+              flexDirection: "row",
+              gap: 10,
             }}
           >
-            cancel order
-          </Button>
-          <Button
-            style={{
-              flex: 1,
-            }}
-            status="danger"
-            onPress={() => {
-              setAcceptModal(true);
-              setCancelModal(false);
-            }}
-          >
-            Mark as OFD
-          </Button>
-        </View>
+            <Button
+              style={{
+                flex: 1,
+              }}
+              status="danger"
+              appearance="outline"
+              onPress={() => {
+                setAcceptModal(false);
+                setCancelModal(true);
+              }}
+            >
+              cancel order
+            </Button>
+            <Button
+              style={{
+                flex: 1,
+              }}
+              status="danger"
+              onPress={() => {
+                setAcceptModal(true);
+                setCancelModal(false);
+              }}
+            >
+              {OrderDetails?.s.c == 0 ? "Mark OFD?" : "Mark Delivered?"}
+            </Button>
+          </View>
+        ) : null}
 
         <OrderModal
           title="Do you want to cancel Order?"
@@ -525,9 +557,18 @@ export default function OrdersDetails({ navigation, route }) {
           setVisible={setCancelModal}
         />
         <OrderModal
-          title="Mark OFD?"
-          subTitle="Mark the order as Out for Delivery!"
-          onConfirm={null}
+          title={OrderDetails?.s.c == 0 ? "Mark OFD?" : "Mark Delivered?"}
+          subTitle={`Mark the order as${
+            OrderDetails?.s.c == 0 ? " Out for Delivery!" : " Delivered!"
+          }`}
+          onConfirm={async () => {
+            await confirmOrder({
+              OrderID,
+              status: OrderDetails?.s.c == 0 ? 1 : 2,
+            });
+
+            console.log("ON CONFIRM CLICKED!");
+          }}
           visible={AcceptModal}
           setVisible={setAcceptModal}
         />

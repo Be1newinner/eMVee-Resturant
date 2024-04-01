@@ -1,6 +1,7 @@
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
+// import { useEffect } from "react";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 
 export default function OrdersList({
@@ -9,6 +10,11 @@ export default function OrdersList({
   status = 0,
 }) {
   const OrdersSelector = useSelector((state) => state.Orders);
+
+  // useEffect(()=>{
+
+  // },[])
+
   return (
     <FlatList
       ListHeaderComponent={
