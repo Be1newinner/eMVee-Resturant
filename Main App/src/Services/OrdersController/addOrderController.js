@@ -1,8 +1,5 @@
 import { Timestamp, collection, addDoc } from "firebase/firestore";
-import {
-  firestoreDB,
-  firebaseAuth,
-} from "../../Infrastructure/firebase.config";
+import { firestoreDB } from "../../Infrastructure/firebase.config";
 
 export default async function addOrderController({
   AddressSelector,
@@ -10,7 +7,7 @@ export default async function addOrderController({
   authState,
 }) {
   try {
-    console.log("authState => ", authState?.phone_no, authState);
+    // console.log("authState => ", authState?.phone_no, authState);
     const CurrentAddress = AddressSelector?.addresses?.filter(
       (e) => e.k == AddressSelector?.default
     )[0];

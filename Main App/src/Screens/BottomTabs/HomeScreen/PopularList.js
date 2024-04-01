@@ -16,7 +16,7 @@ const PopularList = ({ children, navigation }) => {
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
-      data={PopularItems.filter((e) => e.s === true)}
+      data={PopularItems?.data?.filter((e) => e.s === true)}
       numColumns={2}
       ListHeaderComponent={children}
       contentContainerStyle={{

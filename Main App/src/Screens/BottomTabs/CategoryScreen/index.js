@@ -22,7 +22,7 @@ const CategoryScreen = ({ navigation }) => {
       }}
     >
       <FlatList
-        data={TotalCategoryList}
+        data={TotalCategoryList?.data}
         numColumns={2}
         contentContainerStyle={{
           rowGap: 10,

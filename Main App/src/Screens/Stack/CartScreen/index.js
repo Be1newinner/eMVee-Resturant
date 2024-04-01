@@ -23,7 +23,6 @@ export default function CartScreen({ navigation }) {
   const [cartTotal, setCartTotal] = useState(null);
   const [authState, setAuthState] = useState(null);
   const [RecieverAddress, setRecieverAddress] = useState(null);
-  // const [userState, setUserState] = useState(null);
 
   const ConfirmOrder = async () => {
     setLoadingScreen(true);

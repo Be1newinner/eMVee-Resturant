@@ -20,11 +20,11 @@ export default function ProductSearchScreen({ navigation }) {
   const AllProductsData = useSelector((state) => state.AllProducts);
   const AllCategories = useSelector((state) => state.AllCategories);
 
-  const PopularItems = AllProductsData.filter((e) => e.s === true);
+  const PopularItems = AllProductsData.data.filter((e) => e.s === true);
 
   useEffect(() => {
     if (value?.length > 1) {
-      const data = AllProductsData.filter((e) =>
+      const data = AllProductsData.data.filter((e) =>
         e?.t?.toLowerCase().includes(value?.toLowerCase())
       );
 
@@ -144,7 +144,7 @@ export default function ProductSearchScreen({ navigation }) {
                   >
                     In{" "}
                     {item?.c
-                      ? AllCategories?.filter((e) => e.k == item?.c)[0]?.t
+                      ? AllCategories?.data?.filter((e) => e.k == item?.c)[0]?.t
                       : ""}{" "}
                     Category
                   </Text>
@@ -250,7 +250,7 @@ export default function ProductSearchScreen({ navigation }) {
                   >
                     In{" "}
                     {item?.c
-                      ? AllCategories?.filter((e) => e.k == item?.c)[0]?.t
+                      ? AllCategories?.data?.filter((e) => e.k == item?.c)[0]?.t
                       : ""}
                     Category
                   </Text>

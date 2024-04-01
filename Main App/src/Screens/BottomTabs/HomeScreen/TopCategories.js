@@ -21,7 +21,7 @@ const ProductItems = () => {
           gap: 20,
         }}
         showsHorizontalScrollIndicator={false}
-        data={TotalCategoryList.filter((e) => e.s === true)}
+        data={TotalCategoryList?.data?.filter((e) => e.s === true)}
         horizontal
         keyExtractor={(e) => e.k}
         renderItem={({ item }) => (

@@ -106,7 +106,7 @@ const CategoryItems = ({ navigation, route }) => {
                 paddingBottom: 80,
               }}
             >
-              {AllProducts?.filter((e) => e.c == category.k)?.map((item) => (
+              {AllProducts?.data?.filter((e) => e.c == category.k)?.map((item) => (
                 <View
                   onPress={handlePress}
                   key={item.k}

@@ -1,13 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = {
+  data: [],
+  isFecthed: false,
+};
 
 export const AllProductsSlice = createSlice({
   name: "AllProducts",
   initialState,
   reducers: {
     addProducts(state, action) {
-      state.push(...action.payload);
+      if (!state.isFecthed) {
+        state.data.push(...action.payload);
+        state.isFecthed = true;
+      }
     },
   },
 });

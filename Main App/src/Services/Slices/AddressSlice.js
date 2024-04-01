@@ -2,45 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { produce } from "immer";
 
 const initialState = {
-  addresses: [
-    // {
-    //   h: "h449a. g13",
-    //   l: "asthan lsndir",
-    //   n: "Vijay",
-    //   p: "8130506844",
-    //   pi: "110062",
-    //   t: 0,
-    //   k: 0,
-    // },
-    // {
-    //   h: "h4492. g13",
-    //   l: "asthan lsndir",
-    //   n: "Vijay",
-    //   p: "8130506844",
-    //   pi: "110062",
-    //   t: 1,
-    //   k: 1,
-    // },
-    // {
-    //   h: "h4495. g13",
-    //   l: "asthan lsndir",
-    //   n: "Vijay",
-    //   p: "8130506844",
-    //   pi: "110062",
-    //   t: 1,
-    //   k: 2,
-    // },
-    // {
-    //   h: "h4493. g13",
-    //   l: "asthan lsndir",
-    //   n: "Vijay",
-    //   p: "8130506844",
-    //   pi: "110062",
-    //   t: 2,
-    //   k: 3,
-    // },
-  ],
+  addresses: [],
   default: 0,
+  isFetched: false,
 };
 
 export const AddressSlice = createSlice({
@@ -57,13 +21,18 @@ export const AddressSlice = createSlice({
     },
     addAddressArray(state, action) {
       return produce(state, (draft) => {
-        action.payload?.slice(0, 4)?.map((item, index) => {
-          draft.addresses.push({
-            ...item,
+        if (!state.isFetched) {
+          action.payload?.slice(0, 4)?.map((item, index) => {
+            draft.addresses.push({
+              ...item,
+            });
           });
-        });
 
-        draft.default = action.payload[0]?.k;
+          draft.default = action.payload[0]?.k;
+          if (action.payload?.length > 0) {
+            draft.isFetched = true;
+          }
+        }
       });
     },
     removeAddress(state, action) {
@@ -82,6 +51,7 @@ export const AddressSlice = createSlice({
     resetAddress(state) {
       state.addresses = [];
       state.default = 0;
+      state.isFetched = false
     },
     changeDefaultAddress(state, action) {
       return produce(state, (draft) => {
