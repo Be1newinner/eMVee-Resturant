@@ -13,11 +13,12 @@ import { fireStorage, firestoreDB } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addSingleProduct,
   editSingleProduct,
 } from "../../Services/Slices/AllProductsSlice";
+import AutoCompleteCategory from "./AutoCompleteCategory";
 
 export const ProductsModal = ({
   visible,
@@ -26,9 +27,13 @@ export const ProductsModal = ({
   setProduct = () => null,
 }) => {
   const [Name, setName] = useState("");
+  const [Price, setPrice] = useState(null);
   const [checked, setChecked] = useState(false);
   const [Error, setError] = useState("");
   const [image, setImage] = useState(null);
+  const [CategorySelected, setCategorySelected] = useState(null);
+  const categorySelector = useSelector((selector) => selector.AllCategories);
+
   const [imageError, setImageError] = useState(false);
   const dispatch = useDispatch();
 
@@ -37,14 +42,22 @@ export const ProductsModal = ({
       const itemKey = product?.k;
       if (product?.t) setName(product.t);
       if (product?.s) setChecked(product.s);
+      if (product.p) setPrice(product.p);
+      if (product?.c) {
+        const data = categorySelector?.data?.filter((e) => e.k == product.c)[0];
+        setCategorySelected(data);
+        console.log("THE DATA ", data, product.p);
+      }
       setImage(
-        `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/ca%2F${itemKey}.png?alt=media`
+        `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/pa%2F${itemKey}.png?alt=media`
       );
     } else {
       setName("");
       setChecked(false);
       setError("");
       setImage(null);
+      setPrice(null);
+      setCategorySelected(null);
     }
 
     // console.log(product);
@@ -66,7 +79,7 @@ export const ProductsModal = ({
 
       const blob = await response.blob();
 
-      const fileRef = ref(fireStorage, `ca/${productID}.png`);
+      const fileRef = ref(fireStorage, `pa/${productID}.png`);
 
       await uploadBytes(fileRef, blob);
     } catch (error) {
@@ -91,39 +104,40 @@ export const ProductsModal = ({
     const error = {};
 
     if (Name.length < 3) {
-      error.Name = "Please provide a valid Name!";
+      error.Name = "P lease provide a valid Name!";
+    }
+
+    if (!Price) {
+      error.Price = "Please Provide a price!";
     }
 
     setError(error);
 
-    if (error?.Name) {
-      return;
-    }
+    if (error?.Name || error?.Price) return;
 
     const myObject = {
       t: Name,
+      p: Price,
+      c: CategorySelected?.k,
     };
 
-    if (checked) {
-      myObject.s = true;
-    }
+    if (checked) myObject.s = true;
 
-    let productID;
+    if (product?.k) myObject.k = product?.k;
+    else myObject.k = Date.now();
 
-    if (product?.k) productID = product?.k;
-    else productID = Date.now();
+    console.log("myObject", myObject);
 
     try {
-      await setDoc(doc(firestoreDB, "ca8", productID.toString()), myObject);
+      await setDoc(doc(firestoreDB, "pr47", myObject.k.toString()), myObject);
     } catch (error) {
       console.log("ADDING CATEGORY ERROR 1", error);
       return;
     }
-
     try {
       if (product?.k) {
-        dispatch(editSingleProduct({ ...myObject, k: productID }));
-      } else dispatch(addSingleProduct({ ...myObject, k: productID }));
+        dispatch(editSingleProduct(myObject));
+      } else dispatch(addSingleProduct(myObject));
     } catch (error) {
       console.log("ADDING CATEGORY ERROR 2", error);
       return;
@@ -132,15 +146,14 @@ export const ProductsModal = ({
       if (image && !imageError) {
         await uploadImageAsync({
           uri: image,
-          productID,
+          productID: myObject.k,
         });
       }
     } catch (error) {
       console.log("Image Upload Error => ", error);
       return;
     }
-
-    closingModal(null);
+    closingModal();
   }
 
   const closingModal = () => {
@@ -151,6 +164,8 @@ export const ProductsModal = ({
     setVisible(false);
     setProduct(null);
     setImageError(false);
+    setPrice(null);
+    setCategorySelected(null);
   };
 
   return (
@@ -185,7 +200,11 @@ export const ProductsModal = ({
           </Text>
         </View>
 
-        <View>
+        <View
+          style={{
+            gap: 20,
+          }}
+        >
           {Error?.other && (
             <Text
               status="danger"
@@ -199,9 +218,8 @@ export const ProductsModal = ({
 
           <Input
             value={Name}
-            label="product Name"
-            placeholder="enter product name"
-            // accessoryLeft={() => <Entypo name="email" size={24} color="black" />}
+            label="Product Name"
+            placeholder="Enter product name"
             status={Error?.Name ? "danger" : "basic"}
             caption={
               Error?.Name &&
@@ -224,27 +242,59 @@ export const ProductsModal = ({
               elevation: 5,
             }}
           />
+          <Input
+            value={Price?.toString()}
+            label="Product Price"
+            placeholder="Enter product price"
+            status={Error?.Price ? "danger" : "basic"}
+            caption={
+              Error?.Price &&
+              (() => (
+                <Text
+                  status="danger"
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    marginTop: 5,
+                  }}
+                >
+                  {Error?.Price}
+                </Text>
+              ))
+            }
+            onChangeText={(nextValue) => setPrice(nextValue)}
+            size="large"
+            style={{
+              elevation: 5,
+            }}
+          />
+
+          <AutoCompleteCategory
+            value={CategorySelected}
+            setValue={(item) => setCategorySelected(item)}
+          />
+
           <CheckBox
             checked={checked}
             onChange={(nextChecked) => setChecked(nextChecked)}
-            style={{
-              marginTop: 20,
-            }}
             status="danger"
           >
             Mark as Popular product
           </CheckBox>
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{
-                width: 200,
-                height: 200,
-                objectFit: "contain",
-                marginTop: 10,
-              }}
-            />
-          )}
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: !imageError ? 200 : 0,
+              height: !imageError ? 200 : 0,
+              objectFit: "contain",
+              marginTop: 10,
+            }}
+            onError={() => {
+              setImageError(true);
+              // console.log("SET IMAGE ERROR TO FALSE!");
+            }}
+          />
+
           <View style={{ flex: 1, justifyContent: "center" }}>
             <Button
               status="danger"
@@ -270,7 +320,7 @@ export const ProductsModal = ({
         >
           <Button
             status="basic"
-            onPress={() => setVisible(false)}
+            onPress={() => closingModal()}
             style={{
               flex: 1,
             }}
@@ -279,14 +329,14 @@ export const ProductsModal = ({
           </Button>
           <Button
             onPress={() => {
-              addproduct();
+              addProduct();
             }}
             status="danger"
             style={{
               flex: 1,
             }}
           >
-            Add product
+            {product?.t ? "Save Changes" : "Add product"}
           </Button>
         </View>
       </Card>

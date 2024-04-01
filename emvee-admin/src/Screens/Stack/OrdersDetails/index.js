@@ -156,7 +156,7 @@ export default function OrdersDetails({ navigation, route }) {
               marginHorizontal: 10,
             }}
           >
-            {OrdersItems?.items?.map((product, index) => (
+            {OrdersItems?.items?.filter(e=>e.qty > 0)?.map((product, index) => (
               <View
                 key={index}
                 style={{ height: "auto", flexDirection: "row", gap: 10 }}

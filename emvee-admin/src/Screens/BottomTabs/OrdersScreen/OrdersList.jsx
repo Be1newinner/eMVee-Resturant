@@ -126,7 +126,7 @@ export default function OrdersList({
                 padding: 0,
               }}
             >
-              {Object.values(item?.i)?.map((product) => (
+              {Object.values(item?.i)?.filter(e=>e.qty > 0)?.map((product) => (
                 <View
                   key={product.k}
                   style={{ height: "auto", flexDirection: "row", gap: 10 }}

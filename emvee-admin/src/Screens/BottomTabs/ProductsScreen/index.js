@@ -163,7 +163,7 @@ export default function ProductsScreen() {
         visible={modalVisible}
         setVisible={setModalVisible}
         product={editproduct}
-        setproduct={setEditproduct}
+        setProduct={setEditproduct}
       />
     </View>
   );

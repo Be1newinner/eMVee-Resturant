@@ -2,13 +2,15 @@ import { useState } from "react";
 import { Image, Text, View } from "react-native";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 
-export default function ImageComponent({ itemKey, title }) {
+export default function ImageComponent({ itemKey, title, type = 1 }) {
   const [Error, setError] = useState(true);
   return (
     <View>
       <Image
         source={{
-          uri: `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/ca%2F${itemKey}.png?alt=media`,
+          uri: `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/${
+            type == 1 ? "pa" : "ca"
+          }%2F${itemKey}.png?alt=media`,
         }}
         style={{
           width: Error ? 80 : 0,
@@ -33,7 +35,7 @@ export default function ImageComponent({ itemKey, title }) {
               color: "#fff",
             }}
           >
-            {title.slice(0, 1)}
+            {title?.slice(0, 1)}
           </Text>
         </View>
       ) : null}
