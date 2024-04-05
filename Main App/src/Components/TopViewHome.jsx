@@ -37,7 +37,11 @@ export const TopViewHome = ({ navigation }) => {
   useEffect(() => {
     const unsub = onSnapshot(doc(firestoreDB, "ot", "s"), (doc) => {
       const data = doc.data();
-      setpassedDate(new Timestamp(data.t.seconds, data.t.nanoseconds).toDate());
+      if (data?.t) {
+        setpassedDate(
+          new Timestamp(data.t.seconds, data.t.nanoseconds).toDate()
+        );
+      }
     });
   }, []);
 

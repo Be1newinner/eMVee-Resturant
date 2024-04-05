@@ -12,6 +12,10 @@ import TopView from "../../../Components/TopView";
 import AddToCart2 from "../../../Components/AddToCart2";
 import { useSelector } from "react-redux";
 import BottomOrderBar from "../../../Components/BottomOrderBar";
+import {
+  getCategoryImageURL,
+  getImageURL,
+} from "../../../Services/offline/Image";
 
 const CategoryItems = ({ navigation, route }) => {
   const { category } = route.params;
@@ -40,9 +44,9 @@ const CategoryItems = ({ navigation, route }) => {
             top: 50,
             position: "absolute",
             left: Dimensions.get("screen").width / 4 + 20,
-            elevation: 5,
+            elevation: category.i ? 0 : 5,
             zIndex: 2,
-            backgroundColor: "white",
+            backgroundColor: category.i ? "transparent" : "white",
             borderRadius: 150,
             overflow: "hidden",
           }}
@@ -56,7 +60,7 @@ const CategoryItems = ({ navigation, route }) => {
               }}
               width={500}
               height={500}
-              source={category.i}
+              source={{ uri: getCategoryImageURL(category.k) }}
             />
           ) : (
             <View
@@ -87,7 +91,11 @@ const CategoryItems = ({ navigation, route }) => {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <View>
+          <View
+            style={{
+              marginBottom: 80,
+            }}
+          >
             <Text
               style={{
                 padding: 20,
@@ -106,96 +114,101 @@ const CategoryItems = ({ navigation, route }) => {
                 paddingBottom: 80,
               }}
             >
-              {AllProducts?.data?.filter((e) => e.c == category.k)?.map((item) => (
-                <View
-                  onPress={handlePress}
-                  key={item.k}
-                  style={{
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                    paddingVertical: 20,
-                    borderBottomColor: "rgba(0,0,0,0.2)",
-                    borderBottomWidth: 1,
-                    gap: 20,
-                  }}
-                >
+              {AllProducts?.data
+                ?.filter((e) => e.c == category.k)
+                ?.map((item) => (
                   <View
+                    onPress={handlePress}
+                    key={item.k}
                     style={{
-                      flex: 1,
-                      gap: 10,
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      paddingVertical: 20,
+                      borderBottomColor: "rgba(0,0,0,0.2)",
+                      borderBottomWidth: 1,
+                      gap: 20,
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        // fontWeight: 400,
-                      }}
-                    >
-                      {item.t}
-                    </Text>
                     <View
                       style={{
-                        flexDirection: "row",
+                        flex: 1,
                         gap: 10,
                       }}
                     >
                       <Text
                         style={{
-                          fontWeight: 600,
-                          fontSize: 18,
+                          fontSize: 20,
+                          // fontWeight: 400,
                         }}
                       >
-                        ₹{item.p}
+                        {item.t}
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          textDecorationLine: "line-through",
-                        }}
-                      >
-                        ₹{item.m}
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        color: "#678",
-                        fontSize: 16,
-                      }}
-                    >
-                      {item.d}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      gap: 10,
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.i && (
                       <View
                         style={{
-                          overflow: "hidden",
-                          borderRadius: 10,
-                          elevation: 5,
+                          flexDirection: "row",
+                          gap: 10,
                         }}
                       >
-                        <Image
+                        <Text
                           style={{
-                            width: 130,
-                            height: 130,
-                            borderWidth: 2,
-                            borderColor: "rgba(0,0,0,0.1)",
-                            borderRadius: 10,
+                            fontWeight: 600,
+                            fontSize: 18,
                           }}
-                          source={item.i}
-                        />
+                        >
+                          ₹{item.p}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            textDecorationLine: "line-through",
+                          }}
+                        >
+                          ₹{item.m}
+                        </Text>
                       </View>
-                    )}
+                      <Text
+                        style={{
+                          color: "#678",
+                          fontSize: 16,
+                        }}
+                      >
+                        {item.d}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        gap: 10,
+                        justifyContent: "center",
+                      }}
+                    >
+                      {item.i && (
+                        <View
+                          style={{
+                            overflow: "hidden",
+                            borderRadius: 10,
+                            elevation: 5,
+                          }}
+                        >
+                          <Image
+                            style={{
+                              width: 130,
+                              height: 130,
+                              borderWidth: 2,
+                              borderColor: "rgba(0,0,0,0.1)",
+                              borderRadius: 10,
+                            }}
+                            source={{ uri: getImageURL(item.k) }}
+                          />
+                        </View>
+                      )}
 
-                    <AddToCart2 Quantity={selector[item.k]?.qty} item={item} />
+                      <AddToCart2
+                        Quantity={selector[item.k]?.qty}
+                        item={item}
+                      />
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </View>
           </View>
         </ScrollView>

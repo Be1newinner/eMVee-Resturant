@@ -101,7 +101,12 @@ export default function CategoriesScreen() {
                 setModalVisible(true);
               }}
             >
-              <ImageComponent itemKey={item.k} title={item.t} />
+              <ImageComponent
+                itemKey={item.k}
+                title={item.t}
+                isImage={item.i}
+                type={2}
+              />
               <View
                 style={{
                   flexDirection: "row",

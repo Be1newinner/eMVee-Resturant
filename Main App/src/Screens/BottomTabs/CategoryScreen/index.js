@@ -10,6 +10,7 @@ import React from "react";
 import { TopViewHome } from "../../../Components/TopViewHome";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
+import { getCategoryImageURL } from "../../../Services/offline/Image";
 
 const CategoryScreen = ({ navigation }) => {
   const TotalCategoryList = useSelector((state) => state.AllCategories);
@@ -69,7 +70,7 @@ const CategoryScreen = ({ navigation }) => {
                 zIndex: 1,
                 width: "100%",
                 height: "100%",
-                backgroundColor: "rgba(0,0,0,0.5)",
+                backgroundColor: "rgba(0,0,0,0.4)",
                 justifyContent: "center",
                 padding: 20,
               }}
@@ -77,9 +78,10 @@ const CategoryScreen = ({ navigation }) => {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 14,
+                  fontSize: 18,
                   textAlign: "center",
                   marginRight: 13,
+                  fontWeight: 600,
                 }}
               >
                 {item.t}
@@ -99,9 +101,8 @@ const CategoryScreen = ({ navigation }) => {
                     width: Dimensions.get("screen").width / 2 - 17,
                     height: Dimensions.get("screen").width / 2 - 17,
                     borderRadius: 10,
-                    backgroundColor: "rgba(240,48,64,0.15)",
                   }}
-                  source={item.i}
+                  source={{ uri: getCategoryImageURL(item.k) }}
                 />
               ) : (
                 <View
@@ -109,7 +110,6 @@ const CategoryScreen = ({ navigation }) => {
                     width: Dimensions.get("screen").width / 2 - 17,
                     height: Dimensions.get("screen").width / 2 - 17,
                     borderRadius: 10,
-                    backgroundColor: "rgba(240,48,64,0.15)",
                   }}
                 />
               )}

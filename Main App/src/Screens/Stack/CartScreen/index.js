@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addInCart, resetCart } from "../../../Services/Slices/CartSlice";
 import addOrderController from "../../../Services/OrdersController/addOrderController";
 import { LoadingModal } from "../../../Components/LoadingModal";
+import { getImageURL } from "../../../Services/offline/Image";
 
 export default function CartScreen({ navigation }) {
   const selector = useSelector((state) => state.Cart);
@@ -85,13 +86,7 @@ export default function CartScreen({ navigation }) {
   useEffect(() => {
     try {
       const auth = AuthSelector.auth;
-      // console.log("a", AuthSelector);
-      // const user = AuthSelector.user;
-      // console.log(auth);
       setAuthState(auth);
-      // setUserState(user);
-      // AsyncStorage.removeItem("user");
-      // AsyncStorage.removeItem("auth");
     } catch (error) {
       console.log(error);
     }
@@ -152,7 +147,7 @@ export default function CartScreen({ navigation }) {
                       >
                         {item?.i ? (
                           <Image
-                            source={item.i}
+                            source={{ uri: getImageURL(item.k) }}
                             style={{
                               width: 80,
                               height: 80,

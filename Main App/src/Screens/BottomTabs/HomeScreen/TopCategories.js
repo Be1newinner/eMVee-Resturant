@@ -10,6 +10,10 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import {
+  getCategoryImageURL,
+  getImageURL,
+} from "../../../Services/offline/Image";
 
 const ProductItems = () => {
   const navigation = useNavigation();
@@ -32,21 +36,23 @@ const ProductItems = () => {
             style={{
               maxWidth: 100,
               alignItems: "center",
+              borderRadius: 50,
             }}
           >
             {item.i ? (
               <Image
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
                 }}
-                source={item.i}
+                source={{ uri: getCategoryImageURL(item.k) }}
               />
             ) : (
               <View
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 100,
+                  height: 100,
                   backgroundColor: GlobalColors.themeColor,
                   justifyContent: "center",
                   alignItems: "center",
@@ -56,7 +62,7 @@ const ProductItems = () => {
               >
                 <Text
                   style={{
-                    fontSize: 20,
+                    fontSize: 38,
                     fontWeight: 700,
                   }}
                 >

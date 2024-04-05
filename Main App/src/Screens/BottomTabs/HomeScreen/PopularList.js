@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
+import { getImageURL } from "../../../Services/offline/Image";
 
 const PopularList = ({ children, navigation }) => {
   const PopularItems = useSelector((state) => state.AllProducts);
@@ -30,73 +31,81 @@ const PopularList = ({ children, navigation }) => {
           }}
         ></View>
       }
-      renderItem={({ item, index }) => (
-        <Pressable
-          style={[
-            styles.popularItems,
-            {
-              marginRight: index % 2 ? 10 : 0,
-              marginLeft: 10,
-              gap: 5,
-              maxWidth: Dimensions.get("screen").width / 2 - 15,
-            },
-          ]}
-          onPress={() =>
-            navigation.navigate("ProductDetail", { product: item })
-          }
-        >
-          {item.i ? (
-            <Image
-              style={{
-                width: "100%",
-                height: 130,
-                resizeMode: "cover",
-                borderRadius: 10,
-              }}
-              source={item.i}
-            />
-          ) : (
-            <View
-              style={{
-                width: "100%",
-                height: 130,
-                resizeMode: "cover",
-                borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
+      renderItem={({ item, index }) => {
+        // console.log("IMAGE => ", getImageURL(item.k));
+        return (
+          <Pressable
+            style={[
+              styles.popularItems,
+              {
+                marginRight: index % 2 ? 10 : 0,
+                marginLeft: 10,
+                gap: 5,
+                maxWidth: Dimensions.get("screen").width / 2 - 15,
+              },
+            ]}
+            onPress={() =>
+              navigation.navigate("ProductDetail", { product: item })
+            }
+          >
+            {item.i ? (
+              <Image
                 style={{
-                  fontSize: 34,
-                  fontWeight: 700,
+                  width: "100%",
+                  height: 130,
+                  resizeMode: "cover",
+                  borderRadius: 10,
+                }}
+                source={{ uri: getImageURL(item.k) }}
+              />
+            ) : (
+              <View
+                style={{
+                  width: "100%",
+                  height: 130,
+                  resizeMode: "cover",
+                  borderRadius: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                {item.t.slice(0, 1)}
-              </Text>
-            </View>
-          )}
-          <Text
-            style={{ fontSize: 17, fontWeight: "500", marginLeft: 5, flex: 1 }}
-          >
-            {item.t}
-          </Text>
-          {item.v && (
-            <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
-              {item.v}
+                <Text
+                  style={{
+                    fontSize: 34,
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.t.slice(0, 1)}
+                </Text>
+              </View>
+            )}
+            <Text
+              style={{
+                fontSize: 17,
+                fontWeight: "500",
+                marginLeft: 5,
+                flex: 1,
+              }}
+            >
+              {item.t}
             </Text>
-          )}
-          <Text
-            style={{
-              fontWeight: "500",
-              color: GlobalColors.themeColor,
-              marginLeft: 5,
-            }}
-          >
-            ₹{item.p}/-
-          </Text>
-        </Pressable>
-      )}
+            {item.v && (
+              <Text style={{ fontSize: 12, opacity: 0.7, marginLeft: 5 }}>
+                {item.v}
+              </Text>
+            )}
+            <Text
+              style={{
+                fontWeight: "500",
+                color: GlobalColors.themeColor,
+                marginLeft: 5,
+              }}
+            >
+              ₹{item.p}/-
+            </Text>
+          </Pressable>
+        );
+      }}
     />
   );
 };

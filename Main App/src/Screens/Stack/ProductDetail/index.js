@@ -7,6 +7,7 @@ import BottomOrderBar from "../../../Components/BottomOrderBar";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useDispatch, useSelector } from "react-redux";
 import { addInCart } from "../../../Services/Slices/CartSlice";
+import { getImageURL } from "../../../Services/offline/Image";
 
 export default function ProductDetail({ navigation, route }) {
   const ProductData = route.params.product;
@@ -33,6 +34,10 @@ export default function ProductDetail({ navigation, route }) {
   useEffect(() => {
     setQuantity(selector.items[ProductData.k]?.qty || 0);
   }, [selector]);
+
+  useEffect(() => {
+    console.log("ProductData => ", getImageURL(ProductData.k));
+  }, [ProductData]);
 
   return (
     <View
@@ -101,7 +106,7 @@ export default function ProductDetail({ navigation, route }) {
         />
         {ProductData.i ? (
           <Image
-            source={ProductData.i}
+            source={{ uri: getImageURL(ProductData.k) }}
             style={{
               width: Dimensions.get("screen").width,
               height: "auto",

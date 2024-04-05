@@ -103,7 +103,11 @@ export default function ProductsScreen() {
                 setModalVisible(true);
               }}
             >
-              <ImageComponent itemKey={item.k} title={item.t} />
+              <ImageComponent
+                itemKey={item.k}
+                title={item.t}
+                isImage={item.i}
+              />
               <View
                 style={{
                   flexDirection: "row",
