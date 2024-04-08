@@ -191,37 +191,26 @@ export default function OrdersDetails({ navigation, route }) {
                   key={index}
                   style={{ height: "auto", flexDirection: "row", gap: 10 }}
                 >
-                  {product.i ? (
-                    <Image
-                      source={product.i}
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: GlobalColors.themeColor,
+                      height: "auto",
+                      aspectRatio: 1,
+                      borderRadius: 8,
+                    }}
+                  >
+                    <Text
                       style={{
-                        height: 70,
-                        width: 70,
-                        borderRadius: 8,
-                      }}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: GlobalColors.themeColor,
-                        height: "auto",
-                        aspectRatio: 1,
-                        borderRadius: 8,
+                        fontSize: 22,
+                        fontWeight: 700,
+                        color: "#fff",
                       }}
                     >
-                      <Text
-                        style={{
-                          fontSize: 22,
-                          fontWeight: 700,
-                          color: "#fff",
-                        }}
-                      >
-                        {product.t.slice(0, 1)}
-                      </Text>
-                    </View>
-                  )}
+                      {product.t.slice(0, 1)}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       gap: 5,

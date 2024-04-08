@@ -6,7 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { ProductsModal } from "../../../Components/Modals/ProductsModal";
 import ImageComponent from "../../../Components/ImageComponent";
 
-export default function ProductsScreen() {
+export default function ProductsScreen({ navigation }) {
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
   const [editproduct, setEditproduct] = useState(null);
@@ -163,6 +163,7 @@ export default function ProductsScreen() {
           );
         }}
       />
+
       <ProductsModal
         visible={modalVisible}
         setVisible={setModalVisible}

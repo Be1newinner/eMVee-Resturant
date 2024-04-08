@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Auth
 import LoginScreen from "../Screens/Stack/LoginScreen";
 
-import BottomTabNavigation from "../Infrastructure/BottomTabScreen";
+import BottomTabsModified from "../Screens/BottomTabsModified";
 import OrdersDetails from "../Screens/Stack/OrdersDetails";
 
 const Stack = createNativeStackNavigator();
@@ -19,7 +19,7 @@ export default function StackScreens() {
       >
         {/* Auth  */}
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="BottomTab" component={BottomTabNavigation} />
+        <Stack.Screen name="BottomTab" component={BottomTabsModified} />
         <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
       </Stack.Navigator>
     </NavigationContainer>

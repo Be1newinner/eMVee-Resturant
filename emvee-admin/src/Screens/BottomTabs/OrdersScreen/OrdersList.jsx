@@ -132,21 +132,13 @@ export default function OrdersList({
                 padding: 0,
               }}
             >
-              {Object.values(item?.i)?.filter(e=>e.qty > 0)?.map((product) => (
-                <View
-                  key={product.k}
-                  style={{ height: "auto", flexDirection: "row", gap: 10 }}
-                >
-                  {product.i ? (
-                    <Image
-                      source={product.i}
-                      style={{
-                        height: 70,
-                        width: 70,
-                        borderRadius: 8,
-                      }}
-                    />
-                  ) : (
+              {Object.values(item?.i)
+                ?.filter((e) => e.qty > 0)
+                ?.map((product) => (
+                  <View
+                    key={product.k}
+                    style={{ height: "auto", flexDirection: "row", gap: 10 }}
+                  >
                     <View
                       style={{
                         justifyContent: "center",
@@ -167,26 +159,10 @@ export default function OrdersList({
                         {product.t.slice(0, 1)}
                       </Text>
                     </View>
-                  )}
-                  <View
-                    style={{
-                      gap: 5,
-                      flex: 1,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "rgba(0,0,0,0.75)",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {product.t}
-                    </Text>
                     <View
                       style={{
-                        flexDirection: "row",
                         gap: 5,
+                        flex: 1,
                       }}
                     >
                       <Text
@@ -196,28 +172,43 @@ export default function OrdersList({
                           fontWeight: 600,
                         }}
                       >
-                        ₹{product?.p}/-
+                        {product.t}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          gap: 5,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "rgba(0,0,0,0.75)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          ₹{product?.p}/-
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "space-between",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: GlobalColors.productText,
+                          fontWeight: 600,
+                        }}
+                      >
+                        x{product?.qty}/-
                       </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: GlobalColors.productText,
-                        fontWeight: 600,
-                      }}
-                    >
-                      x{product?.qty}/-
-                    </Text>
-                  </View>
-                </View>
-              ))}
+                ))}
 
               <View>
                 <Text

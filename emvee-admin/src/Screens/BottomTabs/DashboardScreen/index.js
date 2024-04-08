@@ -17,7 +17,7 @@ import { resetOrders } from "../../../Services/Slices/OrdersSlice";
 import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);

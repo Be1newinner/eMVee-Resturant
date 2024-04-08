@@ -6,7 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { CategoryModal } from "../../../Components/Modals/CategoryModal";
 import ImageComponent from "../../../Components/ImageComponent";
 
-export default function CategoriesScreen() {
+export default function CategoriesScreen({ navigation }) {
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
   const [editCategory, setEditCategory] = useState(null);
