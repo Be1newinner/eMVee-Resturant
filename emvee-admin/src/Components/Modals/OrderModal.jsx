@@ -53,7 +53,7 @@ export const OrderModal = ({
               flex: 1,
             }}
           >
-            Cancel
+            No
           </Button>
           <Button
             onPress={() => {
@@ -65,7 +65,7 @@ export const OrderModal = ({
               flex: 1,
             }}
           >
-            Confirm
+            Yes
           </Button>
         </View>
       </Card>

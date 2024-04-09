@@ -1,22 +1,29 @@
-import { Dimensions, Image, ScrollView, Text, View } from "react-native";
+import { Dimensions, ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-import { useSelector } from "react-redux";
-import { Button } from "@ui-kitten/components";
+import { useSelector, useDispatch } from "react-redux";
+import { Button, Spinner } from "@ui-kitten/components";
 import { Timestamp, doc, updateDoc } from "firebase/firestore";
 import { firestoreDB } from "../../../Infrastructure/firebase.config";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { OrderModal } from "../../../Components/Modals/OrderModal";
 import { useState } from "react";
+import {
+  cancelOrder,
+  deliverOrderReducer,
+} from "../../../Services/Slices/OrdersSlice";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
+  const dispatch = useDispatch();
   const OrderDetails = OrdersSelector[OrderID];
   const [CancelModal, setCancelModal] = useState(false);
   const [AcceptModal, setAcceptModal] = useState(false);
   const [isDelivered, setIsDelivered] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
+  const [CancelLoading, setCancelLoading] = useState(false);
+  const [StatusLoading, setStatusLoading] = useState(false);
 
   const OrdersItems = {
     status: OrderDetails?.s.c,
@@ -32,15 +39,27 @@ export default function OrdersDetails({ navigation, route }) {
     deliver: OrderDetails?.u?.a,
   };
 
-  const cancelOrder = async ({ OrderID }) => {
-    const docRef = await doc(firestoreDB, "or4", OrderID);
-    await updateDoc(docRef, {
-      "s.c": -1,
-      "-1": new Timestamp.now(),
-    });
+  const cancelOrderFunction = async ({ OrderID }) => {
+    setCancelLoading(true);
+    try {
+      const docRef = await doc(firestoreDB, "or4", OrderID);
+      await updateDoc(docRef, {
+        "s.c": -1,
+        "-1": new Timestamp.now(),
+      });
+
+      setIsCancelled(true);
+
+      dispatch(cancelOrder(OrderID));
+    } catch (error) {
+      console.log(error);
+      setCancelLoading(false);
+    }
+    setCancelLoading(false);
   };
 
   const confirmOrder = async ({ OrderID, status }) => {
+    setStatusLoading(true);
     const docRef = await doc(firestoreDB, "or4", OrderID);
     if (status == 1)
       await updateDoc(docRef, {
@@ -55,10 +74,12 @@ export default function OrdersDetails({ navigation, route }) {
           "s.2": new Timestamp.now(),
         });
         setIsDelivered(true);
+        dispatch(deliverOrderReducer(OrderID));
       } catch (error) {
         console.log("DELIVERY ERROR ", error);
       }
     }
+    setStatusLoading(false);
   };
 
   return (
@@ -141,7 +162,9 @@ export default function OrdersDetails({ navigation, route }) {
                 style={{
                   width: 10,
                   height: 10,
-                  backgroundColor: isDelivered
+                  backgroundColor: isCancelled
+                    ? "rgba(0,0,0,0.7)"
+                    : isDelivered
                     ? "#0f0"
                     : OrdersItems.status === 1
                     ? "#f00"
@@ -153,7 +176,9 @@ export default function OrdersDetails({ navigation, route }) {
               />
               <Text
                 style={{
-                  color: isDelivered
+                  color: isCancelled
+                    ? "rgba(0,0,0,0.7)"
+                    : isDelivered
                     ? "#0f0"
                     : OrdersItems.status === 1
                     ? "#f00"
@@ -162,7 +187,9 @@ export default function OrdersDetails({ navigation, route }) {
                     : "#55d",
                 }}
               >
-                {isDelivered
+                {isCancelled
+                  ? "Order Cancelled"
+                  : isDelivered
                   ? "Order Delivered"
                   : OrdersItems.status === 1
                   ? "Out for Delivery"
@@ -292,7 +319,7 @@ export default function OrdersDetails({ navigation, route }) {
             >
               Billing Details
             </Text>
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -308,8 +335,8 @@ export default function OrdersDetails({ navigation, route }) {
               >
                 ₹{OrdersItems?.subtotal}
               </Text>
-            </View>
-            <View
+            </View> */}
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -325,8 +352,8 @@ export default function OrdersDetails({ navigation, route }) {
               >
                 ₹{OrdersItems?.taxes}
               </Text>
-            </View>
-            <View
+            </View> */}
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -344,7 +371,7 @@ export default function OrdersDetails({ navigation, route }) {
                   ? "Free"
                   : "₹" + OrdersItems?.delivery}
               </Text>
-            </View>
+            </View> */}
             <View
               style={{
                 flexDirection: "row",
@@ -499,7 +526,7 @@ export default function OrdersDetails({ navigation, route }) {
           </View>
         </View>
 
-        {!isDelivered ? (
+        {isDelivered || isCancelled ? null : (
           <View
             status="danger"
             style={{
@@ -517,11 +544,13 @@ export default function OrdersDetails({ navigation, route }) {
               status="danger"
               appearance="outline"
               onPress={() => {
-                setAcceptModal(false);
-                setCancelModal(true);
+                if (!CancelLoading) {
+                  setAcceptModal(false);
+                  setCancelModal(true);
+                }
               }}
             >
-              cancel order
+              {CancelLoading ? "please wait..." : "cancel order"}
             </Button>
             <Button
               style={{
@@ -529,19 +558,24 @@ export default function OrdersDetails({ navigation, route }) {
               }}
               status="danger"
               onPress={() => {
-                setAcceptModal(true);
-                setCancelModal(false);
+                if (!StatusLoading) {
+                  setAcceptModal(true);
+                  setCancelModal(false);
+                }
               }}
             >
-              {OrderDetails?.s.c == 0 ? "Mark OFD?" : "Mark Delivered?"}
+              {StatusLoading
+                ? "please wait..."
+                : OrderDetails?.s.c == 0
+                ? "Mark OFD?"
+                : "Mark Delivered?"}
             </Button>
           </View>
-        ) : null}
+        )}
 
         <OrderModal
           title="Do you want to cancel Order?"
-          // subTitle="Do you want to cancel Order?"
-          onConfirm={() => cancelOrder({ OrderID })}
+          onConfirm={() => cancelOrderFunction({ OrderID })}
           visible={CancelModal}
           setVisible={setCancelModal}
         />
@@ -556,7 +590,7 @@ export default function OrdersDetails({ navigation, route }) {
               status: OrderDetails?.s.c == 0 ? 1 : 2,
             });
 
-            console.log("ON CONFIRM CLICKED!");
+            // console.log("ON CONFIRM CLICKED!");
           }}
           visible={AcceptModal}
           setVisible={setAcceptModal}

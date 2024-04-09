@@ -3,7 +3,6 @@ import { Card, Modal } from "@ui-kitten/components";
 import {
   Text,
   Platform,
-  Button,
   Dimensions,
   TouchableOpacity,
   View,
@@ -13,7 +12,8 @@ import { useState, useRef, useEffect } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { onAuthStateChanged } from "firebase/auth";
-import { firebaseAuth } from "../../Infrastructure/firebase.config";
+import { firebaseAuth, realtimeDB } from "../../Infrastructure/firebase.config";
+import { ref, set } from "firebase/database";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -38,9 +38,20 @@ export const NewOrderNotification = ({ navigation = null }) => {
       "" +
       process.env.EXPO_PUBLIC_u0;
 
+    const addAdminToken = async (data) => {
+      await set(ref(realtimeDB, "token"), data);
+    };
+
     onAuthStateChanged(firebaseAuth, async (user) => {
       if (user?.uid == tdf) {
-        registerForPushNotificationsAsync().then((token) => console.log(token));
+        registerForPushNotificationsAsync().then(async (token) => {
+          try {
+            await addAdminToken(token);
+            console.log(token);
+          } catch (error) {
+            console.log("ERROR in SETTING TOKEN", error);
+          }
+        });
 
         notificationListener.current =
           Notifications.addNotificationReceivedListener((notification) => {
