@@ -48,8 +48,10 @@ export default function LoginScreen({ navigation }) {
             await LogOut();
             setError({ other: "Access Denied!" });
           } else {
-            if (user.uid == tdf) navigation.replace("BottomTab");
-            else {
+            if (user.uid == tdf) {
+              console.log("USER UID => ", user.uid);
+              navigation.replace("BottomTab");
+            } else {
               await dispatch(resetOrders());
               await dispatch(resetProducts());
               await dispatch(resetCategories());
@@ -75,8 +77,10 @@ export default function LoginScreen({ navigation }) {
     onAuthStateChanged(firebaseAuth, async (user) => {
       if (user) {
         if (user.emailVerified) {
-          if (user.uid == tdf) navigation.replace("BottomTab");
-          else {
+          if (user.uid == tdf) {
+            console.log("user.uid => ", user.uid);
+            navigation.replace("BottomTab");
+          } else {
             await dispatch(resetOrders());
             await dispatch(resetProducts());
             await dispatch(resetCategories());

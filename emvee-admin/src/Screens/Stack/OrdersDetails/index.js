@@ -12,6 +12,9 @@ import {
   cancelOrder,
   deliverOrderReducer,
 } from "../../../Services/Slices/OrdersSlice";
+import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
@@ -489,22 +492,58 @@ export default function OrdersDetails({ navigation, route }) {
                 {OrdersItems?.reciever}
               </Text>
             </View>
-            <View>
-              <Text
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+                flex: 1,
+                justifyContent: "space-between",
+              }}
+            >
+              <View>
+                <Text
+                  style={{
+                    color: "rgba(0,0,0,0.7)",
+                  }}
+                >
+                  Receiver Number
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  {OrdersItems?.contact.toString()}
+                </Text>
+              </View>
+              <View
                 style={{
-                  color: "rgba(0,0,0,0.7)",
+                  flexDirection: "row",
+                  gap: 25,
                 }}
               >
-                Receiver Number
-              </Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  fontSize: 16,
-                }}
-              >
-                {OrdersItems?.contact.toString()}
-              </Text>
+                <MaterialIcons
+                  onPress={async () => {
+                    await Linking.openURL(
+                      `tel:${OrdersItems?.contact.toString()}`
+                    );
+                  }}
+                  name="call"
+                  size={30}
+                  color="black"
+                />
+                <FontAwesome5
+                  onPress={async () => {
+                    await Linking.openURL(
+                      `https://api.whatsapp.com/send/?phone=91${OrdersItems?.contact.toString()}&text&type=phone_number&app_absent=0`
+                    );
+                  }}
+                  name="whatsapp"
+                  size={30}
+                  color="black"
+                />
+              </View>
             </View>
             <View>
               <Text

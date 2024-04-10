@@ -14,6 +14,7 @@ import * as Notifications from "expo-notifications";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth, realtimeDB } from "../../Infrastructure/firebase.config";
 import { ref, set } from "firebase/database";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -26,7 +27,6 @@ Notifications.setNotificationHandler({
 export const NewOrderNotification = ({ navigation = null }) => {
   const [OrderData, setOrderData] = useState(null);
   const notificationListener = useRef();
-  const responseListener = useRef();
 
   useEffect(() => {
     const tdf =
@@ -39,41 +39,36 @@ export const NewOrderNotification = ({ navigation = null }) => {
       process.env.EXPO_PUBLIC_u0;
 
     const addAdminToken = async (data) => {
-      await set(ref(realtimeDB, "token"), data);
+      await set(ref(realtimeDB, `token/${data}`), data);
     };
 
-    onAuthStateChanged(firebaseAuth, async (user) => {
-      if (user?.uid == tdf) {
-        registerForPushNotificationsAsync().then(async (token) => {
-          try {
+    try {
+      onAuthStateChanged(firebaseAuth, async (user) => {
+        if (user?.uid == tdf) {
+          const token = await registerForPushNotificationsAsync();
+
+          if (token) {
+            await AsyncStorage.setItem("FCM_Token", token);
             await addAdminToken(token);
-            console.log(token);
-          } catch (error) {
-            console.log("ERROR in SETTING TOKEN", error);
+            console.log("THE TOKEN", token);
           }
-        });
 
-        notificationListener.current =
-          Notifications.addNotificationReceivedListener((notification) => {
-            console.log(
-              "Notification from addNotification Method => ",
-              notification?.request?.content?.data
-            );
-            setOrderData(notification?.request?.content?.data || null);
-          });
-
-        responseListener.current =
-          Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log(response);
-          });
-      }
-    });
+          notificationListener.current =
+            Notifications.addNotificationReceivedListener((notification) => {
+              setOrderData(
+                notification?.reqaddAdminTokenuest?.content?.data || null
+              );
+            });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
-      Notifications.removeNotificationSubscription(responseListener.current);
       setOrderData(null);
     };
   }, []);
@@ -231,7 +226,7 @@ export const NewOrderNotification = ({ navigation = null }) => {
   );
 };
 
-async function registerForPushNotificationsAsync() {
+export async function registerForPushNotificationsAsync() {
   let token;
 
   if (Platform.OS === "android") {
@@ -252,18 +247,10 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
+      // alert("Failed to get push token for push notification!");
       return;
     }
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId: "fdf657fa-486a-42d7-882a-2c016354e668",
-      })
-    ).data;
-    console.log(token);
-  } else {
-    alert("Must use physical device for Push Notifications");
+    token = (await Notifications.getDevicePushTokenAsync()).data;
   }
-
   return token;
 }

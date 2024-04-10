@@ -16,6 +16,7 @@ import LogOut from "../../../Services/LogOut";
 import { resetOrders } from "../../../Services/Slices/OrdersSlice";
 import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
@@ -68,7 +69,7 @@ export default function DashboardScreen({ navigation }) {
     await dispatch(resetOrders());
     await dispatch(resetProducts());
     await dispatch(resetCategories());
-    await LogOut();
+    await LogOut({ AsyncStorage, navigation });
   };
 
   useEffect(() => {

@@ -57,14 +57,17 @@ export default function OrdersScreen({ navigation }) {
             }}
           />
         }
-        data={Object.values(OrdersSelector)}
+        data={
+          Object.values(OrdersSelector)
+          // ?.sort((a, b) => b.s.c - a.s.c)
+        }
         contentContainerStyle={{
-          gap: 10,
+          gap: 20,
         }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(e) => e.orderID}
         renderItem={({ item, index }) => {
-          // console.log(index, item.orderID);
+          console.log(index, item);
           return (
             <View
               style={{
@@ -124,14 +127,26 @@ export default function OrdersScreen({ navigation }) {
                     width: 10,
                     height: 10,
                     backgroundColor:
-                      item.s.c == 2 ? "#5c5" : item.s.c == 1 ? "#f00" : "#55d",
+                      item.s.c == -1
+                        ? "rgba(0,0,0,0.6)"
+                        : item.s.c == 2
+                        ? "#5c5"
+                        : item.s.c == 1
+                        ? "#f00"
+                        : "#55d",
                     borderRadius: 20,
                   }}
                 />
                 <Text
                   style={{
                     color:
-                      item.s.c == 2 ? "#5c5" : item.s.c == 1 ? "#f00" : "#55d",
+                      item.s.c == -1
+                        ? "rgba(0,0,0,0.6)"
+                        : item.s.c == 2
+                        ? "#5c5"
+                        : item.s.c == 1
+                        ? "#f00"
+                        : "#55d",
                     fontWeight: 500,
                   }}
                 >
@@ -156,37 +171,26 @@ export default function OrdersScreen({ navigation }) {
                     key={product.k}
                     style={{ height: "auto", flexDirection: "row", gap: 10 }}
                   >
-                    {product.i ? (
-                      <Image
-                        source={product.i}
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: GlobalColors.themeColor,
+                        height: "auto",
+                        aspectRatio: 1,
+                        borderRadius: 8,
+                      }}
+                    >
+                      <Text
                         style={{
-                          height: 70,
-                          width: 70,
-                          borderRadius: 8,
-                        }}
-                      />
-                    ) : (
-                      <View
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center",
-                          backgroundColor: GlobalColors.themeColor,
-                          height: "auto",
-                          aspectRatio: 1,
-                          borderRadius: 8,
+                          fontSize: 22,
+                          fontWeight: 700,
+                          color: "#fff",
                         }}
                       >
-                        <Text
-                          style={{
-                            fontSize: 22,
-                            fontWeight: 700,
-                            color: "#fff",
-                          }}
-                        >
-                          {product.t.slice(0, 1)}
-                        </Text>
-                      </View>
-                    )}
+                        {product.t.slice(0, 1)}
+                      </Text>
+                    </View>
                     <View
                       style={{
                         gap: 5,
