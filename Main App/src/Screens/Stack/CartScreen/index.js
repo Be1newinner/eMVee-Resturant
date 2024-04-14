@@ -12,6 +12,8 @@ import { addInCart, resetCart } from "../../../Services/Slices/CartSlice";
 import addOrderController from "../../../Services/OrdersController/addOrderController";
 import { LoadingModal } from "../../../Components/LoadingModal";
 import { getImageURL } from "../../../Services/offline/Image";
+import { ref, child, get } from "firebase/database";
+import { realtimeDB } from "../../../Infrastructure/firebase.config";
 
 export default function CartScreen({ navigation }) {
   const selector = useSelector((state) => state.Cart);
@@ -25,22 +27,98 @@ export default function CartScreen({ navigation }) {
   const [authState, setAuthState] = useState(null);
   const [RecieverAddress, setRecieverAddress] = useState(null);
 
-  const ConfirmOrder = async () => {
-    setLoadingScreen(true);
-
-    const response = await addOrderController({
-      CartSelector: selector,
-      AddressSelector,
-      authState,
-    });
-
-    if (response.status === 200) {
-      setConfirmClicked(true);
-      dispatch(resetCart());
-      navigation.replace("OrderConfirm", { orderID: response?.orderID });
+  const getAdminTokens = async () => {
+    try {
+      let data;
+      const dbRef = await ref(realtimeDB);
+      await get(child(dbRef, `token`)).then((snapshot) => {
+        snapshot.exists() && (data = snapshot.val());
+      });
+      return data;
+    } catch (error) {
+      console.log("Getting ADMIN TOKEN ERROR => ", error);
+      return null;
     }
+  };
 
-    setLoadingScreen(false);
+  const sendNotificationToAdmin = async ({ token, orderData }) => {
+    if (!token) return null;
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append(
+        "Authorization",
+        "key=AAAAQt84_LQ:APA91bHJ1GLtZEBEdmMVE0zMC0Y_ZC_PYFdeDgLQIAeMPTdi-vlt07cPwYi1IMHT1FIXvVbSiioKIru-Y_Ja6uXO5uchYr9rKSqxEnZTO5AIz8d2wkNA4apzrUa7qDzHB5vdG2hswu7f"
+      );
+      myHeaders.append("Content-Type", "application/json");
+      const raw = JSON.stringify({
+        to: token,
+        notification: {
+          title: "New Order Recieved!",
+          body: "You have a new Order",
+        },
+        data: orderData,
+      });
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+      await fetch("https://fcm.googleapis.com/fcm/send", requestOptions);
+    } catch (error) {
+      console.log("UNABLE TO SEND NOTIFICATION TO ADMIN => ", error);
+    }
+  };
+
+  const ConfirmOrder = async () => {
+    try {
+      setLoadingScreen(true);
+
+      const response = await addOrderController({
+        CartSelector: selector,
+        AddressSelector,
+        authState,
+      });
+
+      const orderItems = Object.values(selector?.items) || [];
+      const personName =
+        AddressSelector?.addresses?.filter(
+          (e) => e.k == AddressSelector?.default
+        )[0]?.n || "no name";
+      const orderTime = Date.now();
+      const orderTotal = selector.total || 0;
+
+      if (response.status === 200) {
+        const orderData = {
+          type: 7,
+          name: personName,
+          id: "",
+          time: orderTime,
+          total: orderTotal,
+          items: orderItems,
+        };
+        orderData.id = response?.orderID || "";
+
+        const data = await getAdminTokens();
+        const adminTokens = Object.values(data);
+        // console.log("Admin Tokens =>", adminTokens);
+        adminTokens?.forEach((e) => {
+          sendNotificationToAdmin({
+            token: e,
+            orderData,
+          });
+        });
+
+        setConfirmClicked(true);
+        dispatch(resetCart());
+        navigation.replace("OrderConfirm", { orderID: response?.orderID });
+      }
+
+      setLoadingScreen(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingScreen(false);
+    }
   };
 
   const [visible, setVisible] = useState(false);
