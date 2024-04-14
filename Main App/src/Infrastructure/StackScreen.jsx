@@ -11,7 +11,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BurgerScreen from "../Screens/Stack/BurgerScreen";
 import CategoryItems from "../Screens/Stack/CategoryItems";
 import FriedRiceScreen from "../Screens/Stack/FriedRiceScreen";
-import BottomTabNavigation from "../Infrastructure/BottomTabScreen";
 import ProductDetail from "../Screens/Stack/ProductDetail";
 import ProfileScreen from "../Screens/Stack/ProfileScreen";
 import CartScreen from "../Screens/Stack/CartScreen";
@@ -23,6 +22,7 @@ import AboutUs from "../Screens/Stack/AboutUs";
 import TermsCondition from "../Screens/Stack/TermsCondition";
 import PrivacyPolicy from "../Screens/Stack/PrivacyPolicy";
 import LoginWithPhone from "../Screens/Stack/Auth/LoginWithPhone";
+import BottomTabsModified from "../Screens/BottomTabsModified";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,13 +36,12 @@ export default function StackScreens() {
         }}
       >
         {/* <Stack.Screen name="Welcome" component={SplashScreen} /> */}
-
         {/* Auth  */}
         {/* <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} /> */}
 
-        <Stack.Screen name="BottomTab" component={BottomTabNavigation} />
+        <Stack.Screen name="BottomTab" component={BottomTabsModified} />
         <Stack.Screen name="LoginWithPhone" component={LoginWithPhone} />
         <Stack.Screen name="ProductDetail" component={ProductDetail} />
         <Stack.Screen name="CategoryItems" component={CategoryItems} />

@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../../../../Services/Slices/AuthSlice";
 import GetAddressController from "../../../../Services/OrdersController/GetAddressController";
 import { addAddressArray } from "../../../../Services/Slices/AddressSlice";
+import { ref, set } from "firebase/database";
+import { realtimeDB } from "../../../../Infrastructure/firebase.config";
 
 export default function LoginWithPhone({ navigation }) {
   const dispatch = useDispatch();
@@ -22,6 +24,10 @@ export default function LoginWithPhone({ navigation }) {
     await LoginUser({ JWT: decodedJWT });
   };
 
+  const addUserToken = async (data, phone) => {
+    await set(ref(realtimeDB, `tokens/${phone}/${data}`), data);
+  };
+
   const LoginUser = async ({ JWT }) => {
     // console.log("JWT", JWT);
     try {
@@ -31,6 +37,8 @@ export default function LoginWithPhone({ navigation }) {
         const addresses = await GetAddressController({
           phone_no: auth?.phone_no,
         });
+        const data = await AsyncStorage.getItem("FCM_Token");
+        await addUserToken(data, auth?.phone_no);
         dispatch(addAddressArray(addresses));
         dispatch(login(JSON.stringify({ auth })));
         navigation.goBack();

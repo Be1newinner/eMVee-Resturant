@@ -29,7 +29,7 @@ const tdf =
   "" +
   process.env.EXPO_PUBLIC_u0;
 
-const BottomTabScreen = ({ navigation }) => {
+const BottomTabScreenRaw = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -151,4 +151,4 @@ const BottomTabScreen = ({ navigation }) => {
   );
 };
 
-export default BottomTabScreen;
+export default BottomTabScreenRaw;
