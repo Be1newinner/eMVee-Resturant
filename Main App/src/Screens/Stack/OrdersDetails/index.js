@@ -4,38 +4,36 @@ import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
+import OrderStatus from "../../../Services/offline/OrderStatus";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
-
   const [OrdersItems, setOrderItems] = useState(null);
+
+  console.log("OrderStatus ", OrderStatus);
 
   useEffect(() => {
     const OrderDetails = OrdersSelector[OrderID];
     if (OrderDetails) {
       setOrderItems({
-        status:
-          OrderDetails.s.c == 2
-            ? 2
-            : OrderDetails.s.c == 1
-            ? 1
-            : OrderDetails.s.c == -1
-            ? -1
-            : 0,
+        status: OrderDetails.s.c,
         items: Object.values(OrderDetails?.i) || [],
         subtotal: OrderDetails?.p?.s,
         taxes: OrderDetails?.p?.x,
         delivery: OrderDetails?.p?.c,
+        discount: OrderDetails?.p?.d,
         total: OrderDetails?.p?.t,
         saving: 0,
-        date: new Date().toLocaleString(),
+        date: new Date(OrderDetails?.s?.[0].seconds * 1000).toLocaleString(),
         contact: OrderDetails?.u?.p,
         reciever: OrderDetails?.u?.n,
         deliver: OrderDetails?.u?.a,
+        deliveredTime: OrderDetails?.s?.[3]?.seconds || 0,
+        willBeDeliveredTime: OrderDetails?.s?.t?.seconds || 0,
       });
     }
-    console.log(OrderID, OrderDetails?.s?.c);
+    // console.log(OrderID, OrderDetails?.s?.c);
   }, [OrdersSelector]);
 
   return (
@@ -118,32 +116,16 @@ export default function OrdersDetails({ navigation, route }) {
                 style={{
                   width: 10,
                   height: 10,
-                  backgroundColor:
-                    OrdersItems?.status == 1
-                      ? "#f00"
-                      : OrdersItems?.status == 2
-                      ? "#0f0"
-                      : "#55d",
-                  borderRadius: 10,
+                  backgroundColor: OrderStatus[OrdersItems?.status]?.color,
+                  borderRadius: 20,
                 }}
               />
               <Text
                 style={{
-                  color:
-                    OrdersItems?.status == 1
-                      ? "#f00"
-                      : OrdersItems?.status == 2
-                      ? "#0f0"
-                      : "#55d",
+                  color: OrderStatus[OrdersItems?.status]?.color,
                 }}
               >
-                {OrdersItems?.status == 1
-                  ? "Out for Delivery"
-                  : OrdersItems?.status == 2
-                  ? "Order Delivered"
-                  : OrdersItems?.status == -1
-                  ? "Order Cancelled"
-                  : "Processing"}
+                {OrderStatus[OrdersItems?.status]?.title}
               </Text>
             </View>
           </View>
@@ -280,23 +262,25 @@ export default function OrdersDetails({ navigation, route }) {
                 ₹{OrdersItems?.subtotal}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 10,
-              }}
-            >
-              <Text>Taxes</Text>
-              <Text
+            {OrdersItems?.taxes ? (
+              <View
                 style={{
-                  fontWeight: 500,
-                  fontSize: 15,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 10,
                 }}
               >
-                ₹{OrdersItems?.taxes}
-              </Text>
-            </View>
+                <Text>Taxes</Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 15,
+                  }}
+                >
+                  ₹{OrdersItems?.taxes}
+                </Text>
+              </View>
+            ) : null}
             <View
               style={{
                 flexDirection: "row",
@@ -316,6 +300,26 @@ export default function OrdersDetails({ navigation, route }) {
                   : "₹" + OrdersItems?.delivery}
               </Text>
             </View>
+
+            {OrdersItems?.discount ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 10,
+                }}
+              >
+                <Text>Discount</Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 15,
+                  }}
+                >
+                  - ₹{OrdersItems?.discount}
+                </Text>
+              </View>
+            ) : null}
             <View
               style={{
                 flexDirection: "row",
@@ -337,7 +341,11 @@ export default function OrdersDetails({ navigation, route }) {
                   fontSize: 16,
                 }}
               >
-                ₹{OrdersItems?.subtotal}
+                ₹
+                {OrdersItems?.subtotal +
+                  OrdersItems?.taxes +
+                  OrdersItems?.delivery -
+                  OrdersItems?.discount}
               </Text>
             </View>
 
@@ -414,6 +422,28 @@ export default function OrdersDetails({ navigation, route }) {
                 }}
               >
                 {OrdersItems?.date}
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  color: "rgba(0,0,0,0.7)",
+                }}
+              >
+                {OrdersItems?.status == 3 ? "Delievered" : "Expected Delievery"}{" "}
+                on
+              </Text>
+              <Text
+                style={{
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                {OrdersItems?.status == 0
+                  ? "Waiting for admin to accept Order!"
+                  : OrdersItems?.status == 3
+                  ? OrdersItems?.deliveredTime * 1000
+                  : OrdersItems?.willBeDeliveredTime * 1000}
               </Text>
             </View>
             <View>

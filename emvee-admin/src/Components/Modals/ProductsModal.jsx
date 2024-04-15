@@ -12,7 +12,7 @@ import * as ImagePicker from "expo-image-picker";
 import { fireStorage, firestoreDB } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addSingleProduct,
@@ -33,7 +33,6 @@ export const ProductsModal = ({
   const [image, setImage] = useState(null);
   const [CategorySelected, setCategorySelected] = useState(null);
   const categorySelector = useSelector((selector) => selector.AllCategories);
-
   const [imageError, setImageError] = useState(false);
   const dispatch = useDispatch();
 
@@ -126,7 +125,18 @@ export const ProductsModal = ({
     if (product?.k) myObject.k = product?.k;
     else myObject.k = Date.now();
 
-    console.log("myObject", myObject);
+    try {
+      if (image && !imageError) {
+        await uploadImageAsync({
+          uri: image,
+          productID: myObject.k,
+        });
+        myObject.i = true;
+      }
+    } catch (error) {
+      console.log("Image Upload Error => ", error);
+      return;
+    }
 
     try {
       await setDoc(doc(firestoreDB, "pr47", myObject.k.toString()), myObject);
@@ -142,17 +152,7 @@ export const ProductsModal = ({
       console.log("ADDING CATEGORY ERROR 2", error);
       return;
     }
-    try {
-      if (image && !imageError) {
-        await uploadImageAsync({
-          uri: image,
-          productID: myObject.k,
-        });
-      }
-    } catch (error) {
-      console.log("Image Upload Error => ", error);
-      return;
-    }
+
     closingModal();
   }
 

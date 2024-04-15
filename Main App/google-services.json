@@ -1,13 +1,69 @@
 {
-  "type": "service_account",
-  "project_id": "emvee-resturant",
-  "private_key_id": "542cfb2454dfaa551ac43da344164c9f09249bd7",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQvpUwtQVZ46yD\nOGocLiC3mozB33H18bUbyZmFJx71SozFezKhCjekuynEnNr8D9C2fKDamTQpjMNP\n2dmMrvWHsPn42VG5JxySKlllL98NLhq9HYov0LPqV9gwlC6w7oXB+2Z7dgrYcsKT\nyrWpVRkOUd1oEZY8hgIlRdDvqzPvxmZ4JpnaqhRR/L3wGnC/amlzUDH8vHya1bvd\nMz8HmQyCO4JtInHUx3iZ+OPnosUpRwKUI7Cn6RZMyeAll3SZF/Nr1CgCYnwnfpye\n2DeFJs9fNcva0tbbATkrp3ChTXf5EM1DY4Ve63uTbi8OSxNvIM9BgHrZRr4MCSvL\nLj2o3DNvAgMBAAECggEAT5zQQ6JWpyDZM7a5aYQCQGQ2WN7ClP2ZiD6MSadQ/FZx\neAPznE3MSQyE8pKsRkQ14tOHebfCmDIyb2rzuN8lj5nkzI79xzLuh6SVMa1fUaSK\n2CPDB1d+ttrH/kcVw69E3mXmgSHVIxYptbozLKDjDH4WhlFmzjCB8vs8o5vVFBYT\nnUTzOVrcl/Y6994n3K3AJky00uxGoKgVaf6Hdsboq+tbZfrSJ5tGRs3jYz0thmk2\nyL/SaXBVxnQw8WOEeloB3jX7IwqS4MV+jb/GEyCHIk93/66KlFEwpZcxj7ItlkR2\nvXR0sYOH5pI42sv94Tdynlv8hNS9J28y9mKuULLE0QKBgQDv0gb2Y4/GvgMRMsFR\nwglL+Ea3JcP2tWI3weCL9msi/h4MplS/C4b/C1VhJ+43LVHx2E4YyMhs8Sw5I2QC\nROz0Lw9Obg38AFSwYwUTMaiD6a8LOV5JffFedxRBc9nss9E64LZh8PNSYYTqtXE3\npKS8CE/QlOoxnjRVSxlDc0ccFwKBgQDe09abkMS4lBmZlgRz6yRpjDwiwG1RVbUA\nwwwjJyerkE2F0onlB30G6sjkamyYrl2/Ue+DpBB02VuY63q47bY3Bgl31D5RMI1J\nrf1SCZSeqCrJM6UOTVe+Xiy2BoYkBA6inrP1RNsB/2LLdcFx4DRnJhJ+R4DQ2Blq\nIip/vcKCaQKBgAOX7A7JEyBxPG6HiioFdEo1ICoiYLtToHMhbpHqUVSm5iBeZaqv\nK4iqzM614HXnMfEjwpfQemBXhMgeZaM7ESnfgqU0NPVvs9Uoxqyw88t2Nu8+HtGP\nF4zIz/7jE4LeduYg89qn152GZI13xoiE6QsAPOHtOU0hB7u3clt2YLxlAoGAcDwf\nUogeriHaqyOG5qQ/2PILsC1gYqFa5CFaUbJ9JssuYQNk9XlKHlvQCE0ameTpz14D\n2DihGVoJ6wJg9Bi3uQtPZY4APYDJCZ2bhODSfP+TXXin4IZQddCVkLHEiwuIG5z4\nY8fk0CLErlqHr0YQ3wusMPLvDUJruquu4FzCRlECgYBslb0PwfOzFLE+uzE4p/9k\nqjzs53tOyAm70kZ/CcZ7zSUqzR3dgRRcxxGx4apvWAGJDxFpwzPKS3vqSGP3CunO\nnzZ+OI0wd0xBm3JmVUV2kFw52bPQDqQRezDuVV+WuH1IDmXMjA7f9TYI8Gfok9uk\nyOP8uNMA7FOYFqZ4LBLZcg==\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-a0vjz@emvee-resturant.iam.gserviceaccount.com",
-  "client_id": "108629244176385738955",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-a0vjz%40emvee-resturant.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
+  "project_info": {
+    "project_number": "287212895412",
+    "firebase_url": "https://emvee-resturant-default-rtdb.firebaseio.com",
+    "project_id": "emvee-resturant",
+    "storage_bucket": "emvee-resturant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287212895412:android:344323ad7cff93ed2f6be1",
+        "android_client_info": {
+          "package_name": "com.shipsar.emveeadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287212895412-ohp5orn5tvkobj55e7rkrt0cnfai8gra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApcKo4w8bx_ym7SOkZCcPlNMlJndP4NxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287212895412-ohp5orn5tvkobj55e7rkrt0cnfai8gra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287212895412:android:8b2347f19579f4422f6be1",
+        "android_client_info": {
+          "package_name": "com.shipsar.emveerestaurant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287212895412-ohp5orn5tvkobj55e7rkrt0cnfai8gra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApcKo4w8bx_ym7SOkZCcPlNMlJndP4NxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287212895412-ohp5orn5tvkobj55e7rkrt0cnfai8gra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

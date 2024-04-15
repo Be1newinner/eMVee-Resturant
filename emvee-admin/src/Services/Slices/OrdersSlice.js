@@ -39,8 +39,8 @@ export const OrdersSlice = createSlice({
     deliverOrderReducer(state, action) {
       return produce(state, (draft) => {
         const currentData = draft[action.payload];
-        currentData.s.c = 2;
-        currentData.s["2"] = Date.now();
+        currentData.s.c = 3;
+        currentData.s["3"] = Date.now();
         draft[action.payload] = currentData;
         // console.log("order data ", draft[action.payload]);
       });

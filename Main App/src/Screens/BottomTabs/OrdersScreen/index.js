@@ -2,9 +2,11 @@ import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
+import OrderStatus from "../../../Services/offline/OrderStatus";
 
 export default function OrdersScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
+  // console.log(OrderStatus);
 
   return (
     <View
@@ -57,17 +59,16 @@ export default function OrdersScreen({ navigation }) {
             }}
           />
         }
-        data={
-          Object.values(OrdersSelector)
-          // ?.sort((a, b) => b.s.c - a.s.c)
-        }
+        data={Object.values(OrdersSelector)?.sort(
+          (a, b) => b.s?.[0]?.seconds - a.s?.[0]?.seconds
+        )}
         contentContainerStyle={{
           gap: 20,
         }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(e) => e.orderID}
         renderItem={({ item, index }) => {
-          console.log(index, item);
+          // console.log(index, item);
           return (
             <View
               style={{
@@ -77,6 +78,7 @@ export default function OrdersScreen({ navigation }) {
                 borderRadius: 10,
                 elevation: 5,
                 gap: 10,
+                overflow: "hidden",
               }}
               onPress={() => item.action && navigation.navigate(item.action)}
             >
@@ -88,13 +90,19 @@ export default function OrdersScreen({ navigation }) {
               >
                 <Text
                   style={{
-                    fontSize: 16,
-                    color: "rgba(100,100,105,1)",
+                    fontWeight: 700,
                     flex: 1,
-                    fontWeight: 500,
                   }}
                 >
-                  Order ID #{item.orderID}
+                  Order ID{" "}
+                  <Text
+                    style={{
+                      fontWeight: 400,
+                      fontSize: 14,
+                    }}
+                  >
+                    #{item.orderID}
+                  </Text>
                 </Text>
                 <Pressable
                   onPress={() =>
@@ -118,6 +126,24 @@ export default function OrdersScreen({ navigation }) {
               <View
                 style={{
                   flexDirection: "row",
+                  gap: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: 700,
+                  }}
+                >
+                  Order Time
+                </Text>
+                <Text>
+                  {new Date(item?.s?.[0].seconds * 1000).toLocaleString()}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
                   alignItems: "center",
                   gap: 5,
                 }}
@@ -126,37 +152,17 @@ export default function OrdersScreen({ navigation }) {
                   style={{
                     width: 10,
                     height: 10,
-                    backgroundColor:
-                      item.s.c == -1
-                        ? "rgba(0,0,0,0.6)"
-                        : item.s.c == 2
-                        ? "#5c5"
-                        : item.s.c == 1
-                        ? "#f00"
-                        : "#55d",
+                    backgroundColor: OrderStatus[item.s.c]?.color,
                     borderRadius: 20,
                   }}
                 />
                 <Text
                   style={{
-                    color:
-                      item.s.c == -1
-                        ? "rgba(0,0,0,0.6)"
-                        : item.s.c == 2
-                        ? "#5c5"
-                        : item.s.c == 1
-                        ? "#f00"
-                        : "#55d",
+                    color: OrderStatus[item.s.c]?.color,
                     fontWeight: 500,
                   }}
                 >
-                  {item.s.c == 2
-                    ? "Delivered"
-                    : item.s.c == 1
-                    ? "Out for Delivery"
-                    : item.s.c == -1
-                    ? "Cancelled"
-                    : "Processing"}
+                  {OrderStatus[item.s.c]?.title}
                 </Text>
               </View>
 

@@ -34,7 +34,9 @@ export default function OrdersList({
           }}
         />
       }
-      data={Object.values(OrdersSelector).filter((e) => e.s.c == status)}
+      data={Object.values(OrdersSelector)
+        .filter((e) => e.s.c == status)
+        ?.sort((a, b) => b.s?.[0]?.seconds - a.s?.[0]?.seconds)}
       contentContainerStyle={{
         gap: 10,
       }}
@@ -99,23 +101,35 @@ export default function OrdersList({
                 style={{
                   width: 10,
                   height: 10,
+                  backgroundColor: OrderStatus[item.s.c]?.color,
                   borderRadius: 20,
                 }}
               />
               <Text
                 style={{
-                  color: OrderStatus[item?.s.c].color,
+                  color: OrderStatus[item.s.c]?.color,
                   fontWeight: 500,
                 }}
               >
-                {OrderStatus[item?.s.c].title}
-                {/* {item?.s.c == 2
-                  ? "Delivered"
-                  : item?.s.c == 1
-                  ? "Out for Delivery"
-                  : item?.s.c == -1
-                  ? "Cancelled!"
-                  : "Processing"} */}
+                {OrderStatus[item.s.c]?.title}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: 700,
+                }}
+              >
+                Order Time
+              </Text>
+              <Text>
+                {new Date(item?.s?.[0].seconds * 1000).toLocaleString()}
               </Text>
             </View>
 

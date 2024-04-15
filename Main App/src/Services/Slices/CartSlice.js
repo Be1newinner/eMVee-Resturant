@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { produce } from "immer";
 
-const delivery = 10;
-const discount = 10;
+const delivery = 0;
+const discount = 0;
 
 const initialState = {
   items: {},
@@ -36,7 +36,7 @@ export const CartSlice = createSlice({
         );
         draftState.delivery = Math.floor(delivery);
         draftState.discount = Math.floor(discount);
-        draftState.tax = Math.floor(delivery * 18) / 100;
+        // draftState.tax = Math.floor(delivery * 18) / 100;
         draftState.subtotal = Math.floor(subtotal);
         draftState.total = Math.floor(
           subtotal + Math.floor(delivery * 118) / 100 - discount

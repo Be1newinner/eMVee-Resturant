@@ -12,7 +12,7 @@ import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker";
 import { fireStorage, firestoreDB } from "../../Infrastructure/firebase.config";
 import { ref, uploadBytes } from "firebase/storage";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import {
   addSingleCategory,
@@ -116,7 +116,18 @@ export const CategoryModal = ({
 
     if (category?.k) categoryID = category?.k;
     else categoryID = Date.now();
-
+    try {
+      if (image && !imageError) {
+        await uploadImageAsync({
+          uri: image,
+          categoryID,
+        });
+        myObject.i = true;
+      }
+    } catch (error) {
+      console.log("Image Upload Error => ", error);
+      return;
+    }
     try {
       await setDoc(doc(firestoreDB, "ca8", categoryID.toString()), myObject);
     } catch (error) {
@@ -130,17 +141,6 @@ export const CategoryModal = ({
       } else dispatch(addSingleCategory({ ...myObject, k: categoryID }));
     } catch (error) {
       console.log("ADDING CATEGORY ERROR 2", error);
-      return;
-    }
-    try {
-      if (image && !imageError) {
-        await uploadImageAsync({
-          uri: image,
-          categoryID,
-        });
-      }
-    } catch (error) {
-      console.log("Image Upload Error => ", error);
       return;
     }
 

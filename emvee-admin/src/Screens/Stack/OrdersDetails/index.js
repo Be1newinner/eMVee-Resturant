@@ -407,25 +407,30 @@ export default function OrdersDetails({ navigation, route }) {
                 {OrdersItems?.date}
               </Text>
             </View>
-            {OrdersItems?.status != 0 ? (
-              <View>
-                <Text
-                  style={{
-                    color: "rgba(0,0,0,0.7)",
-                  }}
-                >
-                  Deliver By
-                </Text>
-                <Text
-                  style={{
-                    fontWeight: 500,
-                    fontSize: 16,
-                  }}
-                >
-                  {OrdersItems?.deliverBy}
-                </Text>
-              </View>
-            ) : null}
+            <View>
+              <Text
+                style={{
+                  color: "rgba(0,0,0,0.7)",
+                }}
+              >
+                {OrdersItems?.status == 3 ? "Delievered" : "Expected Delievery"}{" "}
+                on
+              </Text>
+              <Text
+                style={{
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                {OrdersItems?.status == 0
+                  ? "Waiting for admin to accept Order!"
+                  : OrdersItems?.status == 3
+                  ? new Date(OrdersItems?.deliveredTime * 1000).toLocaleString()
+                  : new Date(
+                      OrdersItems?.willBeDeliveredTime * 1000
+                    ).toLocaleString()}
+              </Text>
+            </View>
             <View>
               <Text
                 style={{
@@ -488,6 +493,59 @@ export default function OrdersDetails({ navigation, route }) {
                   onPress={async () => {
                     await Linking.openURL(
                       `https://api.whatsapp.com/send/?phone=91${OrdersItems?.contact.toString()}&text&type=phone_number&app_absent=0`
+                    );
+                  }}
+                  name="whatsapp"
+                  size={30}
+                  color="black"
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+                flex: 1,
+                justifyContent: "space-between",
+              }}
+            >
+              <View>
+                <Text
+                  style={{
+                    color: "rgba(0,0,0,0.7)",
+                  }}
+                >
+                  Alternate Number
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  {OrdersItems?.alternate.toString()}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 25,
+                }}
+              >
+                <MaterialIcons
+                  onPress={async () => {
+                    await Linking.openURL(
+                      `tel:${OrdersItems?.alternate.toString()}`
+                    );
+                  }}
+                  name="call"
+                  size={30}
+                  color="black"
+                />
+                <FontAwesome5
+                  onPress={async () => {
+                    await Linking.openURL(
+                      `https://api.whatsapp.com/send/?phone=91${OrdersItems?.alternate.toString()}&text&type=phone_number&app_absent=0`
                     );
                   }}
                   name="whatsapp"
@@ -570,6 +628,7 @@ export default function OrdersDetails({ navigation, route }) {
               setIsCancelled,
               dispatch,
               cancelOrder,
+              phoneNumber: OrdersItems?.contact,
             })
           }
           visible={CancelModal}
@@ -587,6 +646,7 @@ export default function OrdersDetails({ navigation, route }) {
               setIsDelivered,
               dispatch,
               deliverOrderReducer,
+              phoneNumber: OrdersItems?.contact,
             });
           }}
           visible={AcceptModal}

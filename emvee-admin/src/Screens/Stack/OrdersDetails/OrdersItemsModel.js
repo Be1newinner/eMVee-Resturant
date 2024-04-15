@@ -11,6 +11,9 @@ export const OrdersItemsModel = ({ OrderDetails = {} }) => {
     deliverBy: new Date(OrderDetails?.s?.t?.seconds * 1000).toLocaleString(),
     contact: OrderDetails?.u?.p,
     reciever: OrderDetails?.u?.n,
+    alternate: OrderDetails?.u?.u,
     deliver: OrderDetails?.u?.a,
+    deliveredTime: OrderDetails?.s?.[3]?.seconds || 0,
+    willBeDeliveredTime: OrderDetails?.s?.t?.seconds || 0,
   };
 };
