@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import TopView from "../../../Components/TopView";
 import { useSelector } from "react-redux";
+import { getImageURL } from "../../../Services/offline/Image";
 
 export default function ProductSearchScreen({ navigation }) {
   const [value, setValue] = useState("");
@@ -75,7 +76,7 @@ export default function ProductSearchScreen({ navigation }) {
           keyExtractor={(e) => e.k}
           contentContainerStyle={{
             gap: 10,
-            paddingBottom: 40,
+            paddingBottom: 100,
             padding: 10,
           }}
           renderItem={({ item }) => {
@@ -96,7 +97,7 @@ export default function ProductSearchScreen({ navigation }) {
               >
                 {item.i ? (
                   <Image
-                    source={item.i}
+                    source={{ uri: getImageURL(item.k) }}
                     style={{
                       width: 50,
                       height: 50,
@@ -170,7 +171,7 @@ export default function ProductSearchScreen({ navigation }) {
           keyExtractor={(e) => e.k}
           contentContainerStyle={{
             gap: 10,
-            paddingBottom: 40,
+            paddingBottom: 100,
             padding: 10,
           }}
           renderItem={({ item }) => {
@@ -191,7 +192,7 @@ export default function ProductSearchScreen({ navigation }) {
               >
                 {item.i ? (
                   <Image
-                    source={item.i}
+                    source={{ uri: getImageURL(item.k) }}
                     style={{
                       width: 50,
                       height: 50,
@@ -230,7 +231,8 @@ export default function ProductSearchScreen({ navigation }) {
                       fontWeight: 500,
                     }}
                   >
-                    {name.slice(0, name.indexOf(value))}
+                    {item.t}
+                    {/* {name.slice(0, name.indexOf(value))}
                     <Text
                       style={{
                         color: GlobalColors.themeColor,
@@ -241,7 +243,7 @@ export default function ProductSearchScreen({ navigation }) {
                     {name.slice(
                       name.indexOf(value) + value.length,
                       name.length
-                    )}
+                    )} */}
                   </Text>
                   <Text
                     style={{
