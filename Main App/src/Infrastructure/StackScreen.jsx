@@ -14,6 +14,7 @@ import FriedRiceScreen from "../Screens/Stack/FriedRiceScreen";
 import ProductDetail from "../Screens/Stack/ProductDetail";
 import ProfileScreen from "../Screens/Stack/ProfileScreen";
 import CartScreen from "../Screens/Stack/CartScreen";
+import SettingScreen from "../Screens/Stack/SettingScreen";
 import OrderConfirm from "../Screens/Stack/OrderConfirm";
 import OrdersDetails from "../Screens/Stack/OrdersDetails";
 import ProductSearchScreen from "../Screens/Stack/ProductSearchScreen";
@@ -47,6 +48,7 @@ export default function StackScreens() {
         <Stack.Screen name="CategoryItems" component={CategoryItems} />
         <Stack.Screen name="EditProfile" component={ProfileScreen} />
         <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen name="SettingScreen" component={SettingScreen} />
         <Stack.Screen name="OrderConfirm" component={OrderConfirm} />
         <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
         <Stack.Screen

@@ -16,7 +16,7 @@ export default function LoginWithPhone({ navigation }) {
     country_code: "+91",
     phone_no: "8130506284",
   };
-  const URI = `https://auth.phone.email/sign-in?countrycode=${userInfo.country_code}&phone_no=${userInfo.phone_no}&redirect_url=&auth_type=4&device=784519`;
+  const URI = `https://auth.phone.email/sign-in?countrycode=${userInfo.country_code}&phone_no=${userInfo.phone_no}&redirect_url=&mode=othernum&auth_type=4`;
 
   const phoneAuthJwt = async (event) => {
     const token = event.nativeEvent.data;

@@ -24,7 +24,14 @@ export const OrdersSlice = createSlice({
           };
       });
     },
+    resetOrders(state) {
+      try {
+        Object.assign(state, initialState);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });
 
-export const { addOrder } = OrdersSlice.actions;
+export const { addOrder, resetOrders } = OrdersSlice.actions;

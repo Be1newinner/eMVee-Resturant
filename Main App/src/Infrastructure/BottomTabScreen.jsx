@@ -3,16 +3,21 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CategoryScreen from "../Screens/BottomTabs/CategoryScreen";
 import HomeScreen from "../Screens/BottomTabs/HomeScreen";
-import SettingScreen from "../Screens/BottomTabs/SettingScreen";
 import OrdersScreen from "../Screens/BottomTabs/OrdersScreen";
+import CartBottomScreen from "../Screens/BottomTabs/CartScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabScreen = () => {
+  const selector = useSelector((state) => state.Cart);
+  const QuantitySelector = selector?.qty;
+  console.log("Cart Selector in Bottom Tabs => ", QuantitySelector);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -73,6 +78,37 @@ const BottomTabScreen = () => {
           },
           headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
+            <View>
+              <Ionicons
+                name={focused ? "cart-sharp" : "cart-outline"}
+                size={24}
+                color="white"
+              />
+              {QuantitySelector > 0 ? (
+                <View
+                  style={{
+                    backgroundColor: "rgba(10,150,255,1)",
+                    width: 10,
+                    height: 10,
+                    position: "absolute",
+                    right: -3,
+                    borderRadius: 10,
+                  }}
+                />
+              ) : null}
+            </View>
+          ),
+        }}
+        name="Cart"
+        component={CartBottomScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabelStyle: {
+            color: "#fff",
+          },
+          headerTitleAlign: "center",
+          tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "fast-food-sharp" : "fast-food-outline"}
               size={24}
@@ -82,22 +118,6 @@ const BottomTabScreen = () => {
         }}
         name="Orders"
         component={OrdersScreen}
-      />
-      <Tab.Screen
-        options={{
-          tabBarLabelStyle: {
-            color: "#fff",
-          },
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name={focused ? "person-sharp" : "person-outline"}
-              size={24}
-              color="white"
-            />
-          ),
-        }}
-        name="Profile"
-        component={SettingScreen}
       />
     </Tab.Navigator>
   );

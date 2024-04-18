@@ -10,8 +10,6 @@ export const AuthSlice = createSlice({
   initialState,
   reducers: {
     login(state, action) {
-      let auth = null;
-      let user = null;
       try {
         let parsedPayload = {};
         console.log("LOGIN SLICE DATA => ", action.payload);

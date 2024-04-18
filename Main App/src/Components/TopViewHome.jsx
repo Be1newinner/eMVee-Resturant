@@ -134,10 +134,10 @@ export const TopViewHome = ({ navigation }) => {
           </View>
         </View>
         <Ionicons
-          name="cart-outline"
+          name="person-circle-outline"
           size={34}
           color="#fff"
-          onPress={() => navigation.navigate("CartScreen")}
+          onPress={() => navigation.navigate("SettingScreen")}
         />
       </View>
       <Input
