@@ -1,17 +1,21 @@
 import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import OrderStatus from "../../../Services/offline/OrderStatus";
+import { Button } from "@ui-kitten/components";
+import { updateDoc, doc, Timestamp } from "firebase/firestore";
+import { firestoreDB } from "../../../Infrastructure/firebase.config";
+import { cancelOrder } from "../../../Services/Slices/OrdersSlice";
+import { OrderCancelModal } from "../../../Components/OrderCancelModal";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
   const [OrdersItems, setOrderItems] = useState(null);
-
-  console.log("OrderStatus ", OrderStatus);
+  const [isCancelModalVisible, setisCancelModalVisible] = useState(false);
 
   useEffect(() => {
     const OrderDetails = OrdersSelector[OrderID];
@@ -31,10 +35,30 @@ export default function OrdersDetails({ navigation, route }) {
         deliver: OrderDetails?.u?.a,
         deliveredTime: OrderDetails?.s?.[3]?.seconds || 0,
         willBeDeliveredTime: OrderDetails?.s?.t?.seconds || 0,
+        CancelReason: OrderDetails?.s?.r || "",
       });
     }
     // console.log(OrderID, OrderDetails?.s?.c);
   }, [OrdersSelector]);
+
+  const cancelOrderFunction = async () => {
+    setisCancelModalVisible(true);
+    // setIsCancelOrderLoader(true);
+    // try {
+    // const docRef = await doc(firestoreDB, "or4", OrderID);
+    // await updateDoc(docRef, {
+    //   "s.c": -1,
+    //   "s.-1": new Timestamp.now(),
+    //   "s.r": "CANCELLED By User!!",
+    // });
+    // setIsCancelled(true);
+    // dispatch(cancelOrder(OrderID));
+    // } catch (error) {
+    //   console.log(error);
+    //   setIsCancelOrderLoader(false);
+    // }
+    // setIsCancelOrderLoader(false);
+  };
 
   return (
     <ScrollView
@@ -424,28 +448,36 @@ export default function OrdersDetails({ navigation, route }) {
                 {OrdersItems?.date}
               </Text>
             </View>
-            <View>
-              <Text
-                style={{
-                  color: "rgba(0,0,0,0.7)",
-                }}
-              >
-                {OrdersItems?.status == 3 ? "Delievered" : "Expected Delievery"}{" "}
-                on
-              </Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  fontSize: 16,
-                }}
-              >
-                {OrdersItems?.status == 0
-                  ? "Waiting for admin to accept Order!"
-                  : OrdersItems?.status == 3
-                  ? OrdersItems?.deliveredTime * 1000
-                  : OrdersItems?.willBeDeliveredTime * 1000}
-              </Text>
-            </View>
+            {OrdersItems?.status != -1 ? (
+              <View>
+                <Text
+                  style={{
+                    color: "rgba(0,0,0,0.7)",
+                  }}
+                >
+                  {OrdersItems?.status == 3
+                    ? "Delievered "
+                    : "Expected Delievery "}
+                  on
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  {OrdersItems?.status == 0
+                    ? "Waiting for admin to accept Order!"
+                    : OrdersItems?.status == 3
+                    ? new Date(
+                        OrdersItems?.deliveredTime * 1000
+                      ).toLocaleString()
+                    : new Date(
+                        OrdersItems?.willBeDeliveredTime * 1000
+                      ).toLocaleString()}
+                </Text>
+              </View>
+            ) : null}
             <View>
               <Text
                 style={{
@@ -463,6 +495,25 @@ export default function OrdersDetails({ navigation, route }) {
                 {OrdersItems?.reciever}
               </Text>
             </View>
+            {OrdersItems?.CancelReason ? (
+              <View>
+                <Text
+                  style={{
+                    color: "rgba(0,0,0,0.7)",
+                  }}
+                >
+                  Cancel Reason
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  {OrdersItems?.CancelReason}
+                </Text>
+              </View>
+            ) : null}
             <View>
               <Text
                 style={{
@@ -499,6 +550,32 @@ export default function OrdersDetails({ navigation, route }) {
             </View>
           </View>
         </View>
+        {[0, 1, 2].includes(Number(OrdersItems?.status)) ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 10,
+            }}
+          >
+            <OrderCancelModal
+              visible={isCancelModalVisible}
+              setVisible={setisCancelModalVisible}
+              cancelID={OrderID}
+            />
+            <Button
+              style={{
+                maxWidth: 200,
+                elevation: 5,
+              }}
+              status="basic"
+              onPress={() => cancelOrderFunction()}
+            >
+              Cancel Order
+            </Button>
+          </View>
+        ) : null}
       </View>
     </ScrollView>
   );

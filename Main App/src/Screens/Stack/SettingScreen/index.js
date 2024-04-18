@@ -19,6 +19,7 @@ export default function SettingScreen({ navigation }) {
 
   const [authState, setAuthState] = useState(null);
   const [userState, setUserState] = useState(null);
+  const [IsLoggingLoader, setIsLoggingLoader] = useState(false);
 
   useEffect(() => {
     try {
@@ -65,20 +66,27 @@ export default function SettingScreen({ navigation }) {
       icon: "",
     },
     {
-      title: authState?.phone_no?.length == 10 ? "Log Out" : "Log In",
+      title:
+        authState?.phone_no?.length == 10
+          ? IsLoggingLoader
+            ? "Logging Out..."
+            : "Log Out"
+          : "Log In",
       action: authState?.phone_no?.length == 10 ? null : "LoginWithPhone",
       key: 6,
       icon: "",
       action2: async () => {
-        // await AsyncStorage.removeIte63m("user");
-        // await AsyncStorage.removeItem("auth");
-        // await removeUserToken(authState?.phone_no);
-        // dispatch(logout());
-        // dispatch(resetCart());
-        // dispatch(resetAddress());
+        setIsLoggingLoader(true);
+        await AsyncStorage.removeItem("user");
+        await AsyncStorage.removeItem("auth");
+        await removeUserToken(authState?.phone_no);
+        dispatch(logout());
+        dispatch(resetCart());
+        dispatch(resetAddress());
         dispatch(resetOrders());
         // await AsyncStorage.removeItem("address");
         // console.log("log Out Function");
+        setIsLoggingLoader(false);
       },
     },
   ];
