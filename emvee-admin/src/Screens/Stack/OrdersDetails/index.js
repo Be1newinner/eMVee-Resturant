@@ -582,12 +582,13 @@ export default function OrdersDetails({ navigation, route }) {
               marginTop: 10,
               flex: 1,
               flexDirection: "row",
-              gap: 10,
+              flexWrap: "wrap",
+              rowGap: 5,
             }}
           >
             <Button
               style={{
-                flex: 1,
+                width: "49%",
               }}
               status="danger"
               appearance="outline"
@@ -598,11 +599,11 @@ export default function OrdersDetails({ navigation, route }) {
                 }
               }}
             >
-              {CancelLoading ? "please wait..." : "cancel order"}
+              {CancelLoading ? "please wait..." : "cancel"}
             </Button>
             <Button
               style={{
-                flex: 1,
+                width: "49%",
               }}
               status="danger"
               onPress={() => {
@@ -615,6 +616,36 @@ export default function OrdersDetails({ navigation, route }) {
               {StatusLoading
                 ? "please wait..."
                 : "Mark as " + OrderStatus[OrderDetails?.s.c].mark + " !"}
+            </Button>
+            <Button
+              style={{
+                width: "49%",
+              }}
+              status="danger"
+              appearance="outline"
+              onPress={() => {
+                if (!CancelLoading) {
+                  setAcceptModal(false);
+                  setCancelModal(true);
+                }
+              }}
+            >
+              {CancelLoading ? "please wait..." : "Failed"}
+            </Button>
+            <Button
+              style={{
+                width: "49%",
+              }}
+              status="danger"
+              appearance="outline"
+              onPress={() => {
+                if (!CancelLoading) {
+                  setAcceptModal(false);
+                  setCancelModal(true);
+                }
+              }}
+            >
+              {CancelLoading ? "please wait..." : "Reject"}
             </Button>
           </View>
         )}

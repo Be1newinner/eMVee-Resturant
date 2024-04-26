@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { Button, Input, Spinner, Text, Toggle } from "@ui-kitten/components";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-import { StoreCloseModal } from "../../../Components/Modals/StoreCloseModal";
+// import { StoreCloseModal } from "../../../Components/Modals/StoreCloseModal";
 
 export default function StoreStatus({ navigation }) {
   const [activeChecked, setActiveChecked] = useState(true);
-  const [StoreCloseModalStatus, setStoreCloseModalStatus] = useState(true);
+  const [StoreCloseModalStatus, setStoreCloseModalStatus] = useState(false);
 
   const ChangeStoreStatus = () => {
     if (activeChecked) {
@@ -66,10 +66,10 @@ export default function StoreStatus({ navigation }) {
           flexDirection: "row",
         }}
       ></View>
-      <StoreCloseModal
+      {/* <StoreCloseModal
         visible={StoreCloseModalStatus}
         setVisible={setStoreCloseModalStatus}
-      />
+      /> */}
     </View>
   );
 }
