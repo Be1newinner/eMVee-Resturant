@@ -17,6 +17,7 @@ import { resetOrders } from "../../../Services/Slices/OrdersSlice";
 import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import StoreStatus from "../../Stack/StoreStatus";
 
 export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
@@ -538,48 +539,7 @@ export default function DashboardScreen({ navigation }) {
             Manage Store Status
           </Text>
 
-          <View
-            style={{
-              backgroundColor: "#fff",
-              flexWrap: "wrap",
-              borderRadius: 10,
-              elevation: 5,
-              padding: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <Text>Store Status : </Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  // color: "green",
-                  color: "red",
-                }}
-              >
-                {/* Active  */}
-                Inactive
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <Text>Store Closed till : </Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  color: "red",
-                }}
-              >
-                {new Date().toLocaleString()}
-              </Text>
-            </View>
-          </View>
+          <StoreStatus />
         </View>
       </View>
     </ScrollView>

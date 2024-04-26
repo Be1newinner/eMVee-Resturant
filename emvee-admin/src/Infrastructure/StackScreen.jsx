@@ -5,6 +5,7 @@ import LoginScreen from "../Screens/Stack/LoginScreen";
 
 import BottomTabsModified from "../Screens/BottomTabsModified";
 import OrdersDetails from "../Screens/Stack/OrdersDetails";
+// import StoreStatus from "../Screens/Stack/StoreStatus";
 
 const Stack = createNativeStackNavigator();
 
