@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "emvee-admin",
+    "slug": "emvee-admin",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shipsar.emveeadmin"
+    },
+    "android": {
+      "scheme": "emvee-admin",
+      "linking": {
+        "prefixes": [
+          "emvee-admin"
+        ]
+      },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.shipsar.emveeadmin",
+      "versionCode": 6,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "NOTIFICATIONS"
+      ],
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "525ad24f-cbd9-4558-ba72-9b61e6815f32"
+      }
+    }
+  }
+}
