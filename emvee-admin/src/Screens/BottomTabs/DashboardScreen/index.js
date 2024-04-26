@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,14 +24,12 @@ export default function DashboardScreen({ navigation }) {
   const productsSelector = useSelector((selector) => selector.AllProducts);
   const dispatch = useDispatch();
 
-  const [PendingOrders, setPendingOrders] = useState(0);
-  const [TodayDelivered, setTodayDelivered] = useState(0);
-  const [WeekDelivered, setWeekDelivered] = useState(0);
-  const [MonthDelivered, setMonthDelivered] = useState(0);
-  const [TotalDelivered, setTotalDelivered] = useState(0);
   const [TotalProducts, setTotalProducts] = useState(0);
   const [TotalCategories, setTotalCategories] = useState(0);
   const [TotalUsers, setTotalUsers] = useState(0);
+  const [ProcessingArray, setProcessingArray] = useState({});
+  const [CancelledArray, setCancelledArray] = useState({});
+  const [DeliveredArray, setDeliveredArray] = useState({});
 
   async function getCount({ column, queryD, value, value2 }) {
     const coll = collection(firestoreDB, column);
@@ -73,6 +71,7 @@ export default function DashboardScreen({ navigation }) {
   };
 
   useEffect(() => {
+    // Total Users Count
     (async function () {
       try {
         const data = await getCount({ column: "us7" });
@@ -80,230 +79,198 @@ export default function DashboardScreen({ navigation }) {
       } catch (error) {
         console.log(error);
       }
-      try {
-        const data = await getCount({
-          column: "or4",
-          queryD: "s.c",
-          value: 0,
-        });
-        setPendingOrders(data);
-      } catch (error) {
-        console.log(error);
+    })();
+  }, []);
+
+  async function getOrderStatus(status, days) {
+    try {
+      let startTimestamp = null;
+
+      if (days) {
+        const startDate = new Date();
+        const _DaysBefore = DaysBefore(startDate, days);
+        _DaysBefore.setHours(0, 0, 0, 0);
+        startTimestamp = Timestamp.fromDate(_DaysBefore);
+        // console.log("week", sevenDaysBefore);
       }
-      try {
-        const data = await getCount({ column: "us7" });
-        setTotalUsers(data);
-      } catch (error) {
-        console.log(error);
-      }
+
+      const data = await getCount({
+        column: "or4",
+        queryD: "s.c",
+        value: status,
+        value2: startTimestamp,
+      });
+      return data || 0;
+    } catch (error) {
+      console.log(error);
+      return 0;
+    }
+  }
+
+  useEffect(() => {
+    // Deliveries
+
+    (async function () {
+      let today = 0;
+
       try {
         const startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
         const startTimestamp = Timestamp.fromDate(startDate);
         // console.log("Today", startDate);
-        const data = await getCount({
+        today = await getCount({
           column: "or4",
           queryD: "s.c",
-          value: 2,
+          value: 3,
           value2: startTimestamp,
         });
-        setTodayDelivered(data);
       } catch (error) {
         console.log(error);
       }
-      try {
-        const startDate = new Date();
-        const sevenDaysBefore = DaysBefore(startDate, 7);
-        sevenDaysBefore.setHours(0, 0, 0, 0);
-        const startTimestamp = Timestamp.fromDate(sevenDaysBefore);
-        // console.log("week", sevenDaysBefore);
 
-        const data = await getCount({
-          column: "or4",
-          queryD: "s.c",
-          value: 2,
-          value2: startTimestamp,
-        });
-        setWeekDelivered(data);
-      } catch (error) {
-        console.log(error);
-      }
-      try {
-        const startDate = new Date();
-        const ThirtyDaysBefore = DaysBefore(startDate, 30);
-        ThirtyDaysBefore.setHours(0, 0, 0, 0);
-        const startTimestamp = Timestamp.fromDate(ThirtyDaysBefore);
-        const data = await getCount({
-          column: "or4",
-          queryD: "s.c",
-          value: 2,
-          value2: startTimestamp,
-        });
-        setMonthDelivered(data);
-      } catch (error) {
-        console.log(error);
-      }
-      try {
-        const data = await getCount({
-          column: "or4",
-          queryD: "s.c",
-          value: 2,
-        });
-        setTotalDelivered(data);
-      } catch (error) {
-        console.log(error);
-      }
+      setDeliveredArray({
+        Today: {
+          label: "Today",
+          value: today,
+        },
+        Week: {
+          label: "Week",
+          value: await getOrderStatus(3, 7),
+        },
+        Month: {
+          label: "Month",
+          value: await getOrderStatus(3, 30),
+        },
+        Total: {
+          label: "Total",
+          value: await getOrderStatus(3),
+        },
+      });
     })();
   }, []);
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: GlobalColors.primary,
-        padding: 10,
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          gap: 10,
-          justifyContent: "space-between",
-        }}
-      >
-        <Text
-          style={{
-            fontWeight: 600,
-            fontSize: 20,
-          }}
-        >
-          eMVee Dashboard
-        </Text>
-        <FontAwesome
-          name="sign-out"
-          size={28}
-          color="black"
-          onPress={async () => logOutUser()}
-        />
-      </View>
+  useEffect(() => {
+    // Cancelled
 
+    (async function () {
+      let today = 0;
+
+      try {
+        const startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+        const startTimestamp = Timestamp.fromDate(startDate);
+        // console.log("Today", startDate);
+        today = await getCount({
+          column: "or4",
+          queryD: "s.c",
+          value: 3,
+          value2: startTimestamp,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      setCancelledArray({
+        Rejected: {
+          label: "Rejected",
+          value: today,
+        },
+        Cancel: {
+          label: "Cancel",
+          value: await getOrderStatus(-1, 7),
+        },
+        Failed: {
+          label: "Failed",
+          value: await getOrderStatus(3, 30),
+        },
+        Total: {
+          label: "Total",
+          value: await getOrderStatus(3),
+        },
+      });
+    })();
+  }, []);
+
+  useEffect(() => {
+    setProcessingArray({
+      Pending: {
+        label: "Pending",
+        value: Object.values(OrdersSelector).filter(({ s }) => s.c == 0).length,
+      },
+      Accept: {
+        label: "Accept",
+        value: Object.values(OrdersSelector).filter(({ s }) => s.c == 1).length,
+      },
+      OFD: {
+        label: "OFD",
+        value: Object.values(OrdersSelector).filter(({ s }) => s.c == 2).length,
+      },
+      Total: {
+        label: "Total",
+        value:
+          Object.values(OrdersSelector).filter(({ s }) => s.c == 0).length +
+          Object.values(OrdersSelector).filter(({ s }) => s.c == 1).length +
+          Object.values(OrdersSelector).filter(({ s }) => s.c == 2).length,
+      },
+    });
+  }, [OrdersSelector]);
+
+  return (
+    <ScrollView>
       <View
         style={{
-          marginTop: 20,
+          flex: 1,
+          backgroundColor: GlobalColors.primary,
+          padding: 10,
+          paddingBottom: 100,
         }}
       >
-        <Text
-          style={{
-            fontWeight: 600,
-            marginBottom: 5,
-            fontSize: 16,
-          }}
-        >
-          Orders
-        </Text>
         <View
           style={{
-            backgroundColor: GlobalColors.themeColor,
-            flexWrap: "wrap",
             flexDirection: "row",
-            borderRadius: 10,
-            elevation: 5,
+            gap: 10,
+            justifyContent: "space-between",
           }}
         >
           <Text
             style={{
-              flexBasis: "100%",
-              color: "#fff",
               fontWeight: 600,
-              textAlign: "center",
-              marginTop: 20,
+              fontSize: 20,
             }}
           >
-            Processing Orders
+            eMVee Dashboard
           </Text>
-          <View
+          <FontAwesome
+            name="sign-out"
+            size={28}
+            color="black"
+            onPress={async () => logOutUser()}
+          />
+        </View>
+
+        <View
+          style={{
+            marginTop: 20,
+          }}
+        >
+          <Text
             style={{
-              flexBasis: "33%",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
+              fontWeight: 600,
+              marginBottom: 5,
+              fontSize: 16,
             }}
           >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-              }}
-            >
-              Pending
-            </Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: 700,
-              }}
-            >
-              {Object.values(OrdersSelector).filter(({ s }) => s.c == 0).length}
-            </Text>
-          </View>
+            Orders
+          </Text>
+
+          {/* Orders Tab */}
           <View
             style={{
-              flexBasis: "33%",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-              }}
-            >
-              Processing
-            </Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: 700,
-              }}
-            >
-              {Object.values(OrdersSelector).filter(({ s }) => s.c == 1).length}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexBasis: "33%",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-              }}
-            >
-              OFD
-            </Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: 700,
-              }}
-            >
-              {Object.values(OrdersSelector).filter(({ s }) => s.c == 2).length}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexBasis: "100%",
-              flexDirection: "row",
+              backgroundColor: GlobalColors.themeColor,
               flexWrap: "wrap",
+              flexDirection: "row",
+              borderRadius: 10,
+              elevation: 5,
+              paddingVertical: 20,
             }}
           >
             <Text
@@ -314,11 +281,173 @@ export default function DashboardScreen({ navigation }) {
                 textAlign: "center",
               }}
             >
+              Processing Orders
+            </Text>
+
+            <View
+              style={{
+                flexBasis: "100%",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                marginTop: 20,
+              }}
+            >
+              {Object.values(ProcessingArray)?.map((item) => (
+                <View
+                  key={item.label}
+                  style={{
+                    flexBasis: "25%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 22,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.value}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            <Text
+              style={{
+                flexBasis: "100%",
+                color: "#fff",
+                fontWeight: 600,
+                textAlign: "center",
+                marginTop: 20,
+              }}
+            >
+              Cancelled Orders
+            </Text>
+
+            <View
+              style={{
+                flexBasis: "100%",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                marginTop: 20,
+              }}
+            >
+              {Object.values(CancelledArray)?.map((item) => (
+                <View
+                  key={item.label}
+                  style={{
+                    flexBasis: "25%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 22,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.value}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            <Text
+              style={{
+                flexBasis: "100%",
+                color: "#fff",
+                fontWeight: 600,
+                textAlign: "center",
+                marginTop: 20,
+              }}
+            >
               Delivered Orders
             </Text>
+
             <View
               style={{
-                flexBasis: "25%",
+                flexBasis: "100%",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                marginTop: 20,
+              }}
+            >
+              {Object.values(DeliveredArray).map((item) => (
+                <View
+                  key={item.label}
+                  style={{
+                    flexBasis: "25%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 22,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.value}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Other Details Tab */}
+
+          <Text
+            style={{
+              fontWeight: 600,
+              marginBottom: 5,
+              fontSize: 16,
+              marginTop: 20,
+              marginLeft: 10,
+            }}
+          >
+            Other Details
+          </Text>
+          <View
+            style={{
+              backgroundColor: GlobalColors.themeColor,
+              flexWrap: "wrap",
+              flexDirection: "row",
+              borderRadius: 10,
+              elevation: 5,
+            }}
+          >
+            <View
+              style={{
+                flexBasis: "33%",
                 justifyContent: "center",
                 alignItems: "center",
                 padding: 20,
@@ -330,7 +459,7 @@ export default function DashboardScreen({ navigation }) {
                   fontWeight: 700,
                 }}
               >
-                Today
+                Products
               </Text>
               <Text
                 style={{
@@ -339,12 +468,12 @@ export default function DashboardScreen({ navigation }) {
                   fontWeight: 700,
                 }}
               >
-                {TodayDelivered}
+                {TotalProducts}
               </Text>
             </View>
             <View
               style={{
-                flexBasis: "25%",
+                flexBasis: "33%",
                 justifyContent: "center",
                 alignItems: "center",
                 padding: 20,
@@ -356,7 +485,7 @@ export default function DashboardScreen({ navigation }) {
                   fontWeight: 700,
                 }}
               >
-                Week
+                Categories
               </Text>
               <Text
                 style={{
@@ -365,12 +494,12 @@ export default function DashboardScreen({ navigation }) {
                   fontWeight: 700,
                 }}
               >
-                {WeekDelivered}
+                {TotalCategories}
               </Text>
             </View>
             <View
               style={{
-                flexBasis: "25%",
+                flexBasis: "33%",
                 justifyContent: "center",
                 alignItems: "center",
                 padding: 20,
@@ -382,7 +511,7 @@ export default function DashboardScreen({ navigation }) {
                   fontWeight: 700,
                 }}
               >
-                Month
+                Users
               </Text>
               <Text
                 style={{
@@ -391,137 +520,68 @@ export default function DashboardScreen({ navigation }) {
                   fontWeight: 700,
                 }}
               >
-                {MonthDelivered}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexBasis: "25%",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: 20,
-              }}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: 700,
-                }}
-              >
-                Total
-              </Text>
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 22,
-                  fontWeight: 700,
-                }}
-              >
-                {TotalDelivered}
+                {TotalUsers}
               </Text>
             </View>
           </View>
-        </View>
-        <Text
-          style={{
-            fontWeight: 600,
-            marginBottom: 5,
-            fontSize: 16,
-            marginTop: 20,
-            marginLeft: 10,
-          }}
-        >
-          Other Details
-        </Text>
-        <View
-          style={{
-            backgroundColor: GlobalColors.themeColor,
-            flexWrap: "wrap",
-            flexDirection: "row",
-            borderRadius: 10,
-            elevation: 5,
-          }}
-        >
-          <View
+          {/* Close Store Option */}
+
+          <Text
             style={{
-              flexBasis: "33%",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
+              fontWeight: 600,
+              marginBottom: 5,
+              fontSize: 16,
+              marginTop: 20,
+              marginLeft: 10,
             }}
           >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-              }}
-            >
-              Products
-            </Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: 700,
-              }}
-            >
-              {TotalProducts}
-            </Text>
-          </View>
+            Manage Store Status
+          </Text>
+
           <View
             style={{
-              flexBasis: "33%",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
+              backgroundColor: "#fff",
+              flexWrap: "wrap",
+              borderRadius: 10,
+              elevation: 5,
+              padding: 10,
             }}
           >
-            <Text
+            <View
               style={{
-                color: "#fff",
-                fontWeight: 700,
+                flexDirection: "row",
               }}
             >
-              Categories
-            </Text>
-            <Text
+              <Text>Store Status : </Text>
+              <Text
+                style={{
+                  fontWeight: 500,
+                  // color: "green",
+                  color: "red",
+                }}
+              >
+                {/* Active  */}
+                Inactive
+              </Text>
+            </View>
+            <View
               style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: 700,
+                flexDirection: "row",
               }}
             >
-              {TotalCategories}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexBasis: "33%",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-              }}
-            >
-              Users
-            </Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: 700,
-              }}
-            >
-              {TotalUsers}
-            </Text>
+              <Text>Store Closed till : </Text>
+              <Text
+                style={{
+                  fontWeight: 500,
+                  color: "red",
+                }}
+              >
+                {new Date().toLocaleString()}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }

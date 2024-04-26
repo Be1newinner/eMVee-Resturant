@@ -57,84 +57,6 @@ export default function OrdersList({
           >
             <View
               style={{
-                flexDirection: "row",
-                gap: 10,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "rgba(100,100,105,1)",
-                  flex: 1,
-                  fontWeight: 500,
-                }}
-              >
-                Order ID #{item?.orderID}
-              </Text>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate("OrdersDetails", {
-                    order: item?.orderID,
-                  })
-                }
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color: GlobalColors.productText,
-                    fontWeight: 600,
-                  }}
-                >
-                  Order Details
-                </Text>
-              </Pressable>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-              }}
-            >
-              <View
-                style={{
-                  width: 10,
-                  height: 10,
-                  backgroundColor: OrderStatus[item.s.c]?.color,
-                  borderRadius: 20,
-                }}
-              />
-              <Text
-                style={{
-                  color: OrderStatus[item.s.c]?.color,
-                  fontWeight: 500,
-                }}
-              >
-                {OrderStatus[item.s.c]?.title}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: 700,
-                }}
-              >
-                Order Time
-              </Text>
-              <Text>
-                {new Date(item?.s?.[0].seconds * 1000).toLocaleString()}
-              </Text>
-            </View>
-
-            <View
-              style={{
                 gap: 10,
                 padding: 0,
               }}
@@ -216,17 +138,95 @@ export default function OrdersList({
                     </View>
                   </View>
                 ))}
+            </View>
 
-              <View>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "rgba(100,100,105,1)",
+                  flex: 1,
+                  fontWeight: 500,
+                }}
+              >
+                Order ID #{item?.orderID}
+              </Text>
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("OrdersDetails", {
+                    order: item?.orderID,
+                  })
+                }
+              >
                 <Text
                   style={{
+                    fontSize: 16,
+                    color: GlobalColors.productText,
                     fontWeight: 600,
                   }}
                 >
-                  {item?.u?.n}
+                  Order Details
                 </Text>
-                <Text>{item?.u?.a.toUpperCase()}</Text>
-              </View>
+              </Pressable>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+              }}
+            >
+              <View
+                style={{
+                  width: 10,
+                  height: 10,
+                  backgroundColor: OrderStatus[item.s.c]?.color,
+                  borderRadius: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: OrderStatus[item.s.c]?.color,
+                  fontWeight: 500,
+                }}
+              >
+                {OrderStatus[item.s.c]?.title}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: 700,
+                }}
+              >
+                Order Time
+              </Text>
+              <Text>
+                {new Date(item?.s?.[0].seconds * 1000).toLocaleString()}
+              </Text>
+            </View>
+
+            <View>
+              <Text
+                style={{
+                  fontWeight: 600,
+                }}
+              >
+                {item?.u?.n}
+              </Text>
+              <Text>{item?.u?.a.toUpperCase()}</Text>
             </View>
           </View>
         );
