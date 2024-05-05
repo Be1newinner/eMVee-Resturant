@@ -1,14 +1,6 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Card,
-  Modal,
-  Select,
-  Text,
-  SelectItem,
-} from "@ui-kitten/components";
+import React from "react";
+import { Card, Modal, Text } from "@ui-kitten/components";
 import { View } from "react-native";
-import OrderTime from "../../Services/Offline/OrderTime";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export const StoreCloseModal = ({
@@ -16,6 +8,18 @@ export const StoreCloseModal = ({
   setVisible,
   onConfirm = () => null,
 }) => {
+  const setDate = ({ nativeEvent: { timestamp } }) => {
+    console.log("date => ", timestamp);
+    const date = new Date(timestamp);
+    console.log("date2 => ", date.toLocaleDateString());
+  };
+
+  const setTime = ({ nativeEvent: { timestamp } }) => {
+    console.log("time -> ", timestamp);
+    const date = new Date(timestamp);
+    console.log("time2 => ", date.toLocaleTimeString());
+  };
+
   return (
     <Modal
       visible={visible}
@@ -45,9 +49,22 @@ export const StoreCloseModal = ({
           </Text>
           <Text>Please Select when {"\n"}the store will open again?</Text>
 
-          <RNDateTimePicker mode="date" />
-          <RNDateTimePicker mode="time" />
-
+          <RNDateTimePicker
+            mode="date"
+            value={new Date()}
+            onChange={setDate}
+            minimumDate={new Date()}
+          />
+          <RNDateTimePicker
+            mode="time"
+            value={new Date()}
+            onChange={setTime}
+            display="spinner"
+            themeVariant="light"
+            minuteInterval={30}
+            is24Hour={false}
+            disabled
+          />
         </View>
       </Card>
     </Modal>

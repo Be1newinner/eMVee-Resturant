@@ -14,11 +14,13 @@ import * as Linking from "expo-linking";
 import OrderStatus from "../../../Services/Offline/OrderStatus";
 import { cancelOrderFunction, confirmOrder } from "./OrderDetailsController";
 import { OrdersItemsModel } from "./OrdersItemsModel";
+import { CancelStatus } from "../../../Services/Offline/CancelStatus";
 
 export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
   const dispatch = useDispatch();
+  OrderStatus;
 
   const OrderDetails = OrdersSelector[OrderID];
 
@@ -28,6 +30,7 @@ export default function OrdersDetails({ navigation, route }) {
   const [isCancelled, setIsCancelled] = useState(false);
   const [CancelLoading, setCancelLoading] = useState(false);
   const [StatusLoading, setStatusLoading] = useState(false);
+  const [CancelReason, setCancelReason] = useState("");
 
   const OrdersItems = OrdersItemsModel({ OrderDetails });
 
@@ -254,59 +257,7 @@ export default function OrdersDetails({ navigation, route }) {
             >
               Billing Details
             </Text>
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 10,
-              }}
-            >
-              <Text>Subtotal</Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  fontSize: 15,
-                }}
-              >
-                ₹{OrdersItems?.subtotal}
-              </Text>
-            </View> */}
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 10,
-              }}
-            >
-              <Text>Taxes</Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  fontSize: 15,
-                }}
-              >
-                ₹{OrdersItems?.taxes}
-              </Text>
-            </View> */}
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 10,
-              }}
-            >
-              <Text>Delivery</Text>
-              <Text
-                style={{
-                  fontWeight: 500,
-                  fontSize: 15,
-                }}
-              >
-                {OrdersItems?.delivery === 0
-                  ? "Free"
-                  : "₹" + OrdersItems?.delivery}
-              </Text>
-            </View> */}
+
             <View
               style={{
                 flexDirection: "row",
@@ -583,15 +534,15 @@ export default function OrdersDetails({ navigation, route }) {
               flex: 1,
               flexDirection: "row",
               flexWrap: "wrap",
-              rowGap: 5,
+              gap: 5,
             }}
           >
             <Button
-              style={{
-                width: "49%",
-              }}
               status="danger"
               appearance="outline"
+              style={{
+                flex: 1,
+              }}
               onPress={() => {
                 if (!CancelLoading) {
                   setAcceptModal(false);
@@ -599,11 +550,13 @@ export default function OrdersDetails({ navigation, route }) {
                 }
               }}
             >
-              {CancelLoading ? "please wait..." : "cancel"}
+              {CancelLoading
+                ? "please wait..."
+                : CancelStatus[OrderDetails?.s.c].title}
             </Button>
             <Button
               style={{
-                width: "49%",
+                flex: 1,
               }}
               status="danger"
               onPress={() => {
@@ -617,7 +570,7 @@ export default function OrdersDetails({ navigation, route }) {
                 ? "please wait..."
                 : "Mark as " + OrderStatus[OrderDetails?.s.c].mark + " !"}
             </Button>
-            <Button
+            {/* <Button
               style={{
                 width: "49%",
               }}
@@ -646,12 +599,19 @@ export default function OrdersDetails({ navigation, route }) {
               }}
             >
               {CancelLoading ? "please wait..." : "Reject"}
-            </Button>
+            </Button> */}
           </View>
         )}
 
         <OrderModal
-          title="Do you want to cancel Order?"
+          title={
+            "Do you want to " +
+            CancelStatus[OrderDetails?.s.c]?.title +
+            " Order?"
+          }
+          toStatus={CancelStatus[OrderDetails?.s.c]?.key}
+          CancelReason={CancelReason}
+          setCancelReason={setCancelReason}
           onConfirm={() =>
             cancelOrderFunction({
               OrderID,
@@ -660,6 +620,8 @@ export default function OrdersDetails({ navigation, route }) {
               dispatch,
               cancelOrder,
               phoneNumber: OrdersItems?.contact,
+              orderCancelStatus: CancelStatus[OrderDetails?.s.c]?.key,
+              CancelReason,
             })
           }
           visible={CancelModal}

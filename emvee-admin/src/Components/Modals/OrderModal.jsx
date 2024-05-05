@@ -6,6 +6,7 @@ import {
   Select,
   Text,
   SelectItem,
+  Input,
 } from "@ui-kitten/components";
 import { View } from "react-native";
 import OrderTime from "../../Services/Offline/OrderTime";
@@ -16,6 +17,9 @@ export const OrderModal = ({
   onConfirm = () => null,
   title = "",
   subTitle = "",
+  setCancelReason,
+  CancelReason,
+  toStatus,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [IndexError, setIndexError] = useState(null);
@@ -66,6 +70,21 @@ export const OrderModal = ({
             </Select>
             {IndexError ? <Text status="danger">{IndexError}</Text> : null}
           </View>
+        ) : null}
+
+        {toStatus < 0 ? (
+          <Input
+            multiline={true}
+            placeholder="please enter reason to cancel!"
+            status="danger"
+            style={{
+              marginBottom: 10,
+            }}
+            numberOfLines={4}
+            maxLength={100}
+            value={CancelReason}
+            onChangeText={(e) => setCancelReason(e)}
+          />
         ) : null}
 
         <View

@@ -22,7 +22,12 @@ const getUserTokens = async ({ user }) => {
   }
 };
 
-const sendNotificationToUser = async ({ token, status, time = 0 }) => {
+const sendNotificationToUser = async ({
+  token,
+  status,
+  time = 0,
+  CancelReason,
+}) => {
   if (!token || !status) return null;
   try {
     const myHeaders = new Headers();
@@ -35,7 +40,10 @@ const sendNotificationToUser = async ({ token, status, time = 0 }) => {
       to: token,
       notification: {
         title: NotificationByOrders({ time, status })?.title,
-        body: NotificationByOrders({ time, status })?.body,
+        body:
+          status < 0
+            ? "Reason: " + CancelReason
+            : NotificationByOrders({ time, status })?.body,
       },
     });
     const requestOptions = {
@@ -57,22 +65,26 @@ export const cancelOrderFunction = async ({
   dispatch,
   cancelOrder,
   phoneNumber,
+  orderCancelStatus,
+  CancelReason,
 }) => {
   setCancelLoading(true);
   try {
     const docRef = await doc(firestoreDB, "or4", OrderID);
     await updateDoc(docRef, {
-      "s.c": -1,
-      "-1": new Timestamp.now(),
+      "s.c": orderCancelStatus,
+      [orderCancelStatus]: new Timestamp.now(),
+      "s.r": CancelReason,
     });
 
     const data = await getUserTokens({ user: phoneNumber });
     const UserTokens = Object.values(data);
-    console.log("User Tokens =>", UserTokens);
+    // console.log("User Tokens =>", UserTokens);
     UserTokens?.forEach((e) => {
       sendNotificationToUser({
         token: e,
-        status: "-1",
+        status: orderCancelStatus,
+        CancelReason,
       });
     });
 

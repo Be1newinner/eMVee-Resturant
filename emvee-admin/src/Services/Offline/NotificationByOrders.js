@@ -1,8 +1,13 @@
 export const NotificationByOrders = ({ time, status }) => {
   const data = {
+    "-3": {
+      title: "Your Order is Rejected by admin.",
+    },
+    "-2": {
+      title: "Your Order is cancelled by admin.",
+    },
     "-1": {
-      title: "Your Order is cancelled!",
-      body: "We are very sorry to inform you that your order is cancelled!",
+      title: "Your Order status is failed!",
     },
     1: {
       title: "Your Order is Accepted!",
