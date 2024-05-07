@@ -1,19 +1,9 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Pressable,
-  Image,
-} from "react-native";
+import { Text, View, FlatList, Pressable, Image } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import {
-  getCategoryImageURL,
-  getImageURL,
-} from "../../../Services/offline/Image";
+import { getCategoryImageURL } from "../../../Services/offline/Image";
 
 const ProductItems = () => {
   const navigation = useNavigation();
@@ -22,7 +12,7 @@ const ProductItems = () => {
     <View>
       <FlatList
         contentContainerStyle={{
-          gap: 20,
+          gap: 5,
         }}
         showsHorizontalScrollIndicator={false}
         data={TotalCategoryList?.data?.filter((e) => e.s === true)}
@@ -34,7 +24,7 @@ const ProductItems = () => {
               navigation.navigate("CategoryItems", { category: item })
             }
             style={{
-              maxWidth: 100,
+              maxWidth: 60,
               alignItems: "center",
               borderRadius: 50,
             }}
@@ -42,21 +32,21 @@ const ProductItems = () => {
             {item.i ? (
               <Image
                 style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 50,
+                  width: 60,
+                  height: 60,
+                  borderRadius: 60,
                 }}
                 source={{ uri: getCategoryImageURL(item.k) }}
               />
             ) : (
               <View
                 style={{
-                  width: 100,
-                  height: 100,
+                  width: 60,
+                  height: 60,
                   backgroundColor: GlobalColors.themeColor,
                   justifyContent: "center",
                   alignItems: "center",
-                  borderRadius: 50,
+                  borderRadius: 60,
                   elevation: 5,
                 }}
               >

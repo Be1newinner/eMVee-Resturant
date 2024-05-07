@@ -1,6 +1,5 @@
-import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import TopView from "../../../Components/TopView";
-
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, View, Text, StyleSheet, Linking } from "react-native";
 
@@ -46,7 +45,44 @@ const AboutUsScreen = ({ navigation }) => {
           <Text style={styles.contact} onPress={handlePressWebsite}>
             emveemart.com
           </Text>
-          <Text>+91 7630-985-985</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 25,
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text>+91 7630-985-985</Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 25,
+              }}
+            >
+              <MaterialIcons
+                onPress={async () => {
+                  await Linking.openURL(
+                    `tel:+917630985985`
+                  );
+                }}
+                name="call"
+                size={30}
+                color="black"
+              />
+              <FontAwesome5
+                onPress={async () => {
+                  await Linking.openURL(
+                    `https://api.whatsapp.com/send/?phone=917630985985&text&type=phone_number&app_absent=0`
+                  );
+                }}
+                name="whatsapp"
+                size={30}
+                color="black"
+              />
+            </View>
+          </View>
           <Text style={styles.contact}>Location: Thingkangphai, Manipur</Text>
 
           <View style={styles.separator} />
@@ -75,7 +111,7 @@ const AboutUsScreen = ({ navigation }) => {
           <Text style={styles.contact} onPress={handlePressDeveloperWebsite}>
             shipsar.in
           </Text>
-          <Text>+91 8130-506-284</Text>
+          <Text>info@shipsar.in</Text>
         </View>
       </View>
     </ScrollView>

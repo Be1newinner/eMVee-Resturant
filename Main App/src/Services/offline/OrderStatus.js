@@ -1,6 +1,18 @@
 export default OrderStatus = {
   "-1": {
-    title: "cancelled",
+    title: "Failed",
+    color: "rgba(0,0,0,0.5)",
+  },
+  "-2": {
+    title: "Canceled",
+    color: "rgba(0,0,0,0.5)",
+  },
+  "-3": {
+    title: "Rejected",
+    color: "rgba(0,0,0,0.5)",
+  },
+  "-4": {
+    title: "Cancelled by You",
     color: "rgba(0,0,0,0.5)",
   },
   0: {

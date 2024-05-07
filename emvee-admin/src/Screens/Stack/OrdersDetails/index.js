@@ -570,36 +570,6 @@ export default function OrdersDetails({ navigation, route }) {
                 ? "please wait..."
                 : "Mark as " + OrderStatus[OrderDetails?.s.c].mark + " !"}
             </Button>
-            {/* <Button
-              style={{
-                width: "49%",
-              }}
-              status="danger"
-              appearance="outline"
-              onPress={() => {
-                if (!CancelLoading) {
-                  setAcceptModal(false);
-                  setCancelModal(true);
-                }
-              }}
-            >
-              {CancelLoading ? "please wait..." : "Failed"}
-            </Button>
-            <Button
-              style={{
-                width: "49%",
-              }}
-              status="danger"
-              appearance="outline"
-              onPress={() => {
-                if (!CancelLoading) {
-                  setAcceptModal(false);
-                  setCancelModal(true);
-                }
-              }}
-            >
-              {CancelLoading ? "please wait..." : "Reject"}
-            </Button> */}
           </View>
         )}
 
@@ -619,7 +589,7 @@ export default function OrdersDetails({ navigation, route }) {
               setIsCancelled,
               dispatch,
               cancelOrder,
-              phoneNumber: OrdersItems?.contact,
+              phoneNumber: OrdersItems?.alternate,
               orderCancelStatus: CancelStatus[OrderDetails?.s.c]?.key,
               CancelReason,
             })
@@ -639,7 +609,7 @@ export default function OrdersDetails({ navigation, route }) {
               setIsDelivered,
               dispatch,
               deliverOrderReducer,
-              phoneNumber: OrdersItems?.contact,
+              phoneNumber: OrdersItems?.alternate,
             });
           }}
           visible={AcceptModal}

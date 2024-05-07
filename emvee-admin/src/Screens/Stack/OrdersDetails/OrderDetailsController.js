@@ -10,15 +10,12 @@ import { NotificationByOrders } from "../../../Services/Offline/NotificationByOr
 const getUserTokens = async ({ user }) => {
   if (!user) return null;
   try {
-    let data;
     const dbRef = await ref(realtimeDB);
-    await get(child(dbRef, `tokens/${user}`)).then((snapshot) => {
-      snapshot.exists() && (data = snapshot.val());
-    });
-    return data;
+    const data = await get(child(dbRef, `tokens/${user}`));
+    if (data.exists()) return data.val() || {};
+    return {};
   } catch (error) {
-    console.log("Getting user TOKEN ERROR => ", error);
-    return null;
+    return {};
   }
 };
 
@@ -79,7 +76,7 @@ export const cancelOrderFunction = async ({
 
     const data = await getUserTokens({ user: phoneNumber });
     const UserTokens = Object.values(data);
-    // console.log("User Tokens =>", UserTokens);
+    console.log("User Tokens =>", UserTokens);
     UserTokens?.forEach((e) => {
       sendNotificationToUser({
         token: e,
@@ -91,7 +88,7 @@ export const cancelOrderFunction = async ({
     setIsCancelled(true);
     dispatch(cancelOrder(OrderID));
   } catch (error) {
-    console.log(error);
+    console.log("The Error => ", error);
     setCancelLoading(false);
   }
   setCancelLoading(false);

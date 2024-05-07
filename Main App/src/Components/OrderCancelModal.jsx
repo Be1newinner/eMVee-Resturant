@@ -7,12 +7,7 @@ import { updateDoc, doc, Timestamp } from "firebase/firestore";
 import { firestoreDB } from "../Infrastructure/firebase.config";
 import { cancelOrder } from "../Services/Slices/OrdersSlice";
 
-export const OrderCancelModal = ({
-  visible,
-  setVisible,
-  onCancel,
-  cancelID,
-}) => {
+export const OrderCancelModal = ({ visible, setVisible, cancelID }) => {
   const [InputValue, setInputValue] = useState("");
   const [InputError, setInputError] = useState("");
   const [IsCancelOrderLoader, setIsCancelOrderLoader] = useState(false);
@@ -32,8 +27,7 @@ export const OrderCancelModal = ({
     try {
       const docRef = await doc(firestoreDB, "or4", cancelID);
       await updateDoc(docRef, {
-        "s.c": -1,
-        "s.-1": new Timestamp.now(),
+        "s.c": -4,
         "s.r": InputValue,
       });
       setIsCancelled(true);

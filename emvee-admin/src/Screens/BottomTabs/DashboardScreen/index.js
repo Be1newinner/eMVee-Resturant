@@ -526,7 +526,7 @@ export default function DashboardScreen({ navigation }) {
             </View>
           </View>
           {/* Close Store Option */}
-
+                
           <Text
             style={{
               fontWeight: 600,
