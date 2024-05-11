@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MaterialIcons, AntDesign, Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 import { Input } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
-import { firebaseAuth, firestoreDB } from "../Infrastructure/firebase.config";
-import { Timestamp, doc, onSnapshot } from "firebase/firestore";
+import { firebaseAuth } from "../Infrastructure/firebase.config";
+import { StoreDetailsContext } from "../Services/StoreDetails/StoreDetailsContext";
 
 export const TopViewHome = ({ navigation }) => {
   const saved_addresses = useSelector((state) => state.Address);
@@ -13,14 +13,8 @@ export const TopViewHome = ({ navigation }) => {
   const [SavedAddresses, setSavedAddress] = useState(null);
   const [DefaultAddresses, setDefaultAddress] = useState(0);
   const [CurrentAddresses, setCurrentAddresses] = useState(null);
-  const [StoreStatus, setStoreStatus] = useState(true);
-  const [passedDate, setpassedDate] = useState(null);
-  const [timeDiff, setTimeDiff] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+
+  const { StoreStatus, timeDiff } = useContext(StoreDetailsContext);
 
   useEffect(() => {
     setSavedAddress(saved_addresses?.addresses || null);
@@ -33,45 +27,6 @@ export const TopViewHome = ({ navigation }) => {
         SavedAddresses.filter((e) => e.k === DefaultAddresses)[0]
       );
   }, [SavedAddresses, DefaultAddresses]);
-
-  useEffect(() => {
-    const unsub = onSnapshot(doc(firestoreDB, "ot", "s"), (doc) => {
-      const data = doc.data();
-      if (data?.t) {
-        setpassedDate(
-          new Timestamp(data.t.seconds, data.t.nanoseconds).toDate()
-        );
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (passedDate) {
-      try {
-        const CheckNow = new Date();
-        const checkTimeDiffInMs = passedDate - CheckNow;
-        if (checkTimeDiffInMs > 0) {
-          setStoreStatus(false);
-          const intervalId = setInterval(() => {
-            const now = new Date();
-            const timeDiffInMs = passedDate - now;
-            const days = Math.floor(timeDiffInMs / (1000 * 60 * 60 * 24));
-            const hours = Math.floor(timeDiffInMs % 24);
-            const minutes = Math.floor(timeDiffInMs % 60);
-            const seconds = Math.floor(timeDiffInMs % 60);
-
-            setTimeDiff({ days, hours, minutes, seconds });
-          }, 1000);
-
-          return () => clearInterval(intervalId);
-        } else {
-          setStoreStatus(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [passedDate]);
 
   return (
     <View
@@ -189,9 +144,9 @@ export const TopViewHome = ({ navigation }) => {
               }}
             >
               Store Closed{" "}
-              {`${timeDiff.days ? timeDiff.days + "," : ""} ${timeDiff.hours}:${
-                timeDiff.minutes
-              }:${timeDiff.seconds}`}
+              {`${timeDiff.days ? timeDiff.days + " day/s ," : ""} ${
+                timeDiff.hours
+              }:${timeDiff.minutes}:${timeDiff.seconds}`}
             </Text>
           </View>
         </View>

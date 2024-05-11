@@ -8,29 +8,32 @@ import { store } from "./src/Services/store"; // Import your store
 import { StatusBar } from "expo-status-bar";
 import RealtimeOrdersController from "./src/Services/OrdersController/RealtimeOrdersController";
 import * as SplashScreen from "expo-splash-screen";
+import ContextProviders from "./src/Services/ContextProviders";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <SafeAreaProvider
-        style={{
-          backgroundColor: "black",
-        }}
-      >
-        <SafeAreaView
+    <ContextProviders>
+      <Provider store={store}>
+        <SafeAreaProvider
           style={{
-            flex: 1,
+            backgroundColor: "black",
           }}
         >
-          <ApplicationProvider {...eva} theme={eva.light}>
-            <StackScreens />
-            <RealtimeOrdersController />
-          </ApplicationProvider>
-        </SafeAreaView>
-        <StatusBar style="dark" hidden={true} />
-      </SafeAreaProvider>
-    </Provider>
+          <SafeAreaView
+            style={{
+              flex: 1,
+            }}
+          >
+            <ApplicationProvider {...eva} theme={eva.light}>
+              <StackScreens />
+              <RealtimeOrdersController />
+            </ApplicationProvider>
+          </SafeAreaView>
+          <StatusBar style="dark" hidden={true} />
+        </SafeAreaProvider>
+      </Provider>
+    </ContextProviders>
   );
 }
