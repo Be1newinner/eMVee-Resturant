@@ -14,7 +14,7 @@ export default function LoginWithPhone({ navigation }) {
     iss: "phmail",
     aud: "user",
     country_code: "+91",
-    phone_no: "8130506284",
+    phone_no: "7630985985",
   };
   const URI = `https://auth.phone.email/sign-in?countrycode=${userInfo.country_code}&phone_no=${userInfo.phone_no}&redirect_url=&mode=othernum&auth_type=4`;
 
