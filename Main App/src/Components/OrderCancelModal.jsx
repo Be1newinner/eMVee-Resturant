@@ -115,7 +115,7 @@ export const OrderCancelModal = ({ visible, setVisible, cancelID }) => {
               flex: 1,
             }}
           >
-            Cancel
+            Dismiss
           </Button>
           <Button
             onPress={() => {

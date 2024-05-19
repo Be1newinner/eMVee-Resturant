@@ -34,13 +34,12 @@ export const CartSlice = createSlice({
           },
           0
         );
-        draftState.delivery = Math.floor(delivery);
+        const deliveryCharges = subtotal > 300 || subtotal < 1 ? 0 : 50;
+        draftState.delivery = deliveryCharges;
         draftState.discount = Math.floor(discount);
         // draftState.tax = Math.floor(delivery * 18) / 100;
         draftState.subtotal = Math.floor(subtotal);
-        draftState.total = Math.floor(
-          subtotal + Math.floor(delivery * 118) / 100 - discount
-        );
+        draftState.total = Math.floor(subtotal + deliveryCharges - discount);
       });
     },
     decreaseCart(state, action) {},
