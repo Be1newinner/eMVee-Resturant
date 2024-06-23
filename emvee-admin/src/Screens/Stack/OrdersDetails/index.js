@@ -258,6 +258,58 @@ export default function OrdersDetails({ navigation, route }) {
               Billing Details
             </Text>
 
+            {OrdersItems?.delivery ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Sub total
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  ₹{OrdersItems?.subtotal}
+                </Text>
+              </View>
+            ) : null}
+            {OrdersItems?.delivery ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  delivery
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  ₹{OrdersItems?.delivery}
+                </Text>
+              </View>
+            ) : null}
             <View
               style={{
                 flexDirection: "row",
@@ -279,7 +331,7 @@ export default function OrdersDetails({ navigation, route }) {
                   fontSize: 16,
                 }}
               >
-                ₹{OrdersItems?.subtotal}
+                ₹{OrdersItems?.total}
               </Text>
             </View>
 

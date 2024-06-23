@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CategoriesScreen from "../Screens/BottomTabs/CategoriesScreen";
@@ -9,14 +9,14 @@ import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "./firebase.config";
 import LogOut from "../Services/LogOut";
 import { resetOrders } from "../Services/Slices/OrdersSlice";
 import { resetProducts } from "../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../Services/Slices/AllCategoriesSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,6 +31,16 @@ const tdf =
 
 const BottomTabScreenRaw = ({ navigation }) => {
   const dispatch = useDispatch();
+  const [PendingOrdersState, setPendingOrdersState] = useState(0);
+
+  const QuantitySelector = useSelector((selector) => selector.Orders);
+  const tempPendingOrdersCount = Object.values(QuantitySelector).filter(
+    (e) => e.s.c == 0
+  ).length;
+
+  useEffect(() => {
+    setPendingOrdersState(tempPendingOrdersCount);
+  }, [tempPendingOrdersCount]);
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, async (user) => {
@@ -58,7 +68,7 @@ const BottomTabScreenRaw = ({ navigation }) => {
         navigation.replace("LoginScreen");
       }
     });
-  }, [firebaseAuth]);
+  }, [firebaseAuth, tempPendingOrdersCount]);
 
   return (
     <Tab.Navigator
@@ -137,11 +147,26 @@ const BottomTabScreenRaw = ({ navigation }) => {
           },
           headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name={focused ? "fast-food-sharp" : "fast-food-outline"}
-              size={24}
-              color="white"
-            />
+            <View>
+              <Ionicons
+                name={focused ? "fast-food-sharp" : "fast-food-outline"}
+                size={24}
+                color="white"
+              />
+
+              {PendingOrdersState > 0 ? (
+                <View
+                  style={{
+                    backgroundColor: "rgba(10,150,255,1)",
+                    width: 10,
+                    height: 10,
+                    position: "absolute",
+                    right: -3,
+                    borderRadius: 10,
+                  }}
+                />
+              ) : null}
+            </View>
           ),
         }}
         name="Orders"

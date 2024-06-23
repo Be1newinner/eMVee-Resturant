@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Timestamp } from "firebase/firestore";
 import { produce } from "immer";
 
 const initialState = {};

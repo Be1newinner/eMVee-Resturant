@@ -3,14 +3,7 @@ import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { firestoreDB } from "../../../Infrastructure/firebase.config";
-import {
-  collection,
-  where,
-  getCountFromServer,
-  query,
-  Timestamp,
-} from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { FontAwesome } from "@expo/vector-icons";
 import LogOut from "../../../Services/LogOut";
 import { resetOrders } from "../../../Services/Slices/OrdersSlice";
@@ -18,6 +11,7 @@ import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StoreStatus from "../../Stack/StoreStatus";
+import getCount from "../../../Services/functions/GetCountFromFirebase";
 
 export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
@@ -31,27 +25,6 @@ export default function DashboardScreen({ navigation }) {
   const [ProcessingArray, setProcessingArray] = useState({});
   const [CancelledArray, setCancelledArray] = useState({});
   const [DeliveredArray, setDeliveredArray] = useState({});
-
-  async function getCount({ column, queryD, value, value2 }) {
-    const coll = collection(firestoreDB, column);
-    if (queryD && value2) {
-      const q = await query(
-        coll,
-        where("s.c", "==", value),
-        where("s.2", ">=", value2)
-      );
-      const snapshot = await getCountFromServer(q);
-      return await snapshot.data().count;
-    } else if (queryD) {
-      const q = await query(coll, where(queryD, "==", value));
-      const snapshot = await getCountFromServer(q);
-      return await snapshot.data().count;
-    } else {
-      const q = await query(coll);
-      const snapshot = await getCountFromServer(q);
-      return await snapshot.data().count;
-    }
-  }
 
   useEffect(() => {
     setTotalCategories(categorySelector?.data?.length || 0);
@@ -526,7 +499,7 @@ export default function DashboardScreen({ navigation }) {
             </View>
           </View>
           {/* Close Store Option */}
-                
+
           <Text
             style={{
               fontWeight: 600,

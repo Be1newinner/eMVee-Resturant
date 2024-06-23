@@ -1,16 +1,31 @@
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { ProductsModal } from "../../../Components/Modals/ProductsModal";
 import ImageComponent from "../../../Components/ImageComponent";
+import { doc, deleteDoc } from "firebase/firestore";
+import { firestoreDB } from "../../../Infrastructure/firebase.config";
 
 export default function ProductsScreen({ navigation }) {
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
   const [editproduct, setEditproduct] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  async function deleteProduct({ itemKey = null }) {
+    try {
+      if (itemKey != null) {
+        console.log("DELETING ITEM : ", itemKey);
+        await deleteDoc(doc(firestoreDB, "pr47", itemKey));
+      } else {
+        throw "Item Key not Found!";
+      }
+    } catch (error) {
+      console.warn("Product Deleting Error => ", error);
+    }
+  }
 
   return (
     <View
@@ -101,6 +116,23 @@ export default function ProductsScreen({ navigation }) {
               onPress={() => {
                 setEditproduct(item);
                 setModalVisible(true);
+              }}
+              onLongPress={() => {
+                Alert.alert(
+                  "Delete",
+                  `Are you sure, you want to delete item number ${item.k} ${
+                    item.t || ""
+                  }?`,
+                  [
+                    {
+                      text: "Cancel",
+                    },
+                    {
+                      text: "Delete",
+                      onPress: () => deleteProduct({ itemKey: item.k }),
+                    },
+                  ]
+                );
               }}
             >
               <ImageComponent
