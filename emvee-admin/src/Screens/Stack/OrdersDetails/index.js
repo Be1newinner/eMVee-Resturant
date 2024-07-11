@@ -20,7 +20,6 @@ export default function OrdersDetails({ navigation, route }) {
   const OrderID = route.params?.order;
   const OrdersSelector = useSelector((state) => state.Orders);
   const dispatch = useDispatch();
-  OrderStatus;
 
   const OrderDetails = OrdersSelector[OrderID];
 

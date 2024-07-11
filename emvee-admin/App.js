@@ -8,14 +8,11 @@ import { store } from "./src/Services/store"; // Import your store
 import { StatusBar } from "expo-status-bar";
 import RealtimeOrdersController from "./src/Services/OrdersController/RealtimeOrdersController";
 
-// import { Text, View } from "react-native";
-
 export default function App() {
   return (
     <Provider store={store}>
       <SafeAreaProvider
         style={{
-          // backgroundColor: "black",
           flex: 1,
         }}
       >
@@ -26,9 +23,6 @@ export default function App() {
         >
           <ApplicationProvider {...eva} theme={eva.light}>
             <StackScreens />
-            {/* <View>
-              <Text>hi</Text>
-            </View> */}
             <RealtimeOrdersController />
           </ApplicationProvider>
         </SafeAreaView>
