@@ -1,11 +1,24 @@
-// import { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
+import { useEffect, useState } from "react";
 
-export default function ImageComponent({ itemKey, title, type = 1, isImage }) {
-  const url = `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/${
-    type == 1 ? "pa" : "ca"
-  }%2F${itemKey}.png?alt=media`;
+export default function ImageComponent({
+  itemKey,
+  title,
+  type = 1,
+  isImage,
+  refreshTrigger,
+}) {
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    // Construct the URL and update the state
+    const newUrl = `https://firebasestorage.googleapis.com/v0/b/emvee-resturant.appspot.com/o/${
+      type == 1 ? "pa" : "ca"
+    }%2F${itemKey}.png?alt=media&t=${new Date().getTime()}`;
+
+    setUrl(newUrl);
+  }, [itemKey, type, refreshTrigger]);
 
   return (
     <View>

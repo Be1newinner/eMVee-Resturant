@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
@@ -9,6 +9,7 @@ import ImageComponent from "../../../Components/ImageComponent";
 const CategoriesScreen = ({ navigation }) => {
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const sortedCategories = useMemo(() => {
     return categorySelector?.data?.slice().sort((a, b) => {
@@ -16,7 +17,13 @@ const CategoriesScreen = ({ navigation }) => {
       if (a.t > b.t) return 1;
       return 0;
     });
-  }, [categorySelector?.data]);
+  }, [categorySelector?.data, categorySelector?.updateTime]);
+
+  useEffect(() => {
+    const time = Date.now();
+    console.log({ time });
+    setRefreshTrigger(time);
+  }, [categorySelector?.data, categorySelector?.updateTime]);
 
   const renderItem = ({ item }) => {
     return (
@@ -34,6 +41,7 @@ const CategoriesScreen = ({ navigation }) => {
           title={item.t}
           isImage={item.i}
           type={2}
+          refreshTrigger={refreshTrigger}
         />
         <View style={styles.categoryDetails}>
           <View style={styles.categoryText}>

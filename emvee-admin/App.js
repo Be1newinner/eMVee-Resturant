@@ -7,6 +7,9 @@ import { Provider } from "react-redux";
 import { store } from "./src/Services/store"; // Import your store
 import { StatusBar } from "expo-status-bar";
 import RealtimeOrdersController from "./src/Services/OrdersController/RealtimeOrdersController";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   return (

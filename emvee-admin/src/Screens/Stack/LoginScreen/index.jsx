@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { resetOrders } from "../../../Services/Slices/OrdersSlice";
 import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
+import * as SplashScreen from "expo-splash-screen";
 
 export default function LoginScreen({ navigation }) {
   const [emailID, setEmailID] = useState("");
@@ -79,21 +80,23 @@ export default function LoginScreen({ navigation }) {
         if (user) {
           if (user?.emailVerified) {
             if (user?.uid == tdf) {
-              console.log("user.uid => ", user.uid);
+              // console.log("user.uid => ", user.uid);
               navigation.replace("BottomTab");
             } else {
               await dispatch(resetOrders());
               await dispatch(resetProducts());
               await dispatch(resetCategories());
               await LogOut();
-              console.log("Invalid Attempt log out user!");
+              await SplashScreen.hideAsync();
+              console.log("Invalid Attempt log out user! , 1");
             }
           } else {
             await dispatch(resetOrders());
             await dispatch(resetProducts());
             await dispatch(resetCategories());
-            console.log("Invalid Attempt log out user!");
+            console.log("Invalid Attempt log out user! , 2");
             await LogOut();
+            await SplashScreen.hideAsync();
           }
         }
       });

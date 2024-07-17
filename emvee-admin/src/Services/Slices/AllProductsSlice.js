@@ -15,10 +15,8 @@ export const AllProductsSlice = createSlice({
       state.data.push(action.payload);
     },
     editSingleProduct(state, action) {
-      // state.data.push(action.payload);
       state.data = state.data.filter((e) => e.k != action.payload.k);
       state.data.push(action.payload);
-      console.log("editing in Category Selector => ", action.payload);
     },
     resetProducts(state) {
       state.data = [];

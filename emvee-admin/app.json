@@ -30,7 +30,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.shipsar.emveeadmin",
-      "versionCode": 6,
+      "versionCode": 9,
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "NOTIFICATIONS"
@@ -45,7 +45,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "525ad24f-cbd9-4558-ba72-9b61e6815f32"
+        "projectId": "fdf657fa-486a-42d7-882a-2c016354e668"
       }
     }
   }

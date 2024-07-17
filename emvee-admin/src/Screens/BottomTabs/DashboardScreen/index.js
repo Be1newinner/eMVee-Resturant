@@ -2,7 +2,7 @@ import { ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 // import RealtimeOrdersController from "../../../Services/OrdersController/RealtimeOrdersController";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Timestamp } from "firebase/firestore";
 import { FontAwesome } from "@expo/vector-icons";
 import LogOut from "../../../Services/LogOut";
@@ -12,6 +12,7 @@ import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StoreStatus from "../../Stack/StoreStatus";
 import getCount from "../../../Services/functions/GetCountFromFirebase";
+import * as SplashScreen from "expo-splash-screen";
 
 export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
@@ -189,7 +190,11 @@ export default function DashboardScreen({ navigation }) {
   }, [OrdersSelector]);
 
   return (
-    <ScrollView>
+    <ScrollView
+      onLayout={async () => {
+        await SplashScreen.hideAsync();
+      }}
+    >
       <View
         style={{
           flex: 1,

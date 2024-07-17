@@ -25,8 +25,6 @@ const EditAddCategories = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { category } = route.params;
 
-  console.log("category => ", category);
-
   useEffect(() => {
     if (category) {
       setName(category.t || "");
