@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "emvee-admin",
+    "slug": "emvee-admin",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shipsar.emveeadmin"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.shipsar.emveeadmin",
+      "versionCode": 9,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "NOTIFICATIONS"
+      ],
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "fdf657fa-486a-42d7-882a-2c016354e668"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
