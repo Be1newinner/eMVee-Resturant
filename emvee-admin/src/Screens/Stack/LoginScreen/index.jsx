@@ -75,34 +75,40 @@ export default function LoginScreen({ navigation }) {
   };
 
   useEffect(() => {
-    try {
-      onAuthStateChanged(firebaseAuth, async (user) => {
-        if (user) {
-          if (user?.emailVerified) {
-            if (user?.uid == tdf) {
-              // console.log("user.uid => ", user.uid);
-              navigation.replace("BottomTab");
+    (async function () {
+      try {
+        onAuthStateChanged(firebaseAuth, async (user) => {
+          if (user) {
+            if (user?.emailVerified) {
+              if (user?.uid == tdf) {
+                // console.log("user.uid => ", user.uid);
+                await SplashScreen.hideAsync();
+                navigation.replace("BottomTab");
+              } else {
+                await dispatch(resetOrders());
+                await dispatch(resetProducts());
+                await dispatch(resetCategories());
+                await LogOut();
+                await SplashScreen.hideAsync();
+                console.log("Invalid Attempt log out user! , 1");
+              }
             } else {
               await dispatch(resetOrders());
               await dispatch(resetProducts());
               await dispatch(resetCategories());
+              console.log("Invalid Attempt log out user! , 2");
               await LogOut();
               await SplashScreen.hideAsync();
-              console.log("Invalid Attempt log out user! , 1");
             }
           } else {
-            await dispatch(resetOrders());
-            await dispatch(resetProducts());
-            await dispatch(resetCategories());
-            console.log("Invalid Attempt log out user! , 2");
-            await LogOut();
             await SplashScreen.hideAsync();
           }
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
+        });
+      } catch (error) {
+        await SplashScreen.hideAsync();
+        console.log(error);
+      }
+    })();
   }, [firebaseAuth]);
 
   const validation = () => {

@@ -19,12 +19,6 @@
       "bundleIdentifier": "com.shipsar.emveeadmin"
     },
     "android": {
-      "scheme": "emvee-admin",
-      "linking": {
-        "prefixes": [
-          "emvee-admin"
-        ]
-      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
@@ -47,6 +41,9 @@
       "eas": {
         "projectId": "fdf657fa-486a-42d7-882a-2c016354e668"
       }
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
