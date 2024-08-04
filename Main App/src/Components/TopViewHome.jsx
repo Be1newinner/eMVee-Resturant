@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Linking } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { MaterialIcons, AntDesign, Ionicons } from "@expo/vector-icons";
+import { MaterialIcons, AntDesign, FontAwesome6 } from "@expo/vector-icons";
 import { GlobalColors } from "../Infrastructure/GlobalVariables";
 import { Input } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
-import { firebaseAuth } from "../Infrastructure/firebase.config";
 import { StoreDetailsContext } from "../Services/StoreDetails/StoreDetailsContext";
 
 export const TopViewHome = ({ navigation }) => {
@@ -45,14 +44,41 @@ export const TopViewHome = ({ navigation }) => {
         }}
       >
         <View>
-          <Text
+          <View
             style={{
-              fontSize: 16,
-              color: "#fff",
+              flexDirection: "row",
+              gap: 10,
             }}
           >
-            Hi, {firebaseAuth?.currentUser?.displayName || "User"}
-          </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                color: "#fff",
+              }}
+            >
+              Welcome to eMVee Restaurant
+            </Text>
+            <View
+              style={{
+                height: 30,
+                width: 30,
+                justifyContent: "center",
+                alignItems: "center",
+                alignContent: "center",
+                backgroundColor: "lime",
+                borderRadius: 50,
+              }}
+            >
+              <MaterialIcons
+                onPress={async () => {
+                  await Linking.openURL(`tel:+917630985985`);
+                }}
+                name="call"
+                size={24}
+                color="white"
+              />
+            </View>
+          </View>
           <View style={styles.header}>
             <View style={styles.location}>
               <Pressable
@@ -88,9 +114,10 @@ export const TopViewHome = ({ navigation }) => {
             </View>
           </View>
         </View>
-        <Ionicons
-          name="person-circle-outline"
-          size={34}
+
+        <FontAwesome6
+          name="user"
+          size={28}
           color="#fff"
           onPress={() => navigation.navigate("SettingScreen")}
         />

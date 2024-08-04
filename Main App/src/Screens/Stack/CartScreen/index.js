@@ -609,9 +609,9 @@ export default function CartScreen({ navigation }) {
             <OrderConfirmModal
               visible={visible}
               setVisible={setVisible}
-              onConfirm={() => ConfirmOrder()}
+              LoadingScreen={LoadingScreen}
+              onConfirm={ConfirmOrder}
             />
-            <LoadingModal visible={LoadingScreen} />
           </View>
         ) : (
           <View

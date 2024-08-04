@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Modal, Text } from "@ui-kitten/components";
+import { Button, Card, Modal, Spinner, Text } from "@ui-kitten/components";
 import { View } from "react-native";
-import { doc, getDoc } from "firebase/firestore";
-import { firestoreDB } from "../Infrastructure/firebase.config";
 import { StoreDetailsContext } from "../Services/StoreDetails/StoreDetailsContext";
 
 export const OrderConfirmModal = ({
   visible,
   setVisible,
   onConfirm,
+  LoadingScreen,
 }): React.ReactElement => {
   const { StoreStatus, timeDiff } = useContext(StoreDetailsContext);
   const [StoreMessage, setStoreMessage] = useState("");
@@ -32,64 +31,79 @@ export const OrderConfirmModal = ({
         setVisible(false);
       }}
     >
-      <Card disabled={true}>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 5,
-            marginBottom: 25,
-          }}
-        >
-          <Text
+      {LoadingScreen ? (
+        <Card disabled={true}>
+          <View
             style={{
-              fontSize: 18,
-              fontWeight: 700,
+              alignItems: "center",
+              alignContent: "center",
+              justifyContent: "center",
             }}
           >
-            {!StoreStatus ? "Store Closed!" : "Confirm Order?"}
-          </Text>
-          <Text>
-            {!StoreStatus
-              ? StoreMessage
-              : "Order Can not be cancelled! \n This is Cash on Delivery Order"}
-          </Text>
-        </View>
+            <Spinner status="danger" size="giant" />
+            <Text>Please Wait ...</Text>
+          </View>
+        </Card>
+      ) : (
+        <Card disabled={true}>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 5,
+              marginBottom: 25,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+              }}
+            >
+              {!StoreStatus ? "Store Closed!" : "Confirm Order?"}
+            </Text>
+            <Text>
+              {!StoreStatus
+                ? StoreMessage
+                : "Order Can not be cancelled! \n This is Cash on Delivery Order"}
+            </Text>
+          </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            flex: 1,
-            width: "auto",
-          }}
-        >
-          <Button
-            status="basic"
-            onPress={() => {
-              setVisible(false);
-            }}
+          <View
             style={{
+              flexDirection: "row",
               flex: 1,
+              width: "auto",
             }}
           >
-            Cancel
-          </Button>
-          {StoreStatus ? (
             <Button
+              status="basic"
               onPress={() => {
-                onConfirm();
                 setVisible(false);
               }}
-              status="danger"
               style={{
                 flex: 1,
               }}
             >
-              Confirm
+              Cancel
             </Button>
-          ) : null}
-        </View>
-      </Card>
+            {StoreStatus ? (
+              <Button
+                onPress={async () => {
+                  await onConfirm();
+                  setVisible(false);
+                }}
+                status="danger"
+                style={{
+                  flex: 1,
+                }}
+              >
+                Confirm
+              </Button>
+            ) : null}
+          </View>
+        </Card>
+      )}
     </Modal>
   );
 };

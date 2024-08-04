@@ -57,10 +57,6 @@ export const StoreDetailsProvider = ({ children }) => {
     }
   }, [passedDate]);
 
-//   useEffect(() => {
-//     console.log("timeDiff in Context => ", timeDiff);
-//   }, [timeDiff]);
-
   return (
     <StoreDetailsContext.Provider
       value={{
