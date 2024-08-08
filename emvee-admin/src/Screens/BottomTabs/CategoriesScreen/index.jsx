@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import ImageComponent from "../../../Components/ImageComponent";
+import { CategoryItem } from "./CategoryItem";
+import Header from "../../../Components/Header";
 
 const CategoriesScreen = ({ navigation }) => {
   const categorySelector = useSelector((selector) => selector.AllCategories);
@@ -25,66 +26,14 @@ const CategoriesScreen = ({ navigation }) => {
     setRefreshTrigger(time);
   }, [categorySelector?.data, categorySelector?.updateTime]);
 
-  const renderItem = ({ item }) => {
-    return (
-      <Pressable
-        key={item.k}
-        style={styles.categoryItem}
-        onPress={() => {
-          navigation.navigate("EditAddCategories", {
-            category: item,
-          });
-        }}
-      >
-        <ImageComponent
-          itemKey={item.k}
-          title={item.t}
-          isImage={item.i}
-          type={2}
-          refreshTrigger={refreshTrigger}
-        />
-        <View style={styles.categoryDetails}>
-          <View style={styles.categoryText}>
-            <Text style={styles.categoryTitle}>{item?.t}</Text>
-            <Text style={styles.categoryCount}>
-              {productsSelector?.data?.filter((e) => e.c == item.k)?.length}
-            </Text>
-          </View>
-          {item?.s && (
-            <AntDesign
-              name="star"
-              size={24}
-              color={GlobalColors.themeColor}
-              onPress={() =>
-                navigation.navigate("EditAddCategories", {
-                  product: {},
-                })
-              }
-            />
-          )}
-        </View>
-      </Pressable>
-    );
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>
-          Total Categories
-          <Text style={styles.headerCount}>
-            ({categorySelector?.data?.length || 0})
-          </Text>
-        </Text>
-        <AntDesign
-          name="pluscircle"
-          size={28}
-          color="#fff"
-          onPress={() => {
-            navigation.navigate("EditAddCategories", { category: {} });
-          }}
-        />
-      </View>
+      <Header
+        title={"Total Categories"}
+        SelectorData={categorySelector?.data}
+        navigation={navigation}
+        nextScteen={"EditAddCategories"}
+      />
 
       <FlatList
         contentContainerStyle={styles.listContent}
@@ -93,7 +42,14 @@ const CategoriesScreen = ({ navigation }) => {
         ListFooterComponent={<View style={styles.listFooter} />}
         data={sortedCategories}
         keyExtractor={(item) => item.k}
-        renderItem={renderItem}
+        renderItem={(e) => (
+          <CategoryItem
+            item={e.item}
+            productsSelector={productsSelector}
+            refreshTrigger={refreshTrigger}
+            navigation={navigation}
+          />
+        )}
       />
     </View>
   );
@@ -131,31 +87,6 @@ const styles = StyleSheet.create({
   },
   listFooter: {
     marginBottom: 80,
-  },
-  categoryItem: {
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    elevation: 3,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  categoryDetails: {
-    flexDirection: "row",
-    flex: 1,
-    padding: 5,
-    paddingRight: 10,
-    gap: 5,
-  },
-  categoryText: {
-    flex: 1,
-    gap: 5,
-  },
-  categoryTitle: {
-    fontWeight: "500",
-  },
-  categoryCount: {
-    fontWeight: "700",
-    fontSize: 16,
   },
 });
 
