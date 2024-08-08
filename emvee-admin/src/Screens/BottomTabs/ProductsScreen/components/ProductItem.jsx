@@ -5,7 +5,13 @@ import { AntDesign } from "@expo/vector-icons";
 import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
 
 export const ProductItem = React.memo(
-  ({ item, deleteProduct, categorySelector, navigation }) => {
+  ({
+    item,
+    deleteProduct = () => null,
+    categorySelector = {},
+    navigation,
+    smallView = false,
+  }) => {
     const onPress = useCallback(() => {
       navigation.navigate("EditAddProducts", {
         product: item,
@@ -28,6 +34,10 @@ export const ProductItem = React.memo(
       );
     }, [item, deleteProduct]);
 
+    const CategorySelected = categorySelector?.data?.filter(
+      (e) => e.k == item?.c
+    )[0]?.t;
+
     return (
       <Pressable
         key={item.k}
@@ -39,7 +49,7 @@ export const ProductItem = React.memo(
           overflow: "hidden",
         }}
         onPress={onPress}
-        onLongPress={onLongPress}
+        onLongPress={() => !smallView && onLongPress()}
       >
         <ImageComponent itemKey={item.k} title={item.t} isImage={item.i} />
         <View
@@ -52,9 +62,11 @@ export const ProductItem = React.memo(
         >
           <View style={{ flex: 1 }}>
             <Text style={{ fontWeight: "500", flex: 1 }}>{item?.t}</Text>
-            <Text style={{ fontWeight: "500", flex: 1 }}>
-              ({categorySelector?.data?.filter((e) => e.k == item?.c)[0]?.t})
-            </Text>
+            {CategorySelected && (
+              <Text style={{ fontWeight: "500", flex: 1 }}>
+                ({CategorySelected})
+              </Text>
+            )}
             <Text style={{ fontWeight: "500", flex: 1 }}>₹{item?.p}/-</Text>
           </View>
           {item?.s && (
