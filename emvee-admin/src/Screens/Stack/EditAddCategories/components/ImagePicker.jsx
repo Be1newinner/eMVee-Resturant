@@ -17,7 +17,7 @@ const ImagePicker = ({ image, setImage, setImageError }) => {
     }
   };
 
-  console.log("image => ", image)
+  // console.log("image => ", image);
 
   return (
     <View>
@@ -48,4 +48,4 @@ const styles = {
   },
 };
 
-export default ImagePicker;
+export { ImagePicker };

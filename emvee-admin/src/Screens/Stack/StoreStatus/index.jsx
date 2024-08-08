@@ -74,13 +74,6 @@ export default function StoreStatus({ navigation }) {
     newDate.setSeconds(0);
 
     const timestamp = new Timestamp.fromDate(newDate);
-    // console.log(
-    //   date,
-    //   time,
-    //   newDate.toLocaleString(),
-    //   Timestamp.now(),
-    //   timestamp
-    // );
 
     const res = await changeTimer({ currentTimeStamp: timestamp });
     if (res) {
@@ -112,7 +105,7 @@ export default function StoreStatus({ navigation }) {
   return (
     <View
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: "#eee",
         flexWrap: "wrap",
         borderRadius: 10,
         elevation: 5,

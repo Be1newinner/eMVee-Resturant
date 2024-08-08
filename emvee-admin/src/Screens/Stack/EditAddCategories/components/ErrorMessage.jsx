@@ -14,4 +14,4 @@ const styles = {
   },
 };
 
-export default ErrorMessage;
+export { ErrorMessage };

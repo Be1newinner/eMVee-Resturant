@@ -1,179 +1,160 @@
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { View, Dimensions, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
 
 import CategoriesScreen from "../Screens/BottomTabs/CategoriesScreen";
 import HomeScreen from "../Screens/BottomTabs/DashboardScreen";
-// import UserScreen from "../Screens/BottomTabs/UsersScreen";
 import OrdersScreen from "../Screens/BottomTabs/OrdersScreen";
 import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 
-import { Ionicons } from "@expo/vector-icons";
 import { GlobalColors } from "./GlobalVariables";
-import { Dimensions, View } from "react-native";
-import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "./firebase.config";
 import LogOut from "../Services/LogOut";
 import { resetOrders } from "../Services/Slices/OrdersSlice";
 import { resetProducts } from "../Services/Slices/AllProductsSlice";
 import { resetCategories } from "../Services/Slices/AllCategoriesSlice";
-import { useDispatch, useSelector } from "react-redux";
 
-const Tab = createBottomTabNavigator();
+const BottomTab = createBottomTabNavigator();
 
 const tdf =
   process.env.EXPO_PUBLIC_u2 +
-  "" +
   process.env.EXPO_PUBLIC_u9 +
-  "" +
   process.env.EXPO_PUBLIC_u1 +
-  "" +
   process.env.EXPO_PUBLIC_u0;
+
+const TabBarIcon = ({ focused, iconName, showBadge }) => (
+  <View>
+    <Ionicons
+      name={focused ? `${iconName}-sharp` : `${iconName}-outline`}
+      size={24}
+      color="#000"
+    />
+    {showBadge && <View style={styles.badge} />}
+  </View>
+);
 
 const BottomTabScreenRaw = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [PendingOrdersState, setPendingOrdersState] = useState(0);
+  const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
 
-  const QuantitySelector = useSelector((selector) => selector.Orders);
-  const tempPendingOrdersCount = Object.values(QuantitySelector).filter(
-    (e) => e.s.c == 0
+  const orders = useSelector((state) => state.Orders);
+  const filteredOrdersCount = Object.values(orders).filter(
+    (order) => order.s.c === 0
   ).length;
 
   useEffect(() => {
-    setPendingOrdersState(tempPendingOrdersCount);
-  }, [tempPendingOrdersCount]);
+    setPendingOrdersCount(filteredOrdersCount);
+  }, [filteredOrdersCount]);
+
+  const handleUserStateChange = async (user) => {
+    if (user?.emailVerified && user.uid === tdf) return;
+
+    await dispatch(resetOrders());
+    await dispatch(resetProducts());
+    await dispatch(resetCategories());
+    await LogOut();
+    navigation.replace("LoginScreen");
+  };
 
   useEffect(() => {
-    onAuthStateChanged(firebaseAuth, async (user) => {
-      if (user) {
-        if (user.emailVerified) {
-          if (user.uid != tdf) {
-            await dispatch(resetOrders());
-            await dispatch(resetProducts());
-            await dispatch(resetCategories());
-            await LogOut();
-            navigation.replace("LoginScreen");
-          }
-        } else {
-          await dispatch(resetOrders());
-          await dispatch(resetProducts());
-          await dispatch(resetCategories());
-          await LogOut();
-          navigation.replace("LoginScreen");
-        }
-      } else {
-        await dispatch(resetOrders());
-        await dispatch(resetProducts());
-        await dispatch(resetCategories());
-        await LogOut();
-        navigation.replace("LoginScreen");
-      }
-    });
-  }, [firebaseAuth, tempPendingOrdersCount]);
+    const unsubscribe = onAuthStateChanged(firebaseAuth, handleUserStateChange);
+    return unsubscribe;
+  }, [firebaseAuth]);
 
   return (
-    <Tab.Navigator
+    <BottomTab.Navigator
       screenOptions={{
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabBarLabel,
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: GlobalColors.themeColor,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingBottom: 5,
-          height: 55,
-          width: Dimensions.get("screen").width - 20,
-          position: "absolute",
-          bottom: 10,
-          left: 10,
-          borderRadius: 10,
-          elevation: 10,
-          borderBlockColor: "rgba(0,0,0,0.15)",
-        },
       }}
     >
-      <Tab.Screen
+      <BottomTab.Screen
+        name="Main"
+        component={HomeScreen}
         options={{
-          tabBarLabelStyle: {
-            color: "#fff",
-          },
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "home-sharp" : "home-outline"}
               size={24}
-              color="white"
+              color="#000"
             />
           ),
         }}
-        name="Main"
-        component={HomeScreen}
       />
-      <Tab.Screen
+      <BottomTab.Screen
+        name="Products"
+        component={ProductsScreen}
         options={{
-          tabBarLabelStyle: {
-            color: "#fff",
-          },
-          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "fast-food-sharp" : "fast-food-outline"}
               size={24}
-              color="white"
+              color="#000"
             />
           ),
         }}
-        name="Products"
-        component={ProductsScreen}
       />
-      <Tab.Screen
+      <BottomTab.Screen
+        name="Category"
+        component={CategoriesScreen}
         options={{
-          tabBarLabelStyle: {
-            color: "#fff",
-          },
-          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "shapes-sharp" : "shapes-outline"}
               size={24}
-              color="white"
+              color="#000"
             />
           ),
         }}
-        name="Category"
-        component={CategoriesScreen}
       />
-      <Tab.Screen
-        options={{
-          tabBarLabelStyle: {
-            color: "#fff",
-          },
-          headerTitleAlign: "center",
-          tabBarIcon: ({ focused }) => (
-            <View>
-              <Ionicons
-                name={focused ? "fast-food-sharp" : "fast-food-outline"}
-                size={24}
-                color="white"
-              />
-
-              {PendingOrdersState > 0 ? (
-                <View
-                  style={{
-                    backgroundColor: "rgba(10,150,255,1)",
-                    width: 10,
-                    height: 10,
-                    position: "absolute",
-                    right: -3,
-                    borderRadius: 10,
-                  }}
-                />
-              ) : null}
-            </View>
-          ),
-        }}
+      <BottomTab.Screen
         name="Orders"
         component={OrdersScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              focused={focused}
+              iconName="fast-food"
+              showBadge={pendingOrdersCount > 0}
+            />
+          ),
+        }}
       />
-    </Tab.Navigator>
+    </BottomTab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: GlobalColors.themeColor,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 5,
+    height: 55,
+    width: Dimensions.get("screen").width - 20,
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    borderRadius: 10,
+    elevation: 10,
+    borderColor: "rgba(0,0,0,0.3)",
+    borderWidth: 2,
+  },
+  tabBarLabel: {
+    color: "#000",
+  },
+  badge: {
+    backgroundColor: "rgba(10,150,255,1)",
+    width: 10,
+    height: 10,
+    position: "absolute",
+    right: -3,
+    borderRadius: 10,
+  },
+});
 
 export default BottomTabScreenRaw;

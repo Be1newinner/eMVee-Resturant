@@ -18,12 +18,41 @@ export default function StackScreens() {
           headerShown: false,
         }}
       >
-        {/* Auth  */}
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="BottomTab" component={BottomTabsModified} />
-        <Stack.Screen name="OrdersDetails" component={OrdersDetails} />
-        <Stack.Screen name="EditAddProducts" component={EditAddProducts} />
-        <Stack.Screen name="EditAddCategories" component={EditAddCategories} />
+        <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{
+            title: "eMVee Dashboard",
+          }}
+        />
+        <Stack.Screen
+          name="BottomTab"
+          component={BottomTabsModified}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="OrdersDetails"
+          component={OrdersDetails}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditAddProducts"
+          component={EditAddProducts}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditAddCategories"
+          component={EditAddCategories}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

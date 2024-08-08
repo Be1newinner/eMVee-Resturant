@@ -3,12 +3,10 @@ import { ProductItem } from "./ProductItem";
 
 export default function ProductFlatList({
   SelectorData,
-  deleteProduct,
   categorySelector,
   navigation,
   smallView = false,
 }) {
-  console.log("PRODUCT DATA => ", SelectorData);
   return (
     <FlatList
       contentContainerStyle={{
@@ -26,7 +24,6 @@ export default function ProductFlatList({
       renderItem={({ item }) => (
         <ProductItem
           item={item}
-          deleteProduct={deleteProduct}
           categorySelector={categorySelector}
           navigation={navigation}
           smallView={smallView}

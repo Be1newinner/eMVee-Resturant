@@ -1,24 +1,39 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { CategoryItem } from "./CategoryItem";
 import Header from "../../../Components/Header";
+import SearchBarComponent from "../../../Components/SearchBarComponent";
+import Header2 from "../../../Components/Header2";
 
 const CategoriesScreen = ({ navigation }) => {
   const categorySelector = useSelector((selector) => selector.AllCategories);
   const productsSelector = useSelector((selector) => selector.AllProducts);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  const [SearchInput, setSearchInput] = useState("");
+
   const sortedCategories = useMemo(() => {
-    return categorySelector?.data?.slice().sort((a, b) => {
-      if (a.t < b.t) return -1;
-      if (a.t > b.t) return 1;
-      return 0;
-    });
-  }, [categorySelector?.data, categorySelector?.updateTime]);
+    if (SearchInput?.length > 1) {
+      const data = categorySelector?.data?.filter((e) =>
+        e?.t?.toLowerCase().includes(SearchInput?.toLowerCase())
+      );
+
+      return data?.slice().sort((a, b) => {
+        if (a.t < b.t) return -1;
+        if (a.t > b.t) return 1;
+        return 0;
+      });
+    } else
+      return categorySelector?.data?.slice().sort((a, b) => {
+        if (a.t < b.t) return -1;
+        if (a.t > b.t) return 1;
+        return 0;
+      });
+  }, [categorySelector?.data, categorySelector?.updateTime, SearchInput]);
 
   useEffect(() => {
     const time = Date.now();
@@ -28,11 +43,29 @@ const CategoriesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title={"Total Categories"}
-        SelectorData={categorySelector?.data}
-        navigation={navigation}
-        nextScteen={"EditAddCategories"}
+      <Header2
+        title={`Total Categories ${categorySelector?.data?.length}`}
+        rightIcon={
+          <AntDesign
+            name="pluscircle"
+            size={28}
+            onPress={() =>
+              navigation.navigate("EditAddCategories", {
+                product: {},
+              })
+            }
+          />
+        }
+      />
+
+      <SearchBarComponent
+        value={SearchInput}
+        setValue={setSearchInput}
+        style={{
+          marginBottom: -20,
+          marginTop: 90,
+        }}
+        placeholder="Search for Categories"
       />
 
       <FlatList

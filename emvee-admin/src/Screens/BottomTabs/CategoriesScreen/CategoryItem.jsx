@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { AntDesign } from "@expo/vector-icons";
 import ImageComponent from "../../../Components/ImageComponent";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 

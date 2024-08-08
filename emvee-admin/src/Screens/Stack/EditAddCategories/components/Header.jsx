@@ -22,4 +22,4 @@ const styles = {
   },
 };
 
-export default Header;
+export { Header };

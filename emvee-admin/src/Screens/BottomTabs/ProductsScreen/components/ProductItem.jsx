@@ -3,15 +3,10 @@ import { Alert, Pressable, Text, View } from "react-native";
 import ImageComponent from "../../../../Components/ImageComponent";
 import { AntDesign } from "@expo/vector-icons";
 import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
+import { deleteProduct } from "../../../../utils/deleteProduct";
 
 export const ProductItem = React.memo(
-  ({
-    item,
-    deleteProduct = () => null,
-    categorySelector = {},
-    navigation,
-    smallView = false,
-  }) => {
+  ({ item, categorySelector = {}, navigation }) => {
     const onPress = useCallback(() => {
       navigation.navigate("EditAddProducts", {
         product: item,
@@ -49,7 +44,7 @@ export const ProductItem = React.memo(
           overflow: "hidden",
         }}
         onPress={onPress}
-        onLongPress={() => !smallView && onLongPress()}
+        onLongPress={onLongPress}
       >
         <ImageComponent itemKey={item.k} title={item.t} isImage={item.i} />
         <View
