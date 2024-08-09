@@ -14,7 +14,7 @@ export const OrderStats = ({ title, stats }) => (
 
 const styles = StyleSheet.create({
   orderStatsTitle: {
-    fontWeight: "600",
+    fontWeight: "40",
     textAlign: "center",
     marginVertical: 10,
     fontSize: 16,

@@ -1,172 +1,123 @@
 import { View, Alert } from "react-native";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Input,
-  Layout,
-  Popover,
-  Text,
-  Toggle,
-} from "@ui-kitten/components";
+import { Button, Input, Text, Toggle } from "@ui-kitten/components";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Timestamp, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { firestoreDB } from "../../../Infrastructure/firebase.config";
 
+const DateTimePicker = ({ mode, value, onChange, onCancel }) => (
+  <RNDateTimePicker
+    mode={mode}
+    value={value}
+    onChange={onChange}
+    onTouchCancel={onCancel}
+    minimumDate={new Date()}
+    display="spinner"
+    minuteInterval={30}
+  />
+);
+
 export default function StoreStatus({ navigation }) {
   const [activeChecked, setActiveChecked] = useState(true);
-  const [ShowDate, setShowDate] = useState(false);
-  const [ShowTime, setShowTime] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
 
-  const ChangeStoreStatus = async () => {
-    if (activeChecked) {
-      setActiveChecked(false);
-    } else {
-      await resetStoreTimer();
-      setActiveChecked(true);
-    }
-  };
-
-  const setDate = ({ nativeEvent: { timestamp } }) => {
-    const date = new Date(timestamp);
-    setSelectedDate(date);
-    setShowDate(false);
-  };
-
-  const setTime = ({ nativeEvent: { timestamp } }) => {
-    const time = new Date(timestamp);
-    const timeArray = time
-      .toLocaleString()
-      .split(",")[1]
-      .replaceAll(" ", "")
-      .split(":");
-    setSelectedTime(timeArray[0] + ":" + timeArray[1]);
-    setShowTime(false);
-  };
-
-  const resetStoreTimer = async () => {
-    const currentTimeStamp = new Timestamp.now();
-    await changeTimer({ currentTimeStamp });
-  };
-
-  const changeTimer = async ({ currentTimeStamp }) => {
-    try {
-      const docRef = doc(firestoreDB, "ot", "s");
-      await updateDoc(docRef, {
-        t: currentTimeStamp,
-      });
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const closeStoreOnline = async function () {
-    const date = selectedDate.toLocaleDateString()?.split("/");
-    const time = selectedTime?.split(":");
-    const newDate = new Date();
-    newDate.setDate(Number(date[0]));
-    newDate.setMonth(Number(date[1]) - 1);
-    newDate.setFullYear(Number(date[2]));
-    newDate.setHours(Number(time[0]));
-    newDate.setMinutes(Number(time[1]));
-    newDate.setSeconds(0);
-
-    const timestamp = new Timestamp.fromDate(newDate);
-
-    const res = await changeTimer({ currentTimeStamp: timestamp });
-    if (res) {
-      Alert.alert(`Store closed`, `till ${newDate}`);
-    }
-  };
-
   useEffect(() => {
     const docRef = doc(firestoreDB, "ot", "s");
-    const docSnap = onSnapshot(docRef, (doc) => {
+    const unsubscribe = onSnapshot(docRef, (doc) => {
       const time = doc.data()?.t;
       const currentTime = new Date();
       const closedTime = new Date(time?.seconds * 1000);
 
-      const upDate = closedTime.toLocaleDateString();
-      const upTime = closedTime?.toLocaleTimeString();
+      setSelectedDate(closedTime.toLocaleDateString());
+      setSelectedTime(closedTime.toLocaleTimeString());
 
-      setSelectedDate(upDate);
-      setSelectedTime(upTime);
-
-      // console.log(upDate, upTime);
-
-      currentTime < closedTime
-        ? setActiveChecked(false)
-        : setActiveChecked(true);
+      setActiveChecked(currentTime >= closedTime);
     });
+
+    return () => unsubscribe();
   }, []);
 
+  const toggleStoreStatus = async () => {
+    if (activeChecked) {
+      await resetStoreTimer();
+      setActiveChecked(false);
+    } else {
+      setActiveChecked(true);
+    }
+  };
+
+  const resetStoreTimer = async () => {
+    const currentTimeStamp = Timestamp.now();
+    await updateTimer(currentTimeStamp);
+  };
+
+  const updateTimer = async (currentTimeStamp) => {
+    try {
+      const docRef = doc(firestoreDB, "ot", "s");
+      await updateDoc(docRef, { t: currentTimeStamp });
+    } catch (error) {
+      console.error("Failed to update timer:", error);
+    }
+  };
+
+  const closeStore = async () => {
+    if (!selectedDate || !selectedTime) return;
+
+    const [day, month, year] = selectedDate.split("/");
+    const [hours, minutes] = selectedTime.split(":");
+
+    const newDate = new Date(year, month - 1, day, hours, minutes, 0);
+    const timestamp = Timestamp.fromDate(newDate);
+
+    const success = await updateTimer(timestamp);
+    if (success) {
+      Alert.alert("Store closed", `till ${newDate}`);
+      setActiveChecked(false);
+    }
+  };
+
+  const handleDateChange = ({ nativeEvent: { timestamp } }) => {
+    setSelectedDate(new Date(timestamp).toLocaleDateString());
+    setShowDatePicker(false);
+  };
+
+  const handleTimeChange = ({ nativeEvent: { timestamp } }) => {
+    const time = new Date(timestamp);
+    setSelectedTime(`${time.getHours()}:${time.getMinutes()}`);
+    setShowTimePicker(false);
+  };
+
   return (
-    <View
-      style={{
-        backgroundColor: "#eee",
-        flexWrap: "wrap",
-        borderRadius: 10,
-        elevation: 5,
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-        gap: 10,
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Text>Store Status : </Text>
+    <View style={styles.container}>
+      <View style={styles.statusRow}>
+        <Text>Store Status:</Text>
         <Toggle
           status="danger"
           checked={activeChecked}
-          onChange={ChangeStoreStatus}
+          onChange={toggleStoreStatus}
         />
       </View>
-      {!activeChecked ? (
-        <View
-          style={{
-            flexDirection: "column",
-          }}
-        >
-          <Text>Store Closed till : </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 10,
-              marginTop: 5,
-            }}
-          >
+      {!activeChecked && (
+        <View style={styles.closeStoreContainer}>
+          <Text>Store Closed till:</Text>
+          <View style={styles.inputRow}>
             <Input
               placeholder="DD/MM/YYYY"
               maxLength={10}
               value={selectedDate}
-              onChangeText={(e) => {
-                console.log("asd => ", typeof e);
-              }}
-              onPressIn={() => setShowDate(true)}
+              onPressIn={() => setShowDatePicker(true)}
             />
             <Input
               placeholder="hh:mm"
               maxLength={5}
-              onChangeText={(e) => {
-                console.log("asd => ", typeof e);
-              }}
-              onPressIn={() => setShowTime(true)}
               value={selectedTime}
+              onPressIn={() => setShowTimePicker(true)}
             />
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 10,
-              marginTop: 10,
-            }}
-          >
+          <View style={styles.buttonRow}>
             <Button
               status="danger"
               appearance="outline"
@@ -174,39 +125,57 @@ export default function StoreStatus({ navigation }) {
             >
               Cancel
             </Button>
-            <Button
-              status="danger"
-              onPress={async () => {
-                await closeStoreOnline();
-                setActiveChecked(false);
-              }}
-            >
+            <Button status="danger" onPress={closeStore}>
               Close Shop
             </Button>
           </View>
         </View>
-      ) : null}
+      )}
 
-      {ShowDate ? (
-        <RNDateTimePicker
+      {showDatePicker && (
+        <DateTimePicker
           mode="date"
           value={new Date()}
-          onChange={(e) => setDate(e)}
-          onTouchCancel={() => setShowDate(false)}
-          minimumDate={new Date()}
+          onChange={handleDateChange}
+          onCancel={() => setShowDatePicker(false)}
         />
-      ) : null}
-      {ShowTime ? (
-        <RNDateTimePicker
+      )}
+      {showTimePicker && (
+        <DateTimePicker
           mode="time"
           value={new Date()}
-          onChange={(e) => setTime(e)}
-          onTouchCancel={() => setShowTime(false)}
-          minimumDate={new Date()}
-          minuteInterval={30}
-          display="spinner"
+          onChange={handleTimeChange}
+          onCancel={() => setShowTimePicker(false)}
         />
-      ) : null}
+      )}
     </View>
   );
 }
+
+const styles = {
+  container: {
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    elevation: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    gap: 10,
+  },
+  statusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  closeStoreContainer: {
+    flexDirection: "column",
+  },
+  inputRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 5,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 10,
+  },
+};

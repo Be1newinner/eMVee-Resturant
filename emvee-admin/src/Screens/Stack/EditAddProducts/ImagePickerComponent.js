@@ -34,16 +34,18 @@ const ImagePickerComponent = ({
         Pick Image
       </Button>
 
-      <Image
-        source={{ uri: imageUri }}
-        style={{
-          width: imageUri ? 200 : 0,
-          height: imageUri ? 200 : 0,
-          objectFit: "contain",
-          marginTop: 10,
-        }}
-        onError={() => setImageError(true)}
-      />
+      {imageUri && (
+        <Image
+          source={{ uri: imageUri }}
+          style={{
+            width: imageUri ? 200 : 0,
+            height: imageUri ? 200 : 0,
+            objectFit: "contain",
+            marginTop: 10,
+          }}
+          onError={() => setImageError(true)}
+        />
+      )}
     </View>
   );
 };

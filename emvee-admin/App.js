@@ -4,7 +4,7 @@ import StackScreens from "./src/Infrastructure/StackScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
 import { Provider } from "react-redux";
-import { store } from "./src/Services/store";
+import store from "./src/redux/store";
 import { StatusBar } from "expo-status-bar";
 import RealtimeOrdersController from "./src/Services/OrdersController/RealtimeOrdersController";
 import * as SplashScreen from "expo-splash-screen";

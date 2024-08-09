@@ -34,8 +34,7 @@ export default function Header({
             color: "#fff",
           }}
         >
-          {/* ({productsSelector?.data?.length || 0}) */}(
-          {SelectorData?.length || 0})
+          ({SelectorData?.length || 0})
         </Text>
       </Text>
 

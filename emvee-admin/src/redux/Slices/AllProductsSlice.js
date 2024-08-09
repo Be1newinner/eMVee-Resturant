@@ -18,9 +18,11 @@ export const AllProductsSlice = createSlice({
       state.data = state.data.filter((e) => e.k != action.payload.k);
       state.data.push(action.payload);
     },
+    deleteProduct(state, action) {
+      state.data = state.data.filter((e) => e.k != action.payload.k);
+    },
     resetProducts(state) {
       state.data = [];
-      // console.log("RESET Products");
     },
   },
 });
@@ -30,4 +32,5 @@ export const {
   resetProducts,
   addSingleProduct,
   editSingleProduct,
+  deleteProduct,
 } = AllProductsSlice.actions;

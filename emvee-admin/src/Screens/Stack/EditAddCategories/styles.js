@@ -4,12 +4,12 @@ import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
+    backgroundColor: GlobalColors.primary,
   },
   container: {
     gap: 10,
     padding: 20,
     flex: 1,
-    backgroundColor: GlobalColors.primary,
   },
   formContainer: {
     gap: 20,

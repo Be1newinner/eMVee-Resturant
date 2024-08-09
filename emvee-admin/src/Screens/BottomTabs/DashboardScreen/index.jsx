@@ -8,9 +8,9 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import LogOut from "../../../Services/LogOut";
-import { resetOrders } from "../../../Services/Slices/OrdersSlice";
-import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
-import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
+import { resetOrders } from "../../../redux/Slices/OrdersSlice";
+import { resetProducts } from "../../../redux/Slices/AllProductsSlice";
+import { resetCategories } from "../../../redux/Slices/AllCategoriesSlice";
 import StoreStatus from "../../Stack/StoreStatus";
 import getCount from "../../../Services/functions/GetCountFromFirebase";
 import { getOrderStatus } from "../../../utils/getOrderStatus";

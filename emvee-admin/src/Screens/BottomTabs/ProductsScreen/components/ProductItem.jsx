@@ -1,34 +1,14 @@
-import React, { useCallback } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
-import ImageComponent from "../../../../Components/ImageComponent";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+
+import ImageComponent from "../../../../Components/ImageComponent";
 import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
-import { deleteProduct } from "../../../../utils/deleteProduct";
+import { onLongPress } from "../../../../utils/longPressFunction";
 
 export const ProductItem = React.memo(
   ({ item, categorySelector = {}, navigation }) => {
-    const onPress = useCallback(() => {
-      navigation.navigate("EditAddProducts", {
-        product: item,
-      });
-    }, [item]);
-
-    const onLongPress = useCallback(() => {
-      Alert.alert(
-        "Delete",
-        `Are you sure you want to delete item number ${item.k} ${
-          item.t || ""
-        }?`,
-        [
-          { text: "Cancel" },
-          {
-            text: "Delete",
-            onPress: () => deleteProduct({ itemKey: item.k }),
-          },
-        ]
-      );
-    }, [item, deleteProduct]);
-
+    //
     const CategorySelected = categorySelector?.data?.filter(
       (e) => e.k == item?.c
     )[0]?.t;
@@ -43,8 +23,12 @@ export const ProductItem = React.memo(
           borderRadius: 10,
           overflow: "hidden",
         }}
-        onPress={onPress}
-        onLongPress={onLongPress}
+        onPress={() =>
+          navigation.navigate("EditAddProducts", {
+            product: item,
+          })
+        }
+        onLongPress={() => onLongPress(item)}
       >
         <ImageComponent itemKey={item.k} title={item.t} isImage={item.i} />
         <View

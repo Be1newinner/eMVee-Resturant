@@ -8,7 +8,7 @@ import { useState } from "react";
 import {
   cancelOrder,
   deliverOrderReducer,
-} from "../../../Services/Slices/OrdersSlice";
+} from "../../../redux/Slices/OrdersSlice";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import OrderStatus from "../../../Services/Offline/OrderStatus";

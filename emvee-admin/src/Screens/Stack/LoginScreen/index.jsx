@@ -8,9 +8,9 @@ import { firebaseAuth } from "../../../Infrastructure/firebase.config";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import LogOut from "../../../Services/LogOut";
 import { useDispatch } from "react-redux";
-import { resetOrders } from "../../../Services/Slices/OrdersSlice";
-import { resetProducts } from "../../../Services/Slices/AllProductsSlice";
-import { resetCategories } from "../../../Services/Slices/AllCategoriesSlice";
+import { resetOrders } from "../../../redux/Slices/OrdersSlice";
+import { resetProducts } from "../../../redux/Slices/AllProductsSlice";
+import { resetCategories } from "../../../redux/Slices/AllCategoriesSlice";
 import * as SplashScreen from "expo-splash-screen";
 
 export default function LoginScreen({ navigation }) {

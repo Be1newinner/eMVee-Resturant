@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addSingleProduct,
   editSingleProduct,
-} from "../../Services/Slices/AllProductsSlice";
+} from "../../redux/Slices/AllProductsSlice";
 import AutoCompleteCategory from "./AutoCompleteCategory";
 
 export const ProductDeleteModal = ({

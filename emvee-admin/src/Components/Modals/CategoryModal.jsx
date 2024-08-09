@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import {
   addSingleCategory,
   editSingleCategory,
-} from "../../Services/Slices/AllCategoriesSlice";
+} from "../../redux/Slices/AllCategoriesSlice";
 
 export const CategoryModal = ({
   visible,

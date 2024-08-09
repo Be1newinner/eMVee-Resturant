@@ -13,9 +13,9 @@ import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 import { GlobalColors } from "./GlobalVariables";
 import { firebaseAuth } from "./firebase.config";
 import LogOut from "../Services/LogOut";
-import { resetOrders } from "../Services/Slices/OrdersSlice";
-import { resetProducts } from "../Services/Slices/AllProductsSlice";
-import { resetCategories } from "../Services/Slices/AllCategoriesSlice";
+import { resetOrders } from "../redux/Slices/OrdersSlice";
+import { resetProducts } from "../redux/Slices/AllProductsSlice";
+import { resetCategories } from "../redux/Slices/AllCategoriesSlice";
 
 const BottomTab = createBottomTabNavigator();
 
