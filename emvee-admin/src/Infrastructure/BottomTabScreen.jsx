@@ -14,7 +14,7 @@ import { GlobalColors } from "./GlobalVariables";
 import { firebaseAuth } from "./firebase.config";
 import LogOut from "../Services/LogOut";
 import { resetOrders } from "../redux/Slices/OrdersSlice";
-import { resetProducts } from "../redux/Slices/AllProductsSlice";
+import { resetProducts } from "../redux/actions/allProducts";
 import { resetCategories } from "../redux/actions/allCategories";
 
 const BottomTab = createBottomTabNavigator();

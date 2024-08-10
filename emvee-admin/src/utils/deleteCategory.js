@@ -5,20 +5,15 @@ export async function deleteCategory({ itemKey = null }) {
   console.log("DELETING CATEGORY : ", itemKey);
 
   try {
-    if (itemKey) {
-      itemKey = JSON.stringify(itemKey);
+    if (!itemKey) throw new Error("Category Key not Found!");
 
-      if (typeof itemKey !== "string") {
-        throw new TypeError("Category Key must be a string");
-      }
+    if (!["number", "string"].includes(typeof itemKey))
+      throw new Error("Category Key must be a string or number");
 
-      const docRef = doc(firestoreDB, "ca8", itemKey);
+    const docRef = doc(firestoreDB, "ca8", itemKey);
 
-      await deleteDoc(docRef);
-      console.log("Category successfully deleted!");
-    } else {
-      throw new Error("Category Key not Found!");
-    }
+    await deleteDoc(docRef);
+    console.log("Category successfully deleted!");
   } catch (error) {
     console.warn("Category Deleting Error => ", error);
   }

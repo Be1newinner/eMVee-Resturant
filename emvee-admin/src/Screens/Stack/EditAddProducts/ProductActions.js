@@ -4,7 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import {
   addSingleProduct,
   editSingleProduct,
-} from "../../../redux/Slices/AllProductsSlice";
+} from "../../../redux/actions/allProducts";
 import {
   fireStorage,
   firestoreDB,

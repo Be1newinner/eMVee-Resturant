@@ -1,17 +1,16 @@
-import { Dimensions, View } from "react-native";
-import { ScrollView } from "react-native";
+import { Dimensions, View, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { Button, Input, Spinner, Text } from "@ui-kitten/components";
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
-import { firebaseAuth } from "../../../Infrastructure/firebase.config";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import LogOut from "../../../Services/LogOut";
 import { useDispatch } from "react-redux";
-
-import { resetOrders } from "../../../redux/Slices/OrdersSlice";
-import { resetProducts } from "../../../redux/Slices/AllProductsSlice";
 import * as SplashScreen from "expo-splash-screen";
+
+import { firebaseAuth } from "../../../Infrastructure/firebase.config";
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import LogOut from "../../../Services/LogOut";
+import { resetOrders } from "../../../redux/Slices/OrdersSlice";
+import { resetProducts } from "../../../redux/actions/allProducts";
 import { resetCategories } from "../../../redux/actions/allCategories";
 
 export default function LoginScreen({ navigation }) {

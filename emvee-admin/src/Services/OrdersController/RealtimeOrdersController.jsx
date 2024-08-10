@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { collection, query, where, onSnapshot, or } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+
+import { fetchAllCategories, fetchAllProducts } from "./AllProductsService";
 import {
   firebaseAuth,
   firestoreDB,
 } from "../../Infrastructure/firebase.config";
-import { useDispatch, useSelector } from "react-redux";
+import { addProducts } from "../../redux/actions/allProducts";
 import { addOrder } from "../../redux/Slices/OrdersSlice";
-import { addProducts } from "../../redux/Slices/AllProductsSlice";
-import { fetchAllCategories, fetchAllProducts } from "./AllProductsService";
-import { onAuthStateChanged } from "firebase/auth";
 import { loadCategories } from "../../redux/actions/allCategories";
 
 const useAuthUser = (tdf, onAuthSuccess, onAuthFail) => {

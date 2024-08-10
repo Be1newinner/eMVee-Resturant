@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
-import { AllProductsSlice } from "./Slices/AllProductsSlice";
+import AllProducts from "./reducers/allProducts";
 import AllCategories from "./reducers/allCategories";
 import { OrdersSlice } from "./Slices/OrdersSlice";
 
 const rootReducer = combineReducers({
-  AllProducts: AllProductsSlice.reducer,
-  AllCategories: AllCategories,
+  AllProducts,
+  AllCategories,
   Orders: OrdersSlice.reducer,
 });
 

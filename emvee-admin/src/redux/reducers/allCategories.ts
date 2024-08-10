@@ -19,29 +19,40 @@ interface actionType {
 const AllCategories = (state = initialState, action: actionType) => {
   switch (action.type) {
     case LOAD_CATEGORIES: {
-      state.data.push(...action.payload);
-      state.updateTime = Date.now();
-      return state;
+      return {
+        ...state,
+        data: [...state.data, ...action.payload],
+        updateTime: Date.now(),
+      };
     }
     case RESET_CATEGORIES: {
-      state.data = [];
-      state.updateTime = Date.now();
-      return state;
+      return {
+        ...state,
+        data: [],
+        updateTime: Date.now(),
+      };
     }
     case ADD_SINGLE_CATEGORY: {
-      state.data.push(action.payload);
-      state.updateTime = Date.now();
-      return state;
+      return {
+        ...state,
+        data: [...state.data, action.payload],
+        updateTime: Date.now(),
+      };
     }
     case EDIT_SINGLE_CATEGORY: {
-      state.data = state.data.filter((e) => e.k != action.payload.k);
-      state.data.push(action.payload);
-      state.updateTime = Date.now();
-      return state;
+      return {
+        ...state,
+        data: state.data.map((e) =>
+          e.k === action.payload.k ? action.payload : e
+        ),
+        updateTime: Date.now(),
+      };
     }
     case REMOVE_SINGLE_CATEGORY: {
-      state.data = state.data.filter((e) => e.k != action.payload.k);
-      return state;
+      return {
+        ...state,
+        data: state.data.filter((e) => e.k !== action.payload.k),
+      };
     }
     default:
       return state;

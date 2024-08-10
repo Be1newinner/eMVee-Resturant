@@ -1,7 +1,6 @@
 import { Alert } from "react-native";
 import { deleteProduct } from "./deleteProduct";
 import { deleteCategory } from "./deleteCategory";
-import { useDispatch } from "react-redux";
 import { deleteSingleCategory } from "../redux/actions/allCategories";
 
 interface propType {
@@ -9,12 +8,11 @@ interface propType {
   t: string;
 }
 
-export const useDeleteItemHook = (
+export const onLongPress = (
   item: propType,
-  selection: string = "product"
+  selection: string = "product",
+  dispatch: any
 ) => {
-  const dispatch = useDispatch();
-
   Alert.alert(
     "Delete",
     `Are you sure you want to delete ${
