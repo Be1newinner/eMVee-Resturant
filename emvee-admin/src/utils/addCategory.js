@@ -4,7 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import {
   addSingleCategory,
   editSingleCategory,
-} from "../redux/Slices/AllCategoriesSlice";
+} from "../redux/actions/allCategories";
 
 export const addCategory = async ({
   validateForm,

@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import ImageComponent from "../../../Components/ImageComponent";
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
+import { onLongPress } from "../../../utils/longPressFunction";
 
 export const CategoryItem = memo(
   ({ item, productsSelector, refreshTrigger, navigation }) => {
@@ -15,6 +16,7 @@ export const CategoryItem = memo(
             category: item,
           });
         }}
+        onLongPress={() => onLongPress(item, "category")}
       >
         <ImageComponent
           itemKey={item.k}

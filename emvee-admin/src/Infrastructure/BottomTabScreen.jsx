@@ -15,7 +15,7 @@ import { firebaseAuth } from "./firebase.config";
 import LogOut from "../Services/LogOut";
 import { resetOrders } from "../redux/Slices/OrdersSlice";
 import { resetProducts } from "../redux/Slices/AllProductsSlice";
-import { resetCategories } from "../redux/Slices/AllCategoriesSlice";
+import { resetCategories } from "../redux/actions/allCategories";
 
 const BottomTab = createBottomTabNavigator();
 

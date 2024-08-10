@@ -5,7 +5,6 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { CategoryItem } from "./CategoryItem";
-import Header from "../../../Components/Header";
 import SearchBarComponent from "../../../Components/SearchBarComponent";
 import Header2 from "../../../Components/Header2";
 

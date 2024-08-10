@@ -10,12 +10,12 @@ import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import LogOut from "../../../Services/LogOut";
 import { resetOrders } from "../../../redux/Slices/OrdersSlice";
 import { resetProducts } from "../../../redux/Slices/AllProductsSlice";
-import { resetCategories } from "../../../redux/Slices/AllCategoriesSlice";
 import StoreStatus from "../../Stack/StoreStatus";
 import getCount from "../../../Services/functions/GetCountFromFirebase";
 import { getOrderStatus } from "../../../utils/getOrderStatus";
 import { DashboardCard, DashboardSection, OrderStats } from "./components";
 import Header2 from "../../../Components/Header2";
+import { resetCategories } from "../../../redux/actions/allCategories";
 
 export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
