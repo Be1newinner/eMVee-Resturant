@@ -2,6 +2,7 @@ import { Alert } from "react-native";
 import { deleteProduct } from "./deleteProduct";
 import { deleteCategory } from "./deleteCategory";
 import { deleteSingleCategory } from "../redux/actions/allCategories";
+import { deleteSingleProduct } from "../redux/actions/allProducts";
 
 interface propType {
   k: string;
@@ -23,11 +24,21 @@ export const onLongPress = (
       {
         text: "Delete",
         onPress: async () => {
-          if (selection == "category") {
-            await deleteCategory({ itemKey: item.k });
-            dispatch(deleteSingleCategory(item));
-          } else {
-            await deleteProduct({ itemKey: item.k });
+          switch (selection) {
+            case "category": {
+              await deleteCategory({ itemKey: item.k });
+              dispatch(deleteSingleCategory(item));
+              break;
+            }
+            case "product": {
+              await deleteProduct({ itemKey: item.k });
+              dispatch(deleteSingleProduct(item));
+              break;
+            }
+            default:
+              console.warn(
+                "Please Pass Proper selection parameter in onLongPress method"
+              );
           }
         },
       },

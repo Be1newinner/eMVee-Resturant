@@ -5,6 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import ImageComponent from "../../../../Components/ImageComponent";
 import { GlobalColors } from "../../../../Infrastructure/GlobalVariables";
 import { onLongPress } from "../../../../utils/longPressFunction";
+import { useDispatch } from "react-redux";
 
 export const ProductItem = React.memo(
   ({ item, categorySelector = {}, navigation }) => {
@@ -12,6 +13,8 @@ export const ProductItem = React.memo(
     const CategorySelected = categorySelector?.data?.filter(
       (e) => e.k == item?.c
     )[0]?.t;
+
+    const dispatch = useDispatch();
 
     return (
       <Pressable
@@ -28,7 +31,7 @@ export const ProductItem = React.memo(
             product: item,
           })
         }
-        onLongPress={() => onLongPress(item)}
+        onLongPress={() => onLongPress(item, "product", dispatch)}
       >
         <ImageComponent itemKey={item.k} title={item.t} isImage={item.i} />
         <View

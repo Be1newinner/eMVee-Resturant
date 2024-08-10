@@ -70,6 +70,13 @@ const CategoriesScreen = ({ navigation }) => {
       <FlatList
         contentContainerStyle={styles.listContent}
         initialNumToRender={6}
+        maxToRenderPerBatch={5}
+        windowSize={10}
+        getItemLayout={(_, index) => ({
+          length: 100,
+          offset: 100 * index,
+          index,
+        })}
         ListHeaderComponent={<View style={styles.listHeader} />}
         ListFooterComponent={<View style={styles.listFooter} />}
         data={sortedCategories}

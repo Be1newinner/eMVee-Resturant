@@ -6,23 +6,23 @@ import {
   RESET_PRODUCTS,
 } from "../constants/allProducts";
 
-export const loadPRODUCTS = (products) => ({
+export const loadProducts = (products) => ({
   type: LOAD_PRODUCTS,
   payload: products,
 });
-export const resetPRODUCTS = () => ({
+export const resetProducts = () => ({
   type: RESET_PRODUCTS,
 });
 
-export const addSinglePRODUCT = (productItem) => ({
+export const addSingleProduct = (productItem) => ({
   type: ADD_SINGLE_PRODUCT,
   payload: productItem,
 });
-export const editSinglePRODUCT = (productItem) => ({
+export const editSingleProduct = (productItem) => ({
   type: EDIT_SINGLE_PRODUCT,
   payload: productItem,
 });
-export const deleteSinglePRODUCT = (productItem) => ({
+export const deleteSingleProduct = (productItem) => ({
   type: REMOVE_SINGLE_PRODUCT,
   payload: productItem,
 });

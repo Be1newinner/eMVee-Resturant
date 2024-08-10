@@ -2,23 +2,18 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { firestoreDB } from "../Infrastructure/firebase.config";
 
 export async function deleteProduct({ itemKey = null }) {
-  console.log("DELETING ITEM: ", itemKey);
+  console.log("DELETING Product : ", itemKey);
 
   try {
-    if (itemKey) {
-      itemKey = JSON.stringify(itemKey);
+    if (!itemKey) throw new Error("Product Key not Found!");
 
-      if (typeof itemKey !== "string") {
-        throw new TypeError("Item Key must be a string");
-      }
+    if (!["number", "string"].includes(typeof itemKey))
+      throw new Error("Product Key must be a string or number");
 
-      const docRef = doc(firestoreDB, "pr47", itemKey);
+    const docRef = doc(firestoreDB, "pr47", itemKey);
 
-      await deleteDoc(docRef);
-      console.log("Item successfully deleted!");
-    } else {
-      throw new Error("Item Key not Found!");
-    }
+    await deleteDoc(docRef);
+    console.log("Product successfully deleted!");
   } catch (error) {
     console.warn("Product Deleting Error => ", error);
   }
