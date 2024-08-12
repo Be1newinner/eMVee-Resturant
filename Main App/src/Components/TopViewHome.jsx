@@ -54,9 +54,10 @@ export const TopViewHome = ({ navigation }) => {
               style={{
                 fontSize: 16,
                 color: "#fff",
+                marginTop: 3,
               }}
             >
-              Welcome to eMVee Restaurant
+              eMVee Restaurant
             </Text>
             <View
               style={{

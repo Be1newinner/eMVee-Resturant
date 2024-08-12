@@ -31,8 +31,6 @@ const HomeScreen = ({ navigation }) => {
         const data = await AsyncStorage.getItem("auth");
         const data2 = await AsyncStorage.getItem("user");
 
-        // console.log("login in Homescreen => ", { data, data2 });
-
         const phone_no = JSON.parse(data)?.phone_no;
         const addresses = await GetAddressController({
           phone_no,

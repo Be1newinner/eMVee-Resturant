@@ -98,6 +98,9 @@ const BottomTabScreen = () => {
               ) : null}
             </View>
           ),
+          tabBarStyle: {
+            height: 0,
+          },
         }}
         name="Cart"
         component={CartBottomScreen}
