@@ -8,8 +8,9 @@ import {
   Dimensions,
 } from "react-native";
 import React from "react";
-import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
+
+import { GlobalColors } from "../../../Infrastructure/GlobalVariables";
 import { getImageURL } from "../../../Services/offline/Image";
 
 const PopularList = ({ children, navigation }) => {
@@ -120,9 +121,9 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 10,
     backgroundColor: "white",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.8,
+    // shadowColor: "black",
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.8,
     shadowRadius: 16,
   },
 });
