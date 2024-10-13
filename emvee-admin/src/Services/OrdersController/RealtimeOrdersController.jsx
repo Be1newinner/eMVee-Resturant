@@ -12,40 +12,51 @@ import { loadProducts } from "../../redux/actions/allProducts";
 import { addOrder } from "../../redux/Slices/OrdersSlice";
 import { loadCategories } from "../../redux/actions/allCategories";
 
-const useAuthUser = (tdf, onAuthSuccess, onAuthFail) => {
+const useAuthUser = (tdf, onAuthSuccess) => {
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
-      if (user?.uid === tdf) onAuthSuccess();
-      else onAuthFail();
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
+      try {
+        if (user?.uid === tdf) await onAuthSuccess();
+      } catch (e) {
+        console.log(e);
+      }
     });
     return () => unsubscribe();
   }, [tdf]);
 };
 
 const useRealtimeOrders = (tdf, dispatch) => {
-  useAuthUser(tdf, () => {
-    try {
-      const ordersQuery = query(
-        collection(firestoreDB, "or4"),
-        or(where("s.c", "==", 0), where("s.c", "==", 1), where("s.c", "==", 2))
-      );
-      const unsubscribe = onSnapshot(ordersQuery, (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          dispatch(
-            addOrder(
-              JSON.stringify({
-                key: doc.id,
-                value: doc.data(),
-              })
-            )
-          );
+  useAuthUser(
+    tdf,
+    () => {
+      try {
+        const ordersQuery = query(
+          collection(firestoreDB, "or4"),
+          or(
+            where("s.c", "==", 0),
+            where("s.c", "==", 1),
+            where("s.c", "==", 2)
+          )
+        );
+        const unsubscribe = onSnapshot(ordersQuery, (querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            dispatch(
+              addOrder(
+                JSON.stringify({
+                  key: doc.id,
+                  value: doc.data(),
+                })
+              )
+            );
+          });
         });
-      });
-      return () => unsubscribe();
-    } catch (error) {
-      console.log("REALTIME ERROR!", error);
-    }
-  });
+        return () => unsubscribe();
+      } catch (error) {
+        console.log("REALTIME ERROR!", error);
+      }
+    },
+    () => console.log("UNABLE TO LOGIN!")
+  );
 };
 
 const useLoadInitialData = (

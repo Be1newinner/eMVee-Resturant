@@ -47,9 +47,9 @@ export const NewOrderNotification = ({ navigation = null }) => {
       }
     })();
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
+      // Notifications.removeNotificationSubscription(
+      //   notificationListener.current
+      // );
       setOrderData(null);
     };
   }, []);
