@@ -18,7 +18,7 @@ import { getImageURL } from "@/services/offline/Image";
 import { realtimeDB } from "@/infrasrtructure/firebase.config";
 
 export default function CartScreen() {
-  const router = useRouter(); 
+  const router = useRouter();
   const selector = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const AddressSelector = useSelector((state) => state.Address);
@@ -47,27 +47,23 @@ export default function CartScreen() {
   const sendNotificationToAdmin = async ({ token, orderData }) => {
     if (!token) return null;
     try {
-      const myHeaders = new Headers();
-      myHeaders.append(
-        "Authorization",
-        "key=YOUR_SERVER_KEY"
-      );
-      myHeaders.append("Content-Type", "application/json");
-      const raw = JSON.stringify({
-        to: token,
-        notification: {
-          title: "New Order Recieved!",
-          body: "You have a new Order",
+      await fetch('https://e-m-vee-resturant.vercel.app/api/send-pn', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
         },
-        data: orderData,
+        body: JSON.stringify({
+          to: token,
+          title: "New Order Recieved!",
+          message: "You have a new Order",
+          scopeKey: "@be1newinner/emvee-admin",
+          experienceId: "@be1newinner/emvee-admin",
+          channelId: "default",
+        }),
       });
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-      await fetch("https://fcm.googleapis.com/fcm/send", requestOptions);
+
     } catch (error) {
       console.log("UNABLE TO SEND NOTIFICATION TO ADMIN => ", error);
     }
@@ -113,7 +109,7 @@ export default function CartScreen() {
 
         setConfirmClicked(true);
         dispatch(resetCart());
-        router.replace("/order-confirm", { orderID: response?.orderID });
+        router.replace({ pathname: "/order-confirm", params: { orderID: response?.orderID } });
       }
 
       setLoadingScreen(false);
@@ -128,7 +124,7 @@ export default function CartScreen() {
   useEffect(() => {
     if (ConfirmClicked) {
       if (selector.subtotal == 0) {
-        router.replace("/bottom-tab");
+        router.replace("/BottomTabs/HomeScreen");
       }
     }
 
@@ -179,7 +175,6 @@ export default function CartScreen() {
       <View>
         <TopView
           position="relative"
-          router={router}
           color="#000"
           title={"Your Cart"}
         />

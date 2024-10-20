@@ -178,7 +178,7 @@ export default function ProductDetail() {
           </View>
         </View>
       </ScrollView>
-      <BottomOrderBar navigation={router} />
+      <BottomOrderBar/>
     </>
   );
 }

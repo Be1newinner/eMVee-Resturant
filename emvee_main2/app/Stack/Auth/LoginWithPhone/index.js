@@ -7,8 +7,11 @@ import GetAddressController from "../../../../services/OrdersController/GetAddre
 import { addAddressArray } from "../../../../services/Slices/AddressSlice";
 import { ref, set } from "firebase/database";
 import { realtimeDB } from "../../../../infrasrtructure/firebase.config";
+import { useRouter } from "expo-router";
 
-export default function LoginWithPhone({ navigation }) {
+export default function LoginWithPhone() {
+  const navigation = useRouter();
+  
   const dispatch = useDispatch();
   const userInfo = {
     iss: "phmail",
@@ -41,7 +44,7 @@ export default function LoginWithPhone({ navigation }) {
         await addUserToken(data, auth?.phone_no);
         dispatch(addAddressArray(addresses));
         dispatch(login(JSON.stringify({ auth })));
-        navigation.goBack();
+        navigation.back();
       } else console.log("Phone Error");
     } catch (error) {
       console.log(error);

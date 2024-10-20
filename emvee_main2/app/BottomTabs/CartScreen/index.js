@@ -118,7 +118,7 @@ export default function CartBottomScreen() {
         setConfirmClicked(true);
         dispatch(resetCart());
         // Use router.replace to navigate
-        router.replace("/order-confirm", { orderID: response?.orderID });
+        router.replace("/Stack/OrderConfirm", { orderID: response?.orderID });
       }
 
       setLoadingScreen(false);
@@ -134,7 +134,7 @@ export default function CartBottomScreen() {
     if (ConfirmClicked) {
       if (selector.subtotal == 0) {
         // Use router.replace to navigate to BottomTab
-        router.replace("/(tabs)");
+        router.replace("/BottomTabs/HomeScreen");
       }
     }
 
@@ -208,10 +208,10 @@ export default function CartBottomScreen() {
                     setVisible(true);
                   } else {
                     // Use router.push to navigate
-                    router.push("/add-address");
+                    router.push("/Stack/AddAddressScreen");
                   }
                 } else {
-                  router.push("/login");
+                  router.push("/Stack/Auth/LoginScreen");
                 }
               }}
             >

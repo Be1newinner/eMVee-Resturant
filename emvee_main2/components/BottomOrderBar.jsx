@@ -2,10 +2,11 @@ import { Button } from "@ui-kitten/components";
 import { Dimensions, Text, View } from "react-native";
 import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useSelector } from "react-redux";
+import { useRouter } from "expo-router";
 
-export default function BottomOrderBar({ bottom = 0, navigation }) {
+export default function BottomOrderBar({ bottom = 0 }) {
   const selector = useSelector((state) => state.Cart);
-
+  const navigation = useRouter();
   const totalData = {
     price: selector.subtotal,
     items: selector.qty,
@@ -54,7 +55,7 @@ export default function BottomOrderBar({ bottom = 0, navigation }) {
         style={{
           width: 120,
         }}
-        onPress={() => navigation.navigate("CartScreen")}
+        onPress={() => navigation.navigate("Stack/CartScreen")}
       >
         View Cart
       </Button>

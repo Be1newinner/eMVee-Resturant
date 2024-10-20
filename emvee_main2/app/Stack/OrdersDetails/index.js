@@ -10,7 +10,7 @@ import { OrderCancelModal } from "@/components/OrderCancelModal";
 
 export default function OrdersDetails() {
   const router = useRouter(); 
-  const { order: OrderID } = useLocalSearchParams();
+  const { OrderID } = useLocalSearchParams();
   const OrdersSelector = useSelector((state) => state.Orders);
   const [OrdersItems, setOrderItems] = useState(null);
   const [isCancelModalVisible, setisCancelModalVisible] = useState(false);

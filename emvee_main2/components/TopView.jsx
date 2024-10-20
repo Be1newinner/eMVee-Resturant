@@ -5,10 +5,11 @@ import { useRouter } from "expo-router";
 export default function TopView({
   title = "",
   position = "absolute",
-  color = "#fff",
+  color = "rgb(255, 255, 255)",
   style,
 }) {
   const router = useRouter();
+
   return (
     <View
       style={{

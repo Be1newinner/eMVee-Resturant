@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 
 export default function OrdersScreen() {
   const OrdersSelector = useSelector((state) => state.Orders);
-  const router = useRouter();  
+  const router = useRouter();
 
   return (
     <View
@@ -103,7 +103,11 @@ export default function OrdersScreen() {
                   </Text>
                 </Text>
                 <Pressable
-                  onPress={() => router.push(`/OrdersDetails/${item.orderID}`)} // Replaced navigation.navigate
+                  onPress={() => router.push({
+                    pathname: `/Stack/OrdersDetails`, params: {
+                      OrderID: item.orderID
+                    }
+                  })}
                 >
                   <Text
                     style={{

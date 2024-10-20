@@ -31,9 +31,9 @@ const CategoryItems = () => {
 
   // console.log(data);
 
-  useEffect(() => {
-    console.log(typeof category);
-  }, [category])
+  // useEffect(() => {
+  //   console.log(typeof category);
+  // }, [category])
 
   return (
     <View style={{ flex: 1, backgroundColor: "#e34" }}>

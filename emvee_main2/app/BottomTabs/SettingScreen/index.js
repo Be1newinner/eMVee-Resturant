@@ -52,19 +52,19 @@ export default function SettingScreen() {
       key: 4,
       icon: "",
     },
-    // {
-    //   title: authState?.phone_no?.length === 10 ? "Log Out" : "Log In",
-    //   action: authState?.phone_no?.length === 10 ? null : "Stack/Auth/LoginWithPhone",
-    //   key: 6,
-    //   icon: "",
-    //   action2: async () => {
-    //     await AsyncStorage.removeItem("user");
-    //     await AsyncStorage.removeItem("auth");
-    //     dispatch(logout());
-    //     dispatch(resetCart());
-    //     dispatch(resetAddress());
-    //   },
-    // },
+    {
+      title: authState?.phone_no?.length === 10 ? "Log Out" : "Log In",
+      action: authState?.phone_no?.length === 10 ? null : "Stack/Auth/LoginWithPhone",
+      key: 6,
+      icon: "",
+      action2: async () => {
+        await AsyncStorage.removeItem("user");
+        await AsyncStorage.removeItem("auth");
+        dispatch(logout());
+        dispatch(resetCart());
+        dispatch(resetAddress());
+      },
+    },
   ];
 
   return (
