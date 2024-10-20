@@ -34,7 +34,8 @@ const PopularList = ({ children }) => {
         ></View>
       }
       renderItem={({ item, index }) => {
-        console.log("IMAGE => ", getImageURL(item.k));
+        // console.log("IMAGE => ", getImageURL(item.k));
+        console.log(item)
         return (
           <Pressable
             style={[
@@ -49,7 +50,7 @@ const PopularList = ({ children }) => {
             onPress={() =>
               router.push({
                 pathname: "Stack/ProductDetail",
-                // params: { product: item },
+                params: { productId: item.k },
               })
             }
           >

@@ -116,7 +116,7 @@ export const TopViewHome = () => {
           </View>
         </View>
 
-        <Link href="Stack/SettingScreen">
+        <Link href="BottomTabs/SettingScreen">
           <FontAwesome6
             name="user"
             size={28}

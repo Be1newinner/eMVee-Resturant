@@ -55,11 +55,14 @@ const CategoryScreen = () => {
         }
         renderItem={({ item, index }) => (
           <Pressable
-            onPress={() => router.push({
-              pathname: `/Stack/CategoryItems`, params: {
-                category: JSON.stringify(item)
-              }
-            })}
+            onPress={() => {
+              console.log("DATA => ", item)
+              router.push({
+                pathname: `/Stack/CategoryItems`, params: {
+                  category: JSON.stringify(item)
+                }
+              })
+            }}
             style={{
               borderRadius: 10,
               overflow: "hidden",

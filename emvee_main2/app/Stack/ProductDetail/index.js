@@ -21,9 +21,11 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function ProductDetail() {
   const router = useRouter();
-  const searchParams  = useLocalSearchParams();
+  const searchParams = useLocalSearchParams();
   const productId = searchParams?.productId;
-  const ProductData = useSelector((state) => state.Product[productId]);
+  // const ProductData2 = useSelector((state) => state.AllProducts);
+  const ProductData = useSelector((state) => state.AllProducts.data)[productId];
+  // const ProductData = {}
   const selector = useSelector((state) => state.Cart);
 
   const [Quantity, setQuantity] = useState(
@@ -48,15 +50,20 @@ export default function ProductDetail() {
     setQuantity(selector.items[ProductData.k]?.qty || 0);
   }, [selector]);
 
+  useEffect(() => {
+    console.log("ProductData3 => ", ProductData)
+    console.log("productId => ", productId)
+  }, [productId, ProductData])
+
   return (
     <>
       <ScrollView style={{ position: "relative" }}>
         <View style={{ backgroundColor: "#fff", flex: 1, paddingBottom: 40 }}>
-          <View style={{ position: "absolute", top: 10, left: 10, zIndex: 99 }}>
+          <View style={{ position: "absolute", top: 10, left: 10, zIndex: 99, display: "flex" }}>
             <Pressable onPress={() => router.back()} style={{ marginRight: 10 }}>
-              <Ionicons name="arrow-back-outline" size={36} color="#fff" />
+              <Ionicons name="arrow-back-outline" size={36} color="#000" />
             </Pressable>
-            <Text style={{ color: "#fff", fontWeight: 500, fontSize: 18 }}>
+            <Text style={{ color: "#000", fontWeight: 500, fontSize: 18 }}>
               Product Details
             </Text>
           </View>
@@ -124,7 +131,7 @@ export default function ProductDetail() {
             </View>
 
             <View style={{ backgroundColor: "rgba(0,50,200,0.07)", height: 4, marginVertical: 20 }} />
-            
+
             <View style={{ flexDirection: "row", gap: 20, justifyContent: "space-between" }}>
               {[
                 { key: 0, title: "Free Delivery" },
@@ -168,7 +175,7 @@ export default function ProductDetail() {
             </View>
 
             <View style={{ backgroundColor: "rgba(0,50,200,0.07)", height: 4, marginVertical: 20 }} />
-            
+
             <View>
               <Text style={{ fontWeight: 700, fontSize: 18 }}>Country of Origin</Text>
               <Text style={{ fontSize: 16 }}>India</Text>
@@ -178,7 +185,7 @@ export default function ProductDetail() {
           </View>
         </View>
       </ScrollView>
-      <BottomOrderBar/>
+      <BottomOrderBar />
     </>
   );
 }

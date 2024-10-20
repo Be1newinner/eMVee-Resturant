@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import TopCategories from "@/components/TopCategories";
 import PopularList from "@/components/PopularList";
 import { TopViewHome } from "@/components/TopViewHome";
-import { GlobalColors }from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { login } from "@/services/Slices/AuthSlice";
 import GetProductsController from "@/services/OrdersController/GetProductsController";
 import GetAddressController from "@/services/OrdersController/GetAddressController";
@@ -45,7 +45,7 @@ const HomeScreen = () => {
       await SplashScreen.hideAsync();
     })();
   }, []);
- 
+
 
   return (
     <View style={styles.container}>
@@ -64,7 +64,12 @@ const HomeScreen = () => {
             </View>
             <View style={styles.popularHeader}>
               <Text style={styles.headerText}>Our Popular Dishes</Text>
-              <Pressable onPress={() => router.push("Stack/ProductDetail")}>
+              <Pressable onPress={() => router.push({
+                pathname: `/Stack/CategoryItems`, params: {
+                  category: JSON.stringify({ "i": true, "k": "1", "s": true, "t": "eMvee's Special" }
+                  )
+                }
+              })}>
                 <Text style={styles.seeAllText}>See all</Text>
               </Pressable>
             </View>
