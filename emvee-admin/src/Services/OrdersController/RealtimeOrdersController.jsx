@@ -12,11 +12,10 @@ import { loadProducts } from "../../redux/actions/allProducts";
 import { addOrder } from "../../redux/Slices/OrdersSlice";
 import { loadCategories } from "../../redux/actions/allCategories";
 
-const useAuthUser = (tdf, onAuthSuccess, onAuthFail) => {
+const useAuthUser = (tdf, onAuthSuccess) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user?.uid === tdf) onAuthSuccess();
-      else onAuthFail();
     });
     return () => unsubscribe();
   }, [tdf]);

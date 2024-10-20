@@ -1,20 +1,14 @@
 import React from "react";
 import { Card, Modal } from "@ui-kitten/components";
-import {
-  Text,
-  Platform,
-  Dimensions,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, Dimensions, TouchableOpacity, View } from "react-native";
 import { GlobalColors } from "../../Infrastructure/GlobalVariables";
 import { useState, useRef, useEffect } from "react";
-import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth, realtimeDB } from "../../Infrastructure/firebase.config";
 import { ref, set } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import registerForPushNotificationsAsync from "../../Services/functions/registerForPushNotificationsAsync";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -27,6 +21,8 @@ Notifications.setNotificationHandler({
 export const NewOrderNotification = ({ navigation = null }) => {
   const [OrderData, setOrderData] = useState(null);
   const notificationListener = useRef();
+  const [notification, setNotification] = useState();
+  const responseListener = useRef();
 
   useEffect(() => {
     console.log("SOMETHING");
@@ -51,15 +47,20 @@ export const NewOrderNotification = ({ navigation = null }) => {
           if (token) {
             await AsyncStorage.setItem("FCM_Token", token);
             await addAdminToken(token);
-            console.log("THE TOKEN", token);
+            console.log("MY TOKEN", token);
           }
 
           notificationListener.current =
             Notifications.addNotificationReceivedListener((notification) => {
-              setOrderData(
-                notification?.reqaddAdminTokenuest?.content?.data || null
-              );
+              setNotification(notification);
             });
+
+          responseListener.current =
+            Notifications.addNotificationResponseReceivedListener(
+              (response) => {
+                console.log(response);
+              }
+            );
         }
       });
     } catch (error) {
@@ -67,12 +68,19 @@ export const NewOrderNotification = ({ navigation = null }) => {
     }
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
       setOrderData(null);
     };
   }, []);
+
+  useEffect(() => {
+    console.log("notification => ", notification);
+  }, [notification]);
 
   return (
     <Modal
@@ -226,32 +234,3 @@ export const NewOrderNotification = ({ navigation = null }) => {
     </Modal>
   );
 };
-
-export async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      // alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getDevicePushTokenAsync()).data;
-  }
-  return token;
-}
