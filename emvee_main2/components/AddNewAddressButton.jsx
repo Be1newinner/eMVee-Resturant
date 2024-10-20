@@ -10,11 +10,11 @@ import {
 } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
-import { GlobalColors } from "../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewAddress } from "../services/Slices/AddressSlice";
+import { addNewAddress } from "@/services/Slices/AddressSlice";
 import { addDoc, collection } from "firebase/firestore";
-import { firestoreDB } from "../infrasrtructure/firebase.config";
+import { firestoreDB } from "@/infrasrtructure/firebase.config";
 
 export default function AddNewAddressButton() {
   const [visible, setVisible] = useState(false);

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { firebaseAuth } from "../../../infrasrtructure/firebase.config";
+import { firebaseAuth } from "@/infrasrtructure/firebase.config";
 import { useRouter } from "expo-router"; 
 
 const WelcomeScreen = () => {

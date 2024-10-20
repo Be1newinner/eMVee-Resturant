@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
-
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import { getImageURL } from "../../../services/offline/Image";
 import { useRouter } from "expo-router";
+
+import { getImageURL } from "@/services/offline/Image";
+
 const PopularList = ({ children }) => {
   const router = useRouter();
   const PopularItems = useSelector((state) => state.AllProducts);

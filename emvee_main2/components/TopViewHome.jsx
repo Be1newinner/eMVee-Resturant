@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Pressable, Linking } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { MaterialIcons, AntDesign, FontAwesome6 } from "@expo/vector-icons";
-import { GlobalColors } from "../infrasrtructure/GlobalVariables";
 import { Input } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
-import { StoreDetailsContext } from "../services/StoreDetails/StoreDetailsContext";
 import { Link, useRouter } from "expo-router";
 
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { StoreDetailsContext } from "@/services/StoreDetails/StoreDetailsContext";
 
 export const TopViewHome = () => {
   const saved_addresses = useSelector((state) => state.Address);

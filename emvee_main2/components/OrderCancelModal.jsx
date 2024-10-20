@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button, Card, Input, Modal, Text } from "@ui-kitten/components";
 import { View } from "react-native";
+import { useDispatch } from "react-redux";
+import { updateDoc, doc } from "firebase/firestore";
 
-import { useDispatch, useSelector } from "react-redux";
-import { updateDoc, doc, Timestamp } from "firebase/firestore";
-import { firestoreDB } from "../infrasrtructure/firebase.config";
-import { cancelOrder } from "../services/Slices/OrdersSlice";
+import { firestoreDB } from "@/infrasrtructure/firebase.config";
+import { cancelOrder } from "@/services/Slices/OrdersSlice";
 
 export const OrderCancelModal = ({ visible, setVisible, cancelID }) => {
   const [InputValue, setInputValue] = useState("");

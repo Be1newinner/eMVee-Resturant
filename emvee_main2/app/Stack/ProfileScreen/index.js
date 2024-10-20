@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import ProfileTopView from "../../../components/ProfileTopView";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
+import ProfileTopView from "@/components/ProfileTopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { Button, Input } from "@ui-kitten/components";
-import TopView from "../../../components/TopView";
+import TopView from "@/components/TopView";
 import { useRouter } from "expo-router";
 
 const ProfileScreen = () => {

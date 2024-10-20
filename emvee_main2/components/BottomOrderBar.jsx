@@ -1,6 +1,6 @@
 import { Button } from "@ui-kitten/components";
 import { Dimensions, Text, View } from "react-native";
-import { GlobalColors } from "../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useSelector } from "react-redux";
 
 export default function BottomOrderBar({ bottom = 0, navigation }) {

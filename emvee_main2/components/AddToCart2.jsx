@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { addInCart } from "../services/Slices/CartSlice";
+import { addInCart } from "@/services/Slices/CartSlice";
 import { useDispatch } from "react-redux";
 
 export default function AddToCart2({

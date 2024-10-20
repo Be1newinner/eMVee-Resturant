@@ -1,19 +1,16 @@
-import { Dimensions, Image, ScrollView, Text, View } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import TopView from "../../../components/TopView";
-import { useDispatch, useSelector } from "react-redux";
+import { Dimensions, ScrollView, Text, View } from "react-native";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import TopView from "@/components/TopView";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import OrderStatus from "../../../services/offline/OrderStatus";
+import OrderStatus from "@/services/offline/OrderStatus";
 import { Button } from "@ui-kitten/components";
-import { useRouter, useSearchParams } from "expo-router"; 
-import { updateDoc, doc, Timestamp } from "firebase/firestore";
-import { firestoreDB } from "../../../infrasrtructure/firebase.config";
-import { cancelOrder } from "../../../services/Slices/OrdersSlice";
-import { OrderCancelModal } from "../../../components/OrderCancelModal";
+import { useRouter, useLocalSearchParams } from "expo-router"; 
+import { OrderCancelModal } from "@/components/OrderCancelModal";
 
 export default function OrdersDetails() {
   const router = useRouter(); 
-  const { order: OrderID } = useSearchParams();
+  const { order: OrderID } = useLocalSearchParams();
   const OrdersSelector = useSelector((state) => state.Orders);
   const [OrdersItems, setOrderItems] = useState(null);
   const [isCancelModalVisible, setisCancelModalVisible] = useState(false);

@@ -23,10 +23,13 @@ export default function Layout() {
             }}
           >
             <ApplicationProvider {...eva} theme={eva.light}>
-              <Stack>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
                 <Stack.Screen
                   name="BottomTabs"
-                  options={{ headerShown: false }}
                 />
                 <Stack.Screen name="index" options={{ headerShown: false }} />
               </Stack>

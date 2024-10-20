@@ -6,13 +6,13 @@ import {
   Text,
   View,
 } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import ProductSearchBar from "../../../components/ProductSearchBar";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import ProductSearchBar from "@/components/ProductSearchBar";
 import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import TopView from "../../../components/TopView";
+import TopView from "@/components/TopView";
 import { useSelector } from "react-redux";
-import { getImageURL } from "../../../services/offline/Image";
+import { getImageURL } from "@/services/offline/Image";
 import { useRouter } from "expo-router";
 
 export default function ProductSearchScreen() {

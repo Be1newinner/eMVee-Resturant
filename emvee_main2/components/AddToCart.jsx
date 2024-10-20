@@ -2,7 +2,7 @@ import { Pressable, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
 import { useDispatch } from "react-redux";
-import { addInCart } from "../services/Slices/CartSlice";
+import { addInCart } from "@/services/Slices/CartSlice";
 
 export default function AddToCart({
   Quantity = 0,

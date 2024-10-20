@@ -8,18 +8,18 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocalSearchParams, useRouter, useSearchParams } from "expo-router"; 
-import TopView from "../../../components/TopView";
-import AddToCart2 from "../../../components/AddToCart2";
-import BottomOrderBar from "../../../components/BottomOrderBar";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import TopView from "@/components/TopView";
+import AddToCart2 from "@/components/AddToCart2";
+import BottomOrderBar from "@/components/BottomOrderBar";
 import {
   getCategoryImageURL,
   getImageURL,
-} from "../../../services/offline/Image";
+} from "@/services/offline/Image";
 
 const CategoryItems = () => {
   const router = useRouter();
-  const searchParams = useLocalSearchParams(); 
+  const searchParams = useLocalSearchParams();
   const category = JSON.parse(searchParams?.category);
   const AllProducts = useSelector((state) => state.AllProducts);
   const selector = useSelector((state) => state.Cart)?.items;
@@ -31,15 +31,15 @@ const CategoryItems = () => {
 
   // console.log(data);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(typeof category);
-  },[category])
+  }, [category])
 
   return (
     <View style={{ flex: 1, backgroundColor: "#e34" }}>
       <TopView
         position={"relative"}
-        title={category.t} 
+        title={category.t}
         router={router}
       />
       <View

@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import { GlobalColors } from "../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 
 export default function ProfileTopView({ name = "User", phone = "" }) {
   return (

@@ -1,6 +1,6 @@
 import { ScrollView, Text, View } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import TopView from "../../../components/TopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import TopView from "@/components/TopView";
 import { useRouter } from "expo-router";
 
 export default function PrivacyPolicy() {

@@ -1,4 +1,4 @@
-import TopView from "../../../components/TopView";
+import TopView from "@/components/TopView";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, View, Text, StyleSheet, Linking } from "react-native";

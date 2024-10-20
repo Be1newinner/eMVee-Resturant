@@ -1,20 +1,21 @@
 import { Dimensions, Image, Text, View } from "react-native";
 import { ScrollView } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import TopView from "../../../components/TopView";
-import AddToCart from "../../../components/AddToCart";
-import { AntDesign } from "@expo/vector-icons";
-import { Button } from "@ui-kitten/components";
-import { OrderConfirmModal } from "../../../components/OrderConfirmModal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addInCart, resetCart } from "../../../services/Slices/CartSlice";
-import addOrderController from "../../../services/OrdersController/addOrderController";
-import { LoadingModal } from "../../../components/LoadingModal";
-import { getImageURL } from "../../../services/offline/Image";
 import { ref, child, get } from "firebase/database";
-import { realtimeDB } from "../../../infrasrtructure/firebase.config";
 import { useRouter } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import { Button } from "@ui-kitten/components";
+
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import TopView from "@/components/TopView";
+import AddToCart from "@/components/AddToCart";
+import { OrderConfirmModal } from "@/components/OrderConfirmModal";
+import { addInCart, resetCart } from "@/services/Slices/CartSlice";
+import addOrderController from "@/services/OrdersController/addOrderController";
+import { LoadingModal } from "@/components/LoadingModal";
+import { getImageURL } from "@/services/offline/Image";
+import { realtimeDB } from "@/infrasrtructure/firebase.config";
 
 export default function CartScreen() {
   const router = useRouter(); 

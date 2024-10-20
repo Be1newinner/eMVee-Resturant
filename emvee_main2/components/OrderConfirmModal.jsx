@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Modal, Spinner, Text } from "@ui-kitten/components";
 import { View } from "react-native";
-import { StoreDetailsContext } from "../services/StoreDetails/StoreDetailsContext";
+import { StoreDetailsContext } from "@/services/StoreDetails/StoreDetailsContext";
 
 export const OrderConfirmModal = ({
   visible,
   setVisible,
   onConfirm,
   LoadingScreen,
-}): React.ReactElement => {
+}) => {
   const { StoreStatus, timeDiff } = useContext(StoreDetailsContext);
   const [StoreMessage, setStoreMessage] = useState("");
 

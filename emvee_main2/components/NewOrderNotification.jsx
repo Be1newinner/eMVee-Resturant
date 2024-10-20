@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { GlobalColors } from "../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";

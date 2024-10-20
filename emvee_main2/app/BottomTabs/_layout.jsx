@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 export default function _layout() {
   const selector = useSelector((state) => state.Cart);
   const QuantitySelector = selector?.qty;
+
   return (
     <Tabs
       screenOptions={{
@@ -24,10 +25,12 @@ export default function _layout() {
           left: 10,
           width: "90%",
         },
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "silver",
       }}
     >
       <Tabs.Screen
-        name="HomeScreen"
+        name="HomeScreen/index"
         options={{
           tabBarIcon: ({ focused }) => (
             <Ionicons
@@ -36,10 +39,11 @@ export default function _layout() {
               color="white"
             />
           ),
+          title: "Home",
         }}
       />
       <Tabs.Screen
-        name="category"
+        name="CategoryScreen/index"
         options={{
           tabBarIcon: ({ focused }) => (
             <Ionicons
@@ -51,8 +55,9 @@ export default function _layout() {
         }}
       />
       <Tabs.Screen
-        name="cart"
+        name="CartScreen/index"
         options={{
+          title: "Cart",
           tabBarIcon: ({ focused }) => (
             <View>
               <Ionicons
@@ -77,8 +82,22 @@ export default function _layout() {
         }}
       />
       <Tabs.Screen
-        name="orders"
+        name="OrdersScreen/index"
         options={{
+          title: "Orders",
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "fast-food-sharp" : "fast-food-outline"}
+              size={24}
+              color="white"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="SettingScreen/index"
+        options={{
+          title: "Setting",
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "fast-food-sharp" : "fast-food-outline"}

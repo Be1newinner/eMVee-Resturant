@@ -1,4 +1,4 @@
-import AddToCart2 from "../../../components/AddToCart2";
+import AddToCart2 from "@/components/AddToCart2";
 
 export default function CategorySingleItem({ item, handlePress }) {
   return (

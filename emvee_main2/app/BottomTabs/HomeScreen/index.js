@@ -1,20 +1,19 @@
-// app/home.js
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import TopCategories from "./TopCategories";
-import PopularList from "./PopularList";
-import { TopViewHome } from "../../../components/TopViewHome";
-import { GlobalColors }from "../../../infrasrtructure/GlobalVariables";
-import { login } from "../../../services/Slices/AuthSlice";
-import GetProductsController from "../../../services/OrdersController/GetProductsController";
-import GetAddressController from "../../../services/OrdersController/GetAddressController";
-import { addProducts } from "../../../services/Slices/AllProductsSlice";
-import { addCategories } from "../../../services/Slices/AllCategoriesSlice";
-import { addAddressArray } from "../../../services/Slices/AddressSlice";
+import TopCategories from "@/components/TopCategories";
+import PopularList from "@/components/PopularList";
+import { TopViewHome } from "@/components/TopViewHome";
+import { GlobalColors }from "@/infrasrtructure/GlobalVariables";
+import { login } from "@/services/Slices/AuthSlice";
+import GetProductsController from "@/services/OrdersController/GetProductsController";
+import GetAddressController from "@/services/OrdersController/GetAddressController";
+import { addProducts } from "@/services/Slices/AllProductsSlice";
+import { addCategories } from "@/services/Slices/AllCategoriesSlice";
+import { addAddressArray } from "@/services/Slices/AddressSlice";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();

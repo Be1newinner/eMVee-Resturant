@@ -1,6 +1,6 @@
 import { Dimensions, Image, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter, useSearchParams } from "expo-router";

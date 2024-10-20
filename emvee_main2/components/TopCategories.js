@@ -1,9 +1,11 @@
 import { Text, View, FlatList, Pressable, Image } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import { getCategoryImageURL } from "../../../services/offline/Image";
 import { useRouter } from "expo-router";
+
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { getCategoryImageURL } from "@/services/offline/Image";
+
 
 const ProductItems = () => {
   const navigation = useRouter();

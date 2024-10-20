@@ -9,12 +9,12 @@ import {
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import AddToCart from "../../../components/AddToCart";
-import BottomOrderBar from "../../../components/BottomOrderBar";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
+import AddToCart from "@/components/AddToCart";
+import BottomOrderBar from "@/components/BottomOrderBar";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useDispatch, useSelector } from "react-redux";
-import { addInCart } from "../../../services/Slices/CartSlice";
-import { getImageURL } from "../../../services/offline/Image";
+import { addInCart } from "@/services/Slices/CartSlice";
+import { getImageURL } from "@/services/offline/Image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";

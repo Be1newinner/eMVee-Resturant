@@ -1,16 +1,11 @@
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import ProfileTopView from "../../../components/ProfileTopView";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
+import ProfileTopView from "@/components/ProfileTopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../services/Slices/AuthSlice";
-import { resetCart } from "../../../services/Slices/CartSlice";
-import { resetAddress } from "../../../services/Slices/AddressSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ref, set } from "firebase/database";
-import { realtimeDB } from "../../../infrasrtructure/firebase.config";
-import { resetOrders } from "../../../services/Slices/OrdersSlice";
+import { realtimeDB } from "@/infrasrtructure/firebase.config";
 import { useRouter } from "expo-router"; 
 
 export default function SettingScreen() {

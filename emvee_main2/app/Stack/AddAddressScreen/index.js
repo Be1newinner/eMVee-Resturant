@@ -8,21 +8,21 @@ import {
 } from "react-native";
 import { Button, Card, Modal } from "@ui-kitten/components";
 import { Feather } from "@expo/vector-icons";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import TopView from "../../../components/TopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import TopView from "@/components/TopView";
 import { Divider } from "@ui-kitten/components";
-import AddNewAddressButton from "../../../components/AddNewAddressButton";
+import AddNewAddressButton from "@/components/AddNewAddressButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
-  addAddressArray,
+  // addAddressArray,
   changeDefaultAddress,
   removeAddress,
-} from "../../../services/Slices/AddressSlice";
+} from "@/services/Slices/AddressSlice";
 import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
-import { firestoreDB } from "../../../infrasrtructure/firebase.config";
-import GetAddressController from "../../../services/OrdersController/GetAddressController";
+import { firestoreDB } from "@/infrasrtructure/firebase.config";
+// import GetAddressController from "@/services/OrdersController/GetAddressController";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 
 export default function AddAddressScreen() {
@@ -95,8 +95,8 @@ export default function AddAddressScreen() {
                       {CurrentAddresses?.t == 0
                         ? "Home"
                         : CurrentAddresses?.t == 1
-                        ? "Work"
-                        : "Other"}
+                          ? "Work"
+                          : "Other"}
                     </Text>
                     <Text>
                       {CurrentAddresses?.h.toUpperCase() +
