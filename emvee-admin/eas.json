@@ -3,11 +3,19 @@
     "preview": {
       "android": {
         "buildType": "apk"
+      },
+      "cache": {
+        "disabled": false,
+        "paths": ["node_modules"]
       }
     },
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "cache": {
+        "disabled": false,
+        "paths": ["node_modules"]
+      }
     },
     "production": {
       "autoIncrement": true

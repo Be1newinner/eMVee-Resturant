@@ -32,6 +32,7 @@ const NewOrderNotification2 = () => {
             // setOrderData(
             //   notification?.reqaddAdminTokenuest?.content?.data || null
             // );
+            console.log(notification)
           });
       } catch (error) {
         console.log(error);

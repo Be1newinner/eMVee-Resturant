@@ -29,6 +29,7 @@ export const NewOrderNotification = ({ navigation = null }) => {
   const notificationListener = useRef();
 
   useEffect(() => {
+    console.log("SOMETHING");
     const tdf =
       process.env.EXPO_PUBLIC_u2 +
       "" +
