@@ -38,11 +38,10 @@ export default async function registerForPushNotificationsAsync() {
     }
     try {
       const pushTokenString = (
-        await Notifications.getExpoPushTokenAsync({
+        await Notifications.getDevicePushTokenAsync({
           projectId,
         })
       ).data;
-      console.log(pushTokenString);
       return pushTokenString;
     } catch (e) {
       handleRegistrationError(`${e}`);

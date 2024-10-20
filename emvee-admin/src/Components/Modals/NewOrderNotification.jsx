@@ -47,6 +47,7 @@ export const NewOrderNotification = ({ navigation = null }) => {
           if (token) {
             await AsyncStorage.setItem("FCM_Token", token);
             await addAdminToken(token);
+            alert(token);
             console.log("MY TOKEN", token);
           }
 
