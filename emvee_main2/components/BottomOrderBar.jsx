@@ -55,7 +55,7 @@ export default function BottomOrderBar({ bottom = 0 }) {
         style={{
           width: 120,
         }}
-        onPress={() => navigation.navigate("Stack/CartScreen")}
+        onPress={() => navigation.navigate("BottomTabs/CartScreen")}
       >
         View Cart
       </Button>

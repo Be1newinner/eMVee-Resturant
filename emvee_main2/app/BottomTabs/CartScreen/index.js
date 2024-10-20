@@ -1,24 +1,24 @@
 import { Dimensions, Image, Text, View } from "react-native";
 import { ScrollView } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import TopView from "../../../components/TopView";
-import AddToCart from "../../../components/AddToCart";
-import { AntDesign } from "@expo/vector-icons";
-import { Button } from "@ui-kitten/components";
-import { OrderConfirmModal } from "../../../components/OrderConfirmModal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { addInCart, resetCart } from "../../../services/Slices/CartSlice";
-import addOrderController from "../../../services/OrdersController/addOrderController";
-import { LoadingModal } from "../../../components/LoadingModal";
-import { getImageURL } from "../../../services/offline/Image";
 import { ref, child, get } from "firebase/database";
-import { realtimeDB } from "../../../infrasrtructure/firebase.config";
-
-// Import useRouter hook from Expo Router
 import { useRouter } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import { Button } from "@ui-kitten/components";
 
-export default function CartBottomScreen() {
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import TopView from "@/components/TopView";
+import AddToCart from "@/components/AddToCart";
+import { OrderConfirmModal } from "@/components/OrderConfirmModal";
+import { addInCart, resetCart } from "@/services/Slices/CartSlice";
+import addOrderController from "@/services/OrdersController/addOrderController";
+import { LoadingModal } from "@/components/LoadingModal";
+import { getImageURL } from "@/services/offline/Image";
+import { realtimeDB } from "@/infrasrtructure/firebase.config";
+
+export default function CartScreen() {
+  const router = useRouter();
   const selector = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const AddressSelector = useSelector((state) => state.Address);
@@ -29,9 +29,6 @@ export default function CartBottomScreen() {
   const [cartTotal, setCartTotal] = useState(null);
   const [authState, setAuthState] = useState(null);
   const [RecieverAddress, setRecieverAddress] = useState(null);
-
-  // Use the router hook for navigation
-  const router = useRouter();
 
   const getAdminTokens = async () => {
     try {
@@ -50,27 +47,23 @@ export default function CartBottomScreen() {
   const sendNotificationToAdmin = async ({ token, orderData }) => {
     if (!token) return null;
     try {
-      const myHeaders = new Headers();
-      myHeaders.append(
-        "Authorization",
-        "key=AAAAQt84_LQ:APA91bHJ1GLtZEBEdmMVE0zMC0Y_ZC_PYFdeDgLQIAeMPTdi-vlt07cPwYi1IMHT1FIXvVbSiioKIru-Y_Ja6uXO5uchYr9rKSqxEnZTO5AIz8d2wkNA4apzrUa7qDzHB5vdG2hswu7f"
-      );
-      myHeaders.append("Content-Type", "application/json");
-      const raw = JSON.stringify({
-        to: token,
-        notification: {
-          title: "New Order Recieved!",
-          body: "You have a new Order",
+      await fetch('https://e-m-vee-resturant.vercel.app/api/send-pn', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
         },
-        data: orderData,
+        body: JSON.stringify({
+          to: token,
+          title: "New Order Recieved!",
+          message: "You have a new Order",
+          scopeKey: "@be1newinner/emvee-admin",
+          experienceId: "@be1newinner/emvee-admin",
+          channelId: "default",
+        }),
       });
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-      await fetch("https://fcm.googleapis.com/fcm/send", requestOptions);
+
     } catch (error) {
       console.log("UNABLE TO SEND NOTIFICATION TO ADMIN => ", error);
     }
@@ -107,7 +100,6 @@ export default function CartBottomScreen() {
 
         const data = await getAdminTokens();
         const adminTokens = Object.values(data);
-        // console.log("Admin Tokens =>", adminTokens);
         adminTokens?.forEach((e) => {
           sendNotificationToAdmin({
             token: e,
@@ -117,8 +109,7 @@ export default function CartBottomScreen() {
 
         setConfirmClicked(true);
         dispatch(resetCart());
-        // Use router.replace to navigate
-        router.replace("/Stack/OrderConfirm", { orderID: response?.orderID });
+        router.replace({ pathname: "Stack/OrderConfirm", params: { orderID: response?.orderID } });
       }
 
       setLoadingScreen(false);
@@ -133,8 +124,7 @@ export default function CartBottomScreen() {
   useEffect(() => {
     if (ConfirmClicked) {
       if (selector.subtotal == 0) {
-        // Use router.replace to navigate to BottomTab
-        router.replace("/BottomTabs/HomeScreen");
+        router.replace("BottomTabs/HomeScreen");
       }
     }
 
@@ -191,75 +181,220 @@ export default function CartBottomScreen() {
 
         {cartTotal?.subtotal != 0 ? (
           <View>
-            {/* Cart items rendering */}
-            {/* Confirm Order Button */}
-            <Button
-              status="danger"
+            <View
               style={{
-                width: Dimensions.get("screen").width - 20,
-                position: "relative",
-                bottom: 0,
-                left: 10,
-                marginBottom: 40,
-              }}
-              onPress={() => {
-                if (authState?.phone_no?.length == 10) {
-                  if (RecieverAddress) {
-                    setVisible(true);
-                  } else {
-                    // Use router.push to navigate
-                    router.push("/Stack/AddAddressScreen");
-                  }
-                } else {
-                  router.push("/Stack/Auth/LoginScreen");
-                }
+                padding: 10,
+                marginTop: 20,
+                gap: 10,
               }}
             >
-              {authState?.phone_no?.length == 10
-                ? RecieverAddress
-                  ? "Confirm Order"
-                  : "Add Address"
-                : "Login to Order"}
-            </Button>
+              <Text
+                style={{
+                  fontWeight: 600,
+                  marginLeft: 10,
+                }}
+              >
+                Cart Items
+              </Text>
+              {CartData &&
+                Object.values(CartData)
+                  ?.filter((e) => e?.qty > 0)
+                  ?.map((item) => (
+                    <View
+                      key={item.k}
+                      style={{
+                        padding: 10,
+                        backgroundColor: "#fff",
+                        borderRadius: 20,
+                        elevation: 5,
+                        flexDirection: "row",
+                        gap: 20,
+                      }}
+                    >
+                      <View
+                        style={{
+                          borderRadius: 10,
+                          borderWidth: 2,
+                          borderColor: "rgba(0,0,0,0.25)",
+                        }}
+                      >
+                        {item?.i ? (
+                          <Image
+                            source={{ uri: getImageURL(item.k) }}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 10,
+                            }}
+                          />
+                        ) : (
+                          <View
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 10,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              elevation: 5,
+                              backgroundColor: "#fff",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontWeight: 500,
+                                fontSize: 32,
+                                color: GlobalColors.themeColor,
+                              }}
+                            >
+                              {item?.t?.slice(0, 1)}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      <View
+                        style={{
+                          justifyContent: "space-between",
+                          flex: 1,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 16,
+                            color: GlobalColors.themeColor,
+                          }}
+                        >
+                          {item?.t}
+                        </Text>
+                        <Text>
+                          {item?.qty} x ₹{item?.p}
+                        </Text>
+                        <AddToCart
+                          Quantity={item?.qty}
+                          item={item}
+                          variant={1}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          justifyContent: "space-between",
+                          alignItems: "flex-end",
+                          marginRight: 5,
+                        }}
+                      >
+                        <AntDesign
+                          name="closecircleo"
+                          size={24}
+                          color={GlobalColors.themeColor}
+                          onPress={() => {
+                            dispatch(
+                              addInCart({
+                                ...item,
+                                qty: 0,
+                                total: 0,
+                              })
+                            );
+                          }}
+                        />
+                        <Text
+                          style={{
+                            fontWeight: 600,
+                            color: GlobalColors.themeColor,
+                            fontSize: 16,
+                          }}
+                        >
+                          ₹{item?.total}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
+            </View>
 
-            <OrderConfirmModal
-              visible={visible}
-              setVisible={setVisible}
-              onConfirm={() => ConfirmOrder()}
-            />
-            <LoadingModal visible={LoadingScreen} />
+            <View
+              style={{
+                paddingHorizontal: 10,
+                paddingVertical: 20,
+                gap: 10,
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                elevation: 5,
+                marginTop: 20,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: 600,
+                  fontSize: 20,
+                }}
+              >
+                Your Orders
+              </Text>
+              <View>
+                {[
+                  {
+                    key: "SubTotal",
+                    value: `₹${cartTotal?.subtotal}`,
+                  },
+                  {
+                    key: "Tax",
+                    value: `₹${cartTotal?.tax}`,
+                  },
+                  {
+                    key: "Delivery",
+                    value: `₹${cartTotal?.delivery}`,
+                  },
+                  {
+                    key: "Discount",
+                    value: `₹${cartTotal?.discount}`,
+                  },
+                  {
+                    key: "Total",
+                    value: `₹${cartTotal?.total}`,
+                  },
+                ].map((e) => (
+                  <View
+                    key={e.key}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text>{e.key}</Text>
+                    <Text>{e.value}</Text>
+                  </View>
+                ))}
+              </View>
+              <Button
+                onPress={() => {
+                  ConfirmOrder();
+                }}
+              >
+                Confirm Order
+              </Button>
+            </View>
           </View>
         ) : (
           <View
             style={{
-              gap: 20,
-              paddingTop: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 20,
+              marginTop: Dimensions.get("window").height * 0.2,
             }}
           >
             <Image
               source={require("../../../assets/cart-empty.webp")}
-              width={300}
-              height={300}
               style={{
                 width: 300,
                 height: 300,
-                objectFit: "contain",
-                marginLeft: "auto",
-                marginRight: "auto",
               }}
             />
-            <Text
-              style={{
-                fontWeight: 500,
-                fontSize: 16,
-                textAlign: "center",
-              }}
-            >
-              Your cart is empty!
-            </Text>
           </View>
         )}
       </View>
+
+      {LoadingScreen && <LoadingModal />}
+      <OrderConfirmModal visible={visible} setVisible={setVisible} />
     </ScrollView>
   );
 }
