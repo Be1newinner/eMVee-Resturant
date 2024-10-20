@@ -49,7 +49,7 @@ const sendNotificationToUser = async ({
       body: raw,
       redirect: "follow",
     };
-    await fetch("https://fcm.googleapis.com/fcm/send", requestOptions);
+    await fetch("POST https://fcm.googleapis.com/v1/projects/emvee-resturant/messages:send", requestOptions);
   } catch (error) {
     console.log("UNABLE TO SEND NOTIFICATION TO ADMIN => ", error);
   }

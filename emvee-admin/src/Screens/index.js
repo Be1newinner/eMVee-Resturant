@@ -7,8 +7,8 @@ import * as Notifications from "expo-notifications";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
   }),
 });
 
@@ -16,35 +16,65 @@ const NewOrderNotification = () => {
   const [OrderData, setOrderData] = useState(null);
   const notificationListener = useRef();
 
+  const [notification, setNotification] = useState();
+  const responseListener = useRef();
+
+  // useEffect(() => {
+  //   (async function () {
+  //     try {
+  //       const token = await registerForPushNotificationsAsync();
+
+  //       if (token) {
+  //         alert(token);
+  //         setOrderData(token);
+  //         console.log("THE TOKEN", token);
+  //       }
+
+  //       notificationListener.current =
+  //         Notifications.addNotificationReceivedListener((notification) => {
+  //           // setOrderData(
+  //           //   notification?.reqaddAdminTokenuest?.content?.data || null
+  //           // );
+  //         });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   })();
+
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(
+  //       notificationListener.current
+  //     );
+  //     setOrderData(null);
+  //   };
+  // }, []);
+
+
   useEffect(() => {
-    (async function () {
-      try {
-        const token = await registerForPushNotificationsAsync();
+    registerForPushNotificationsAsync()
+      .then(token => { setOrderData(token ?? ''); console.log("PUSH TOKEN ", token) })
+      .catch((error) => setOrderData(`${error}`));
 
-        if (token) {
-          alert(token);
-          setOrderData(token);
-          console.log("THE TOKEN", token);
-        }
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
 
-        notificationListener.current =
-          Notifications.addNotificationReceivedListener((notification) => {
-            // setOrderData(
-            //   notification?.reqaddAdminTokenuest?.content?.data || null
-            // );
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      setOrderData(null);
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(notificationListener.current);
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+
+
+  useEffect(() => {
+    console.log("notification => ", notification);
+  }, [notification])
 
   return (
     <View
