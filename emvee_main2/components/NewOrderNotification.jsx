@@ -142,7 +142,7 @@ export const NewOrderNotification = () => {
             onPress={() => {
               const order = OrderData?.id || "";
               setOrderData(null);
-              router.push({ pathname: '/OrdersDetails', params: { order } });
+              router.push({ pathname: 'Stack/OrdersDetails', params: { order } });
             }}
             style={{
               height: 40,

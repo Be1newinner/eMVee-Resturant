@@ -6,8 +6,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { useRouter, useSearchParams } from "expo-router";
 
 export default function OrderConfirm() {
-  const router = useRouter(); 
-  const { orderID } = useSearchParams(); 
+  const router = useRouter();
+  const { orderID } = useSearchParams();
 
   return (
     <ScrollView
@@ -20,7 +20,7 @@ export default function OrderConfirm() {
           marginLeft: 15,
           marginTop: 15,
         }}
-        onPress={() => router.replace("/bottom-tab")} 
+        onPress={() => router.replace("BottomTabs/HomeScreen")}
       >
         <AntDesign name="home" size={40} color={GlobalColors.themeColor} />
       </Pressable>
@@ -71,13 +71,13 @@ export default function OrderConfirm() {
             style={{
               width: "100%",
             }}
-            onPress={() => router.replace("/bottom-tab")} 
+            onPress={() => router.replace("BottomTabs/HomeScreen")}
           >
             Go to Home
           </Button>
 
           <Pressable
-            onPress={() => router.replace("/order-details", { order: orderID })} 
+            onPress={() => router.replace({ pathname: "Stack/OrderDetails", params: { order: orderID } })}
           >
             <Text
               style={{
@@ -100,6 +100,6 @@ export default function OrderConfirm() {
           </Text>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 }

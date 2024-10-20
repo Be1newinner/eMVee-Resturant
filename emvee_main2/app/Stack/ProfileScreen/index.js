@@ -4,7 +4,6 @@ import ProfileTopView from "@/components/ProfileTopView";
 import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { Button, Input } from "@ui-kitten/components";
 import TopView from "@/components/TopView";
-import { useRouter } from "expo-router";
 
 const ProfileScreen = () => {
   const [fullName, setFullName] = useState("");
@@ -13,8 +12,6 @@ const ProfileScreen = () => {
   const [mobileNo, setMobileNo] = useState("");
   const [email, setEmail] = useState("");
   const [InputState, setInputState] = useState(false);
-
-  const router = useRouter();
 
   const Submit = () => {
     setInputState(!InputState);
@@ -34,7 +31,6 @@ const ProfileScreen = () => {
         }}
       >
         <TopView
-          navigation={router}
           title={"your profile"}
           position="relative"
           color={"rgba(0,0,0,0.8)"}

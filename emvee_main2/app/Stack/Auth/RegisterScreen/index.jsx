@@ -1,14 +1,9 @@
 import { Dimensions, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native";
+import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import { Button, Divider, Input, Spinner, Text } from "@ui-kitten/components";
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import { GlobalColors } from "../../../../infrasrtructure/GlobalVariables";
-import Svg, { Path } from "react-native-svg";
-import {
-  firebaseAuth,
-  firestoreDB,
-} from "../../../../infrasrtructure/firebase.config";
 import {
   sendEmailVerification,
   createUserWithEmailAndPassword,
@@ -16,8 +11,13 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
+import { useRouter } from "expo-router";
 
-export default function RegisterScreen({ navigation }) {
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { firebaseAuth, firestoreDB } from "@/infrasrtructure/firebase.config";
+
+export default function RegisterScreen() {
+  const navigation = useRouter();
   const [emailID, setEmailID] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -51,9 +51,12 @@ export default function RegisterScreen({ navigation }) {
             sendEmailVerification(user).then(async () => {
               await signOut(firebaseAuth);
               cleanUp();
-              navigation.navigate("VerifyEmail", {
-                email: emailID,
-                password: password,
+              navigation.navigate({
+                pathname: "Stack/Auth/VerifyEmail",
+                params: {
+                  email: emailID,
+                  password: password,
+                },
               });
             });
           }
@@ -209,7 +212,7 @@ export default function RegisterScreen({ navigation }) {
               ))
             }
             onChangeText={(nextValue) => {
-              const phoneRegex = nextValue.replace(/[^0-9]+$/g,"");
+              const phoneRegex = nextValue.replace(/[^0-9]+$/g, "");
               setPhone(phoneRegex);
             }}
             size="large"
@@ -312,7 +315,7 @@ export default function RegisterScreen({ navigation }) {
             Already have an account?{" "}
             <Text
               status="primary"
-              onPress={() => navigation.replace("LoginScreen")}
+              onPress={() => navigation.replace("Stack/Auth/LoginScreen")}
             >
               Log in
             </Text>

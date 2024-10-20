@@ -1,14 +1,16 @@
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import ProfileTopView from "../../../components/ProfileTopView";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../services/Slices/AuthSlice";
-import { resetCart } from "../../../services/Slices/CartSlice";
-import { resetAddress } from "../../../services/Slices/AddressSlice";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+
+import ProfileTopView from "@/components/ProfileTopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { logout } from "@/services/Slices/AuthSlice";
+import { resetCart } from "@/services/Slices/CartSlice";
+import { resetAddress } from "@/services/Slices/AddressSlice";
+
 
 export default function SettingScreen() {
   const AuthSelector = useSelector((state) => state.Authentication);
@@ -96,7 +98,13 @@ export default function SettingScreen() {
                 alignItems: "center",
               }}
               key={item.key}
-              onPress={() => (item.action ? router.push(item.action) : "")}
+              onPress={async () => {
+                if (item.key == 6) {
+                  await item.action2()
+                } else {
+                  router.push(item.action)
+                }
+              }}
             >
               {item.icon ? (
                 <AntDesign

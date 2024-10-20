@@ -23,13 +23,13 @@ import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
 import { firestoreDB } from "@/infrasrtructure/firebase.config";
 // import GetAddressController from "@/services/OrdersController/GetAddressController";
-import { useRouter } from "expo-router"; // Import useRouter for navigation
+import { useRouter } from "expo-router";
 
 export default function AddAddressScreen() {
   const saved_addresses = useSelector((state) => state.Address);
   const AuthSelector = useSelector((state) => state.Authentication);
   const dispatch = useDispatch();
-  const router = useRouter(); // Initialize the router for navigation
+  const router = useRouter(); 
 
   const [ConfirmVisible, setConfirmVisible] = useState(false);
   const [ItemKey, setItemKey] = useState(null);
@@ -81,9 +81,7 @@ export default function AddAddressScreen() {
         }}
         ListHeaderComponent={
           <View>
-            {/* Pass router.back instead of navigation */}
             <TopView
-              navigation={router.back}
               title={
                 CurrentAddresses ? (
                   <View>
@@ -168,8 +166,7 @@ export default function AddAddressScreen() {
                   marginTop: 10,
                   width: 200,
                 }}
-                // Use router.push for navigation
-                onPress={() => router.push("/LoginWithPhone")}
+                onPress={() => router.push("Stack/Auth/LoginWithPhone")}
               >
                 Log in
               </Button>

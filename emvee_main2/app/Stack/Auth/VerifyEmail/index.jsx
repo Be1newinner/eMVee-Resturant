@@ -1,12 +1,12 @@
-import { Dimensions, Image, Text, View } from "react-native";
-import { ScrollView } from "react-native";
-import TopView from "../../../../components/TopView";
-import { GlobalColors } from "../../../../infrasrtructure/GlobalVariables";
+import { ScrollView, Dimensions, Image, Text, View } from "react-native";
 import { useState } from "react";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { firebaseAuth } from "../../../../infrasrtructure/firebase.config";
 import { Button, Spinner } from "@ui-kitten/components";
 import { useRouter, useSearchParams } from "expo-router";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+
+import TopView from "@/components/TopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { firebaseAuth } from "@/infrasrtructure/firebase.config";
 
 export default function VerifyEmail() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function VerifyEmail() {
       const { user } = await signInWithEmailAndPassword(firebaseAuth, email, password);
       console.log("Sign IN =>", user?.emailVerified);
       if (user?.emailVerified) {
-        router.replace("BottomTab");
+        router.replace("BottomTab/HomeScreen");
       } else {
         await signOut(firebaseAuth);
         setError("Still not Verified!");
@@ -45,7 +45,6 @@ export default function VerifyEmail() {
         }}
       >
         <TopView
-          navigation={router}
           title=""
           position="relative"
           color="#000"

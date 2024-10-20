@@ -1,7 +1,6 @@
 import { ScrollView, Text, View } from "react-native";
 import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import TopView from "@/components/TopView";
-import { useRouter } from "expo-router";
 
 export default function PrivacyPolicy() {
   return (
@@ -13,7 +12,6 @@ export default function PrivacyPolicy() {
     >
       <View>
         <TopView
-          navigation={useRouter().back}
           title="Privacy Policy"
           position="relative"
           color="black"

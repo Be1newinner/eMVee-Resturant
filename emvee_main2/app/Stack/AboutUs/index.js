@@ -23,9 +23,7 @@ const AboutUsScreen = () => {
       }}
     >
       <View>
-        {/* Passing router.back for navigation in TopView */}
         <TopView
-          navigation={router.back}
           title="About Us"
           position="relative"
           color="black"
@@ -96,7 +94,7 @@ const AboutUsScreen = () => {
               marginBottom: 5,
             }}
           >
-            About the Developer
+            About the Developerrouter
           </Text>
           <Text style={styles.description}>
             <Text

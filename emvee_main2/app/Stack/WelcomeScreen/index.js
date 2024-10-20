@@ -19,9 +19,9 @@ const WelcomeScreen = () => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
         if (user.emailVerified) {
-          router.replace("BottomTab"); 
+          router.replace("BottomTabs/HomeScreen"); 
         } else {
-          router.navigate("VerifyEmail"); 
+          router.navigate("Stack/Auth/VerifyEmail"); 
         }
       }
     });
@@ -35,7 +35,7 @@ const WelcomeScreen = () => {
         <Image style={styles.img} source={{ uri: "assets:/food.png" }} />
         <Text style={styles.text}>100+ Recipe</Text>
         <TouchableOpacity
-          onPress={() => router.push("LoginScreen")} 
+          onPress={() => router.push("Stack/Auth/LoginScreen")} 
           style={styles.buttonContainer}
         >
           <Text style={styles.buttonText}>Get Started</Text>

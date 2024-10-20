@@ -5,11 +5,10 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import OrderStatus from "@/services/offline/OrderStatus";
 import { Button } from "@ui-kitten/components";
-import { useRouter, useLocalSearchParams } from "expo-router"; 
+import { useLocalSearchParams } from "expo-router";
 import { OrderCancelModal } from "@/components/OrderCancelModal";
 
 export default function OrdersDetails() {
-  const router = useRouter(); 
   const { OrderID } = useLocalSearchParams();
   const OrdersSelector = useSelector((state) => state.Orders);
   const [OrdersItems, setOrderItems] = useState(null);
@@ -70,7 +69,6 @@ export default function OrdersDetails() {
         }}
       >
         <TopView
-          navigation={router} 
           title={
             <Text
               style={{
@@ -465,10 +463,10 @@ export default function OrdersDetails() {
                   {OrdersItems?.status == 0
                     ? "Waiting for admin to accept Order!"
                     : OrdersItems?.status == 3
-                    ? new Date(
+                      ? new Date(
                         OrdersItems?.deliveredTime * 1000
                       ).toLocaleString()
-                    : new Date(
+                      : new Date(
                         OrdersItems?.willBeDeliveredTime * 1000
                       ).toLocaleString()}
                 </Text>

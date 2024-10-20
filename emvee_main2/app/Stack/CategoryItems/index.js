@@ -6,9 +6,9 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import TopView from "@/components/TopView";
 import AddToCart2 from "@/components/AddToCart2";
 import BottomOrderBar from "@/components/BottomOrderBar";
@@ -18,7 +18,6 @@ import {
 } from "@/services/offline/Image";
 
 const CategoryItems = () => {
-  const router = useRouter();
   const searchParams = useLocalSearchParams();
   const category = JSON.parse(searchParams?.category);
   const AllProducts = useSelector((state) => state.AllProducts);
@@ -40,7 +39,6 @@ const CategoryItems = () => {
       <TopView
         position={"relative"}
         title={category.t}
-        router={router}
       />
       <View
         style={{
@@ -221,7 +219,7 @@ const CategoryItems = () => {
           </View>
         </ScrollView>
       </View>
-      <BottomOrderBar router={router} />
+      <BottomOrderBar />
     </View>
   );
 };

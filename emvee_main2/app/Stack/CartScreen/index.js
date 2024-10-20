@@ -109,7 +109,7 @@ export default function CartScreen() {
 
         setConfirmClicked(true);
         dispatch(resetCart());
-        router.replace({ pathname: "/order-confirm", params: { orderID: response?.orderID } });
+        router.replace({ pathname: "Stack/OrderConfirm", params: { orderID: response?.orderID } });
       }
 
       setLoadingScreen(false);
@@ -124,7 +124,7 @@ export default function CartScreen() {
   useEffect(() => {
     if (ConfirmClicked) {
       if (selector.subtotal == 0) {
-        router.replace("/BottomTabs/HomeScreen");
+        router.replace("BottomTabs/HomeScreen");
       }
     }
 

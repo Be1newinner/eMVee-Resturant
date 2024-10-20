@@ -83,7 +83,7 @@ export default function ProductSearchScreen() {
                 gap: 10,
               }}
               onPress={() =>
-                router.push(`/productDetail?productId=${item.k}`) 
+                router.push({ pathname: "Stack/ProductDetail", params: { productId: item.k } })
               }
             >
               {item.i ? (
@@ -147,7 +147,7 @@ export default function ProductSearchScreen() {
                 gap: 10,
               }}
               onPress={() =>
-                router.push(`/productDetail?productId=${item.k}`) // Use query parameters for navigation
+                router.push({ pathname: "Stack/ProductDetail", params: { productId: item.k } })
               }
             >
               {item.i ? (
