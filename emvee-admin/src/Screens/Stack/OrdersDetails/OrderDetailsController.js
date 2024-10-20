@@ -27,29 +27,30 @@ const sendNotificationToUser = async ({
 }) => {
   if (!token || !status) return null;
   try {
-    const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "key=AAAAQt84_LQ:APA91bHJ1GLtZEBEdmMVE0zMC0Y_ZC_PYFdeDgLQIAeMPTdi-vlt07cPwYi1IMHT1FIXvVbSiioKIru-Y_Ja6uXO5uchYr9rKSqxEnZTO5AIz8d2wkNA4apzrUa7qDzHB5vdG2hswu7f"
-    );
-    myHeaders.append("Content-Type", "application/json");
-    const raw = JSON.stringify({
-      to: token,
-      notification: {
+    // const myHeaders = new Headers();
+    // myHeaders.append(
+    //   "Authorization",
+    //   "key=AAAAQt84_LQ:APA91bHJ1GLtZEBEdmMVE0zMC0Y_ZC_PYFdeDgLQIAeMPTdi-vlt07cPwYi1IMHT1FIXvVbSiioKIru-Y_Ja6uXO5uchYr9rKSqxEnZTO5AIz8d2wkNA4apzrUa7qDzHB5vdG2hswu7f"
+    // );
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: token,
         title: NotificationByOrders({ time, status })?.title,
         body:
           status < 0
             ? "Reason: " + CancelReason
             : NotificationByOrders({ time, status })?.body,
-      },
+      }),
     });
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    await fetch("POST https://fcm.googleapis.com/v1/projects/emvee-resturant/messages:send", requestOptions);
+
+
   } catch (error) {
     console.log("UNABLE TO SEND NOTIFICATION TO ADMIN => ", error);
   }
