@@ -27,8 +27,7 @@ const sendNotificationToUser = async ({
 }) => {
   if (!token || !status) return null;
   try {
-
-    await fetch('https://exp.host/--/api/v2/push/send', {
+    await fetch('https://e-m-vee-resturant.vercel.app/api/send-pn', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -38,10 +37,13 @@ const sendNotificationToUser = async ({
       body: JSON.stringify({
         to: token,
         title: NotificationByOrders({ time, status })?.title,
-        body:
+        message:
           status < 0
             ? "Reason: " + CancelReason
             : NotificationByOrders({ time, status })?.body,
+        scopeKey: "@be1newinner/emvee-admin",
+        experienceId: "@be1newinner/emvee-admin",
+        channelId: "default",
       }),
     });
 
