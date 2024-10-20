@@ -21,7 +21,7 @@
     "@types/react": "~18.2.45",
     "@ui-kitten/components": "^5.3.1",
     "eas-cli": "7.5.0",
-    "expo": "~51.0.37",
+    "expo": "~51.0.38",
     "expo-constants": "~16.0.2",
     "expo-dev-client": "~4.0.28",
     "expo-device": "~6.0.2",

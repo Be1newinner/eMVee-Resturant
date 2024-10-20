@@ -27,11 +27,6 @@ const sendNotificationToUser = async ({
 }) => {
   if (!token || !status) return null;
   try {
-    // const myHeaders = new Headers();
-    // myHeaders.append(
-    //   "Authorization",
-    //   "key=AAAAQt84_LQ:APA91bHJ1GLtZEBEdmMVE0zMC0Y_ZC_PYFdeDgLQIAeMPTdi-vlt07cPwYi1IMHT1FIXvVbSiioKIru-Y_Ja6uXO5uchYr9rKSqxEnZTO5AIz8d2wkNA4apzrUa7qDzHB5vdG2hswu7f"
-    // );
 
     await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
