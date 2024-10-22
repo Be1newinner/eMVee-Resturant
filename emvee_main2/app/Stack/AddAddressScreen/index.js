@@ -15,21 +15,19 @@ import AddNewAddressButton from "@/components/AddNewAddressButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
-  // addAddressArray,
   changeDefaultAddress,
   removeAddress,
 } from "@/services/Slices/AddressSlice";
 import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
 import { firestoreDB } from "@/infrasrtructure/firebase.config";
-// import GetAddressController from "@/services/OrdersController/GetAddressController";
 import { useRouter } from "expo-router";
 
 export default function AddAddressScreen() {
   const saved_addresses = useSelector((state) => state.Address);
   const AuthSelector = useSelector((state) => state.Authentication);
   const dispatch = useDispatch();
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [ConfirmVisible, setConfirmVisible] = useState(false);
   const [ItemKey, setItemKey] = useState(null);
