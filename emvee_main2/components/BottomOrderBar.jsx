@@ -45,7 +45,7 @@ export default function BottomOrderBar({ bottom = 0 }) {
             color: GlobalColors.productText,
           }}
         >
-          Total ₹{totalData.price}/- & {totalData.items}{" "}
+          Total ₹{totalData.price}/- & {totalData.items}
           {totalData.items == 1 ? "item" : "items"}
         </Text>
       </View>
