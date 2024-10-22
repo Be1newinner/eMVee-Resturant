@@ -31,11 +31,11 @@ const PopularList = ({ children }) => {
           style={{
             height: 50,
           }}
-        ></View>
+        />
       }
       renderItem={({ item, index }) => {
         // console.log("IMAGE => ", getImageURL(item.k));
-        console.log(item)
+        // console.log(item)
         return (
           <Pressable
             style={[
@@ -47,11 +47,13 @@ const PopularList = ({ children }) => {
                 maxWidth: Dimensions.get("screen").width / 2 - 15,
               },
             ]}
-            onPress={() =>
+            onPress={() => {
+              console.log(item)
               router.push({
                 pathname: "Stack/ProductDetail",
                 params: { productId: item.k },
               })
+            }
             }
           >
             {item.i ? (

@@ -3,11 +3,16 @@ import { ScrollView } from "react-native";
 import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
-import { useRouter, useSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+// import { useEffect } from "react";
 
 export default function OrderConfirm() {
   const router = useRouter();
-  const { orderID } = useSearchParams();
+  const { orderID } = useLocalSearchParams();
+
+  // useEffect(() => {
+  //   console.log("orderID => ", orderID);
+  // }, [orderID])
 
   return (
     <ScrollView
@@ -77,7 +82,7 @@ export default function OrderConfirm() {
           </Button>
 
           <Pressable
-            onPress={() => router.replace({ pathname: "Stack/OrderDetails", params: { order: orderID } })}
+            onPress={() => router.replace({ pathname: "Stack/OrdersDetails", params: { order: orderID } })}
           >
             <Text
               style={{

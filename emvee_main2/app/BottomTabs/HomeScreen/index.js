@@ -46,7 +46,6 @@ const HomeScreen = () => {
     })();
   }, []);
 
-
   return (
     <View style={styles.container}>
       <PopularList

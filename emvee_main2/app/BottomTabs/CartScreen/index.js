@@ -71,6 +71,9 @@ export default function CartScreen() {
 
   const ConfirmOrder = async () => {
     try {
+
+
+
       setLoadingScreen(true);
 
       const response = await addOrderController({
@@ -84,6 +87,11 @@ export default function CartScreen() {
         AddressSelector?.addresses?.filter(
           (e) => e.k == AddressSelector?.default
         )[0]?.n || "no name";
+
+        if(AddressSelector?.addresses?.length < 1){
+          router.navigate("Stack/AddAddressScreen")
+        }
+
       const orderTime = Date.now();
       const orderTotal = selector.total || 0;
 
@@ -96,10 +104,12 @@ export default function CartScreen() {
           total: orderTotal,
           items: orderItems,
         };
+
         orderData.id = response?.orderID || "";
 
         const data = await getAdminTokens();
         const adminTokens = Object.values(data);
+
         adminTokens?.forEach((e) => {
           sendNotificationToAdmin({
             token: e,
@@ -109,7 +119,12 @@ export default function CartScreen() {
 
         setConfirmClicked(true);
         dispatch(resetCart());
-        router.replace({ pathname: "Stack/OrderConfirm", params: { orderID: response?.orderID } });
+        router.replace({ 
+          pathname: "Stack/OrderConfirm", 
+          params: { 
+            orderID: response?.orderID 
+          } 
+        });
       }
 
       setLoadingScreen(false);
@@ -365,9 +380,7 @@ export default function CartScreen() {
                 ))}
               </View>
               <Button
-                onPress={() => {
-                  ConfirmOrder();
-                }}
+                onPress={ConfirmOrder}
               >
                 Confirm Order
               </Button>

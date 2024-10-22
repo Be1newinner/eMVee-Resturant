@@ -24,7 +24,8 @@ export default function ProductDetail() {
   const searchParams = useLocalSearchParams();
   const productId = searchParams?.productId;
   // const ProductData2 = useSelector((state) => state.AllProducts);
-  const ProductData = useSelector((state) => state.AllProducts.data)[productId];
+  const ProductData = useSelector((state) => state.AllProducts.data).find((item) => item.k == productId);
+  const ProductData2 = useSelector((state) => state.AllProducts.data);
   // const ProductData = {}
   const selector = useSelector((state) => state.Cart);
 
@@ -51,8 +52,9 @@ export default function ProductDetail() {
   }, [selector]);
 
   useEffect(() => {
-    console.log("ProductData3 => ", ProductData)
+    console.log("ProductData => ", ProductData)
     console.log("productId => ", productId)
+    // console.log("ProductData2 => ", ProductData2.find((item) => item.k == productId))
   }, [productId, ProductData])
 
   return (
