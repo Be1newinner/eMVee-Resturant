@@ -4,15 +4,10 @@ import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-// import { useEffect } from "react";
 
 export default function OrderConfirm() {
   const router = useRouter();
   const { orderID } = useLocalSearchParams();
-
-  // useEffect(() => {
-  //   console.log("orderID => ", orderID);
-  // }, [orderID])
 
   return (
     <ScrollView
@@ -82,7 +77,7 @@ export default function OrderConfirm() {
           </Button>
 
           <Pressable
-            onPress={() => router.replace({ pathname: "Stack/OrdersDetails", params: { order: orderID } })}
+            onPress={() => router.replace({ pathname: "Stack/OrdersDetails", params: { OrderID: orderID } })}
           >
             <Text
               style={{

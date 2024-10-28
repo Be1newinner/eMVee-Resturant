@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "expo-router";
 export default function Index() {
-  return (
-    <>
-      <Redirect href="BottomTabs/HomeScreen" />
-    </>
-  );
+
+
+  return <Redirect href="BottomTabs/HomeScreen" />;
 }

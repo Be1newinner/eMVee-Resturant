@@ -9,10 +9,15 @@ import { useLocalSearchParams } from "expo-router";
 import { OrderCancelModal } from "@/components/OrderCancelModal";
 
 export default function OrdersDetails() {
-  const { OrderID } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+  const { OrderID } = params;
   const OrdersSelector = useSelector((state) => state.Orders);
   const [OrdersItems, setOrderItems] = useState(null);
   const [isCancelModalVisible, setisCancelModalVisible] = useState(false);
+
+  // useEffect(()=>{
+  //   console.log(params)
+  // },[params])
 
   useEffect(() => {
     const OrderDetails = OrdersSelector[OrderID];

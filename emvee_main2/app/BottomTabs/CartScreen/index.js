@@ -28,7 +28,6 @@ export default function CartScreen() {
   const [CartData, setCartData] = useState(null);
   const [cartTotal, setCartTotal] = useState(null);
   const [authState, setAuthState] = useState(null);
-  const [RecieverAddress, setRecieverAddress] = useState(null);
 
   const getAdminTokens = async () => {
     try {
@@ -71,9 +70,6 @@ export default function CartScreen() {
 
   const ConfirmOrder = async () => {
     try {
-
-
-
       setLoadingScreen(true);
 
       const response = await addOrderController({
@@ -88,9 +84,9 @@ export default function CartScreen() {
           (e) => e.k == AddressSelector?.default
         )[0]?.n || "no name";
 
-        if(AddressSelector?.addresses?.length < 1){
-          router.navigate("Stack/AddAddressScreen")
-        }
+      if (AddressSelector?.addresses?.length < 1) {
+        router.navigate("Stack/AddAddressScreen")
+      }
 
       const orderTime = Date.now();
       const orderTotal = selector.total || 0;
@@ -119,17 +115,17 @@ export default function CartScreen() {
 
         setConfirmClicked(true);
         dispatch(resetCart());
-        router.replace({ 
-          pathname: "Stack/OrderConfirm", 
-          params: { 
-            orderID: response?.orderID 
-          } 
+        router.replace({
+          pathname: "Stack/OrderConfirm",
+          params: {
+            orderID: response?.orderID
+          }
         });
       }
 
-      setLoadingScreen(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setLoadingScreen(false);
     }
   };
@@ -163,14 +159,6 @@ export default function CartScreen() {
       });
     }
   }, [selector]);
-
-  useEffect(() => {
-    setRecieverAddress(
-      AddressSelector?.addresses?.filter(
-        (e) => e.k == AddressSelector.default
-      )[0]
-    );
-  }, [AddressSelector]);
 
   useEffect(() => {
     try {
@@ -380,6 +368,7 @@ export default function CartScreen() {
                 ))}
               </View>
               <Button
+                status="danger"
                 onPress={ConfirmOrder}
               >
                 Confirm Order
@@ -406,7 +395,7 @@ export default function CartScreen() {
         )}
       </View>
 
-      {LoadingScreen && <LoadingModal />}
+      <LoadingModal visible={LoadingScreen} />
       <OrderConfirmModal visible={visible} setVisible={setVisible} />
     </ScrollView>
   );

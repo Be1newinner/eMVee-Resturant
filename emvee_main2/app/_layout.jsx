@@ -16,6 +16,10 @@ SplashScreen.preventAutoHideAsync();
 export default function Layout() {
   const navigationRef = useNavigationContainerRef();
   useReactNavigationDevTools(navigationRef);
+  
+  // useEffect(() => {
+  //   console.log(router);
+  // }, [router]);
 
   return (
     <SafeAreaProvider>
@@ -32,7 +36,6 @@ export default function Layout() {
                   headerShown: false,
                 }}
               >
-                <Stack.Screen name="BottomTabs" />
                 <Stack.Screen name="index" options={{ headerShown: false }} />
               </Stack>
 
