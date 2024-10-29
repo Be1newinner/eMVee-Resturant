@@ -18,7 +18,6 @@ export default function SettingScreen() {
   const router = useRouter();
 
   const [authState, setAuthState] = useState(null);
-  const [userState, setUserState] = useState(null);
 
   useEffect(() => {
     try {
@@ -56,7 +55,7 @@ export default function SettingScreen() {
     },
     {
       title: authState?.phone_no?.length === 10 ? "Log Out" : "Log In",
-      action: authState?.phone_no?.length === 10 ? null : "Stack/Auth/LoginWithPhone",
+      action: "Stack/Auth/LoginWithPhone",
       key: 6,
       icon: "",
       action2: async () => {
@@ -77,7 +76,7 @@ export default function SettingScreen() {
       }}
     >
       <View>
-        <ProfileTopView name={userState?.name} phone={authState?.phone_no} />
+        <ProfileTopView phone={authState?.phone_no} />
 
         <View
           style={{
@@ -100,9 +99,13 @@ export default function SettingScreen() {
               key={item.key}
               onPress={async () => {
                 if (item.key == 6) {
-                  await item.action2()
+                  if (authState?.phone_no?.length === 10) {
+                    await item.action2()
+                  } else {
+                    router.navigate(item.action)
+                  }
                 } else {
-                  router.push(item.action)
+                  router.navigate(item.action)
                 }
               }}
             >

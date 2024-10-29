@@ -2,10 +2,8 @@ import TopView from "@/components/TopView";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, View, Text, StyleSheet, Linking } from "react-native";
-import { useRouter } from "expo-router"; 
 
 const AboutUsScreen = () => {
-  const router = useRouter();  
 
   const handlePressWebsite = () => {
     Linking.openURL("https://emveemart.com/");
@@ -37,7 +35,7 @@ const AboutUsScreen = () => {
                 fontWeight: 500,
               }}
             >
-              eMVee Mart
+              eMVee Mart{" "}
             </Text>
             is a restaurant based in Thingkangphai, Manipur. We offer delicious
             food for home delivery.
