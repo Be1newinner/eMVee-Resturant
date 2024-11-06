@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { GlobalColors } from "../../infrasrtructure/GlobalVariables";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { useSelector } from "react-redux";
 
 export default function _layout() {
@@ -23,7 +23,7 @@ export default function _layout() {
           position: "absolute",
           bottom: 10,
           left: 10,
-          width: "90%",
+          width: Dimensions.get("screen").width - 20,
         },
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "silver",

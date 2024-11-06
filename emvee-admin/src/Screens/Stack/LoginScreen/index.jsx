@@ -35,12 +35,22 @@ export default function LoginScreen({ navigation }) {
     "" +
     process.env.EXPO_PUBLIC_u0;
 
+    const tdf2 =
+    process.env.EXPO_PUBLIC_u21 +
+    "" +
+    process.env.EXPO_PUBLIC_u91 +
+    "" +
+    process.env.EXPO_PUBLIC_u11 +
+    "" +
+    process.env.EXPO_PUBLIC_u01;
+
   const signInUser = async ({ email, password }) => {
     setError(null);
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password).then(
         async ({ user }) => {
+          console.log(user)
           if (!user?.emailVerified) {
             // await signOut(firebaseAuth);
             await dispatch(resetOrders());
@@ -49,7 +59,7 @@ export default function LoginScreen({ navigation }) {
             await LogOut();
             setError({ other: "Access Denied!" });
           } else {
-            if (user.uid == tdf) {
+            if (user.uid == tdf || user.uid == tdf2) {
               console.log("USER UID => ", user.uid);
               navigation.replace("BottomTab");
             } else {
@@ -69,7 +79,7 @@ export default function LoginScreen({ navigation }) {
       } else {
         setError({ other: JSON.stringify(error) });
       }
-      // console.error("SignIn => ", error);
+      console.error("SignIn => ", error);
       setIsLoading(false);
     }
   };
