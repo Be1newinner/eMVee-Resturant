@@ -35,7 +35,7 @@ export default function LoginScreen({ navigation }) {
     "" +
     process.env.EXPO_PUBLIC_u0;
 
-    const tdf2 =
+  const tdf2 =
     process.env.EXPO_PUBLIC_u21 +
     "" +
     process.env.EXPO_PUBLIC_u91 +
@@ -50,13 +50,13 @@ export default function LoginScreen({ navigation }) {
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password).then(
         async ({ user }) => {
-          console.log(user)
+          console.log(user);
           if (!user?.emailVerified) {
             // await signOut(firebaseAuth);
             await dispatch(resetOrders());
             await dispatch(resetProducts());
             await dispatch(resetCategories());
-            await LogOut();
+            await LogOut({ navigation });
             setError({ other: "Access Denied!" });
           } else {
             if (user.uid == tdf || user.uid == tdf2) {
@@ -66,7 +66,7 @@ export default function LoginScreen({ navigation }) {
               await dispatch(resetOrders());
               await dispatch(resetProducts());
               await dispatch(resetCategories());
-              await LogOut();
+              await LogOut({ navigation });
               setError({ other: "Access Denied!" });
             }
           }
@@ -90,7 +90,7 @@ export default function LoginScreen({ navigation }) {
         onAuthStateChanged(firebaseAuth, async (user) => {
           if (user) {
             if (user?.emailVerified) {
-              if (user?.uid == tdf) {
+              if (user?.uid == tdf || user.uid == tdf2) {
                 // console.log("user.uid => ", user.uid);
                 await SplashScreen.hideAsync();
                 navigation.replace("BottomTab");
@@ -98,7 +98,7 @@ export default function LoginScreen({ navigation }) {
                 await dispatch(resetOrders());
                 await dispatch(resetProducts());
                 await dispatch(resetCategories());
-                await LogOut();
+                await LogOut({ navigation });
                 await SplashScreen.hideAsync();
                 console.log("Invalid Attempt log out user! , 1");
               }
@@ -107,7 +107,7 @@ export default function LoginScreen({ navigation }) {
               await dispatch(resetProducts());
               await dispatch(resetCategories());
               console.log("Invalid Attempt log out user! , 2");
-              await LogOut();
+              await LogOut({ navigation });
               await SplashScreen.hideAsync();
             }
           } else {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Timestamp } from "firebase/firestore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -13,15 +13,15 @@ import getCount from "../../../Services/functions/GetCountFromFirebase";
 import { getOrderStatus } from "../../../utils/getOrderStatus";
 import { DashboardCard, DashboardSection, OrderStats } from "./components";
 import Header2 from "../../../Components/Header2";
-import { resetOrders } from "../../../redux/Slices/OrdersSlice";
-import { resetProducts } from "../../../redux/actions/allCategories";
-import { resetCategories } from "../../../redux/actions/allCategories";
+// import { resetOrders } from "../../../redux/Slices/OrdersSlice";
+// import { resetProducts } from "../../../redux/actions/allProducts";
+// import { resetCategories } from "../../../redux/actions/allCategories";
 
 export default function DashboardScreen({ navigation }) {
   const OrdersSelector = useSelector((state) => state.Orders);
   const categorySelector = useSelector((state) => state.AllCategories);
   const productsSelector = useSelector((state) => state.AllProducts);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [TotalProducts, setTotalProducts] = useState(0);
   const [TotalCategories, setTotalCategories] = useState(0);
@@ -36,10 +36,7 @@ export default function DashboardScreen({ navigation }) {
   }, [productsSelector, categorySelector?.data]);
 
   const logOutUser = async () => {
-    await dispatch(resetOrders());
-    await dispatch(resetProducts());
-    await dispatch(resetCategories());
-    await LogOut({ AsyncStorage, navigation });
+    await LogOut({ navigation });
   };
 
   useEffect(() => {

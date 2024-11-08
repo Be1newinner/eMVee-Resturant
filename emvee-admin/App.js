@@ -4,13 +4,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
 import { Provider } from "react-redux";
 import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
+// import * as SplashScreen from "expo-splash-screen";
 
 import StackScreens from "./src/Infrastructure/StackScreen";
 import store from "./src/redux/store";
 import RealtimeOrdersController from "./src/Services/OrdersController/RealtimeOrdersController";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   return (

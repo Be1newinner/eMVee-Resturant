@@ -1,8 +1,9 @@
 import { ref, set } from "firebase/database";
 import { firebaseAuth, realtimeDB } from "./../Infrastructure/firebase.config";
 import { signOut } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default async function LogOut({ AsyncStorage, navigation }) {
+export default async function LogOut({ navigation }) {
   try {
     if (typeof AsyncStorage != "undefined") {
       const data = await AsyncStorage.getItem("FCM_Token");
@@ -14,5 +15,7 @@ export default async function LogOut({ AsyncStorage, navigation }) {
     console.error(e);
   }
   await signOut(firebaseAuth);
+  
+  
   if (navigation) navigation.replace("LoginScreen");
 }

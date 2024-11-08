@@ -12,7 +12,7 @@ import ProductsScreen from "../Screens/BottomTabs/ProductsScreen";
 
 import { GlobalColors } from "./GlobalVariables";
 import { firebaseAuth } from "./firebase.config";
-import LogOut from "../Services/LogOut";
+// import LogOut from "../Services/LogOut";
 import { resetOrders } from "../redux/Slices/OrdersSlice";
 import { resetProducts } from "../redux/actions/allProducts";
 import { resetCategories } from "../redux/actions/allCategories";
@@ -24,6 +24,15 @@ const tdf =
   process.env.EXPO_PUBLIC_u9 +
   process.env.EXPO_PUBLIC_u1 +
   process.env.EXPO_PUBLIC_u0;
+
+const tdf2 =
+  process.env.EXPO_PUBLIC_u21 +
+  "" +
+  process.env.EXPO_PUBLIC_u91 +
+  "" +
+  process.env.EXPO_PUBLIC_u11 +
+  "" +
+  process.env.EXPO_PUBLIC_u01;
 
 const TabBarIcon = ({ focused, iconName, showBadge }) => (
   <View>
@@ -50,13 +59,16 @@ const BottomTabScreenRaw = ({ navigation }) => {
   }, [filteredOrdersCount]);
 
   const handleUserStateChange = async (user) => {
-    if (user?.emailVerified && user.uid === tdf) return;
+    if (user) {
+      const isSameID = user.uid == tdf || user.uid == tdf2;
+      if (user?.emailVerified && isSameID) return;
 
-    await dispatch(resetOrders());
-    await dispatch(resetProducts());
-    await dispatch(resetCategories());
-    await LogOut();
-    navigation.replace("LoginScreen");
+      console.log({ isSameID });
+
+      await dispatch(resetOrders());
+      await dispatch(resetProducts());
+      await dispatch(resetCategories());
+    }
   };
 
   useEffect(() => {
