@@ -45,7 +45,7 @@ export default function AddToCart({
                 addInCart({
                   ...item,
                   qty: Quantity - 1,
-                  total: (Quantity - 1) * item.p,
+                  total: (Quantity - 1) * (item.pd ? item.pd : item.p),
                 })
               )
             : setQuantity(Quantity - 1);
@@ -90,7 +90,7 @@ export default function AddToCart({
                 addInCart({
                   ...item,
                   qty: Quantity + 1,
-                  total: (Quantity + 1) * item.p,
+                  total: (Quantity + 1) * (item.pd ? item.pd : item.p),
                 })
               )
             : setQuantity(Quantity + 1);

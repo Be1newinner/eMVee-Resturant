@@ -2,16 +2,16 @@ import WebView from "react-native-webview";
 import { decode } from "base-64";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import { login } from "../../../../services/Slices/AuthSlice";
-import GetAddressController from "../../../../services/OrdersController/GetAddressController";
-import { addAddressArray } from "../../../../services/Slices/AddressSlice";
+import { login } from "@/services/Slices/AuthSlice";
+import GetAddressController from "@/services/OrdersController/GetAddressController";
+import { addAddressArray } from "@/services/Slices/AddressSlice";
 import { ref, set } from "firebase/database";
-import { realtimeDB } from "../../../../infrasrtructure/firebase.config";
+import { realtimeDB } from "@/infrasrtructure/firebase.config";
 import { useRouter } from "expo-router";
 
 export default function LoginWithPhone() {
   const navigation = useRouter();
-  
+
   const dispatch = useDispatch();
   const userInfo = {
     iss: "phmail",
@@ -44,7 +44,8 @@ export default function LoginWithPhone() {
         await addUserToken(data, auth?.phone_no);
         dispatch(addAddressArray(addresses));
         dispatch(login(JSON.stringify({ auth })));
-        navigation.back();
+
+        navigation.canGoBack() && navigation.back();
       } else console.log("Phone Error");
     } catch (error) {
       console.log(error);

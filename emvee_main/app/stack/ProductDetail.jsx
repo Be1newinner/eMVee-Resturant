@@ -18,17 +18,15 @@ import { getImageURL } from "@/services/offline/Image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function ProductDetail() {
   const router = useRouter();
   const searchParams = useLocalSearchParams();
   const productId = searchParams?.productId;
-  // const ProductData2 = useSelector((state) => state.AllProducts);
   const ProductData = useSelector((state) => state.AllProducts.data).find(
     (item) => item.k == productId
   );
-  const ProductData2 = useSelector((state) => state.AllProducts.data);
-  // const ProductData = {}
   const selector = useSelector((state) => state.Cart);
 
   const [Quantity, setQuantity] = useState(
@@ -53,11 +51,11 @@ export default function ProductDetail() {
     setQuantity(selector.items[ProductData.k]?.qty || 0);
   }, [selector]);
 
-  useEffect(() => {
-    console.log("ProductData => ", ProductData);
-    console.log("productId => ", productId);
-    // console.log("ProductData2 => ", ProductData2.find((item) => item.k == productId))
-  }, [productId, ProductData]);
+  // useEffect(() => {
+  //   console.log("ProductData => ", ProductData);
+  //   console.log("productId => ", productId);
+  //   // console.log("ProductData2 => ", ProductData2.find((item) => item.k == productId))
+  // }, [productId, ProductData]);
 
   return (
     <>
@@ -69,16 +67,27 @@ export default function ProductDetail() {
               top: 10,
               left: 10,
               zIndex: 99,
-              display: "flex",
+              width: Dimensions.get("screen").width - 20,
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "rgba(255,255,255,0.25)",
+              padding: 5,
+              borderRadius: 10,
             }}
           >
             <Pressable
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() && router.back()}
               style={{ marginRight: 10 }}
             >
               <Ionicons name="arrow-back-outline" size={36} color="#000" />
             </Pressable>
-            <Text style={{ color: "#000", fontWeight: 500, fontSize: 18 }}>
+            <Text
+              style={{
+                color: "#000",
+                fontWeight: 500,
+                fontSize: 18,
+              }}
+            >
               Product Details
             </Text>
           </View>
@@ -145,31 +154,83 @@ export default function ProductDetail() {
               }}
             >
               <View>
-                <Text style={{ color: GlobalColors.productText, fontSize: 18 }}>
-                  Price
-                </Text>
-                <View
+                <Text
                   style={{
-                    flexDirection: "row",
-                    alignItems: "flex-end",
-                    gap: 10,
+                    color: GlobalColors.productText,
+                    fontSize: 18,
+                    marginBottom: 10,
                   }}
                 >
-                  <Text
-                    style={{ color: GlobalColors.productText, fontSize: 26 }}
-                  >
-                    ₹{ProductData.p}
-                  </Text>
-                  <Text
+                  Price
+                </Text>
+                {ProductData.pd ? (
+                  <View
                     style={{
-                      color: GlobalColors.productText,
-                      fontSize: 20,
-                      textDecorationLine: "line-through",
+                      gap: 10,
                     }}
                   >
-                    ₹{ProductData.m}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                      }}
+                    >
+                      <AntDesign
+                        name="arrowdown"
+                        size={16}
+                        color={
+                          Math.round((ProductData.pd / ProductData.p) * 100) >
+                          100
+                            ? GlobalColors.themeColor
+                            : GlobalColors.discountPercent
+                        }
+                      />
+                      <Text
+                        style={{
+                          fontWeight: "900",
+                          color:
+                            Math.round((ProductData.pd / ProductData.p) * 100) >
+                            100
+                              ? GlobalColors.themeColor
+                              : GlobalColors.discountPercent,
+                          marginLeft: 5,
+                        }}
+                      >
+                        {Math.round((ProductData.pd / ProductData.p) * 100)}%
+                      </Text>
+
+                      <Text
+                        style={{
+                          fontWeight: "900",
+                          marginLeft: 5,
+                          textDecorationLine: "line-through",
+                          color: GlobalColors.discountPricing,
+                        }}
+                      >
+                        ₹{ProductData.p}/-
+                      </Text>
+                    </View>
+
+                    <Text
+                      style={{
+                        fontWeight: "900",
+                        marginLeft: 5,
+                        fontSize: 18,
+                      }}
+                    >
+                      ₹{ProductData.pd}/-
+                    </Text>
+                  </View>
+                ) : (
+                  <Text
+                    style={{
+                      fontWeight: "500",
+                      marginLeft: 5,
+                      fontSize: 18,
+                    }}
+                  >
+                    ₹{ProductData.p}/-
                   </Text>
-                </View>
+                )}
               </View>
 
               <AddToCart Quantity={Quantity} setQuantity={setQuantity} />

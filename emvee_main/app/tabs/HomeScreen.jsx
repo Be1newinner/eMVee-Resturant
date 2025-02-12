@@ -15,7 +15,7 @@ import { login } from "@/services/Slices/AuthSlice";
 import { addProducts } from "@/services/Slices/AllProductsSlice";
 import { addCategories } from "@/services/Slices/AllCategoriesSlice";
 import { addAddressArray } from "@/services/Slices/AddressSlice";
-import { PAGES_STACK, PAGES_TAB } from "../../../constants/Pages";
+import { PAGES_STACK, PAGES_TAB } from "@/constants/Pages";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -65,12 +65,21 @@ const HomeScreen = () => {
             </View>
             <View style={styles.popularHeader}>
               <Text style={styles.headerText}>Our Popular Dishes</Text>
-              <Pressable onPress={() => router.push({
-                pathname: PAGES_STACK.CATEGORY_ITEMS, params: {
-                  category: JSON.stringify({ "i": true, "k": "1", "s": true, "t": "eMvee's Special" }
-                  )
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: PAGES_STACK.CATEGORY_ITEMS,
+                    params: {
+                      category: JSON.stringify({
+                        i: true,
+                        k: "1",
+                        s: true,
+                        t: "eMvee's Special",
+                      }),
+                    },
+                  })
                 }
-              })}>
+              >
                 <Text style={styles.seeAllText}>See all</Text>
               </Pressable>
             </View>

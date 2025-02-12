@@ -7,12 +7,12 @@ import {
   Pressable,
 } from "react-native";
 import React from "react";
-import { TopViewHome } from "../../../components/TopViewHome";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
+import { TopViewHome } from "@/components/TopViewHome";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useSelector } from "react-redux";
-import { getCategoryImageURL } from "../../../services/offline/Image";
+import { getCategoryImageURL } from "@/services/offline/Image";
 import { useRouter } from "expo-router";
-import { PAGES_STACK } from "../../../constants/Pages";
+import { PAGES_STACK } from "@/constants/Pages";
 
 const CategoryScreen = () => {
   const TotalCategoryList = useSelector((state) => state.AllCategories);

@@ -10,7 +10,7 @@ import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { logout } from "@/services/Slices/AuthSlice";
 import { resetCart } from "@/services/Slices/CartSlice";
 import { resetAddress } from "@/services/Slices/AddressSlice";
-import { PAGES_STACK } from "../../../constants/Pages";
+import { PAGES_STACK } from "@/constants/Pages";
 
 
 export default function SettingScreen() {

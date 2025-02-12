@@ -22,7 +22,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
 import { firestoreDB } from "@/infrasrtructure/firebase.config";
 import { useRouter } from "expo-router";
-import { PAGES_STACK } from "../../../constants/Pages";
+import { PAGES_STACK } from "@/constants/Pages";
 
 export default function AddAddressScreen() {
   const saved_addresses = useSelector((state) => state.Address);

@@ -28,9 +28,14 @@ export const CartSlice = createSlice({
       });
 
       return produce(newState, (draftState) => {
+        console.log({ draftState })
         const subtotal = Object.values(newState.items).reduce(
           (total, value) => {
-            return total + value.qty * value.p;
+            if (value.pd)
+              return total + value.qty * value.pd;
+            else
+              return total + value.qty * value.p;
+
           },
           0
         );
@@ -42,8 +47,8 @@ export const CartSlice = createSlice({
         draftState.total = Math.floor(subtotal + deliveryCharges - discount);
       });
     },
-    decreaseCart(state, action) {},
-    removeFromCart(state, action) {},
+    decreaseCart(state, action) { },
+    removeFromCart(state, action) { },
     resetCart(state) {
       try {
         Object.assign(state, initialState);

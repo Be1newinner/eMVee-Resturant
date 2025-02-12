@@ -14,7 +14,7 @@ import TopView from "@/components/TopView";
 import { useSelector } from "react-redux";
 import { getImageURL } from "@/services/offline/Image";
 import { useRouter } from "expo-router";
-import { PAGES_STACK } from "../../../constants/Pages";
+import { PAGES_STACK } from "@/constants/Pages";
 
 export default function ProductSearchScreen() {
   const router = useRouter();

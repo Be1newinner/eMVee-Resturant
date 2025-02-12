@@ -307,7 +307,7 @@ export default function AddNewAddressButton() {
                 fontWeight: 700,
               }}
               appearance="outline"
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() && router.back()}
             >
               Cancel
             </Button>

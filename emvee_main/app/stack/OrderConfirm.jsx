@@ -4,7 +4,7 @@ import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { PAGES_STACK, PAGES_TAB } from "../../../constants/Pages";
+import { PAGES_STACK, PAGES_TAB } from "@/constants/Pages";
 
 export default function OrderConfirm() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function OrderConfirm() {
             Your order is confirmed. {"\n"} We are preparing it for delivery.
           </Text>
           <Image
-            source={require("../../../assets/images/order-confirm.webp")}
+            source={require("../../assets/images/order-confirm.webp")}
             style={{
               width: Dimensions.get("screen").width / 2,
               height: Dimensions.get("screen").width / 2,

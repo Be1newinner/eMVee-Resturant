@@ -1,13 +1,51 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { GlobalColors } from "../../infrasrtructure/GlobalVariables";
-import { Dimensions, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function _layout() {
   const selector = useSelector((state: any) => state.Cart);
   const QuantitySelector = selector?.qty;
+
+  const tabBar = [
+    {
+      id: 0,
+      name: "HomeScreen",
+      icon_active: "home-sharp",
+      icon_inactive: "home-outline",
+      title: "Home",
+    },
+    {
+      id: 1,
+      name: "CategoryScreen",
+      icon_active: "shapes-sharp",
+      icon_inactive: "shapes-outline",
+      title: "Menu",
+    },
+    {
+      id: 2,
+      name: "CartScreen",
+      icon_active: "cart-sharp",
+      icon_inactive: "cart-outline",
+      title: "Basket",
+    },
+    {
+      id: 3,
+      name: "OrdersScreen",
+      icon_active: "fast-food-sharp",
+      icon_inactive: "fast-food-outline",
+      title: "Orders",
+    },
+    {
+      id: 4,
+      name: "SettingScreen",
+      icon_active: "settings-sharp",
+      icon_inactive: "settings-outline",
+      title: "Home",
+    },
+  ];
 
   return (
     <SafeAreaView
@@ -18,25 +56,13 @@ export default function _layout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarStyle: {
-            backgroundColor: GlobalColors.themeColor,
-            alignItems: "center",
-            justifyContent: "center",
-            paddingBottom: 5,
-            height: 55,
-            borderRadius: 10,
-            elevation: 10,
-            position: "absolute",
-            left: 20,
-            width: Dimensions.get("screen").width - 20,
-            marginLeft: 10,
-          },
+          tabBarStyle: styles.tabBarStyle,
           tabBarActiveTintColor: "white",
           tabBarInactiveTintColor: "silver",
         }}
       >
         <Tabs.Screen
-          name="HomeScreen/index"
+          name="HomeScreen"
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons
@@ -49,7 +75,7 @@ export default function _layout() {
           }}
         />
         <Tabs.Screen
-          name="CategoryScreen/index"
+          name="CategoryScreen"
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons
@@ -58,12 +84,13 @@ export default function _layout() {
                 color="white"
               />
             ),
+            title: "Menu",
           }}
         />
         <Tabs.Screen
-          name="CartScreen/index"
+          name="CartScreen"
           options={{
-            title: "Cart",
+            title: "Basket",
             tabBarIcon: ({ focused }) => (
               <View>
                 <Ionicons
@@ -72,23 +99,14 @@ export default function _layout() {
                   color="white"
                 />
                 {QuantitySelector > 0 && (
-                  <View
-                    style={{
-                      backgroundColor: "rgba(10,150,255,1)",
-                      width: 10,
-                      height: 10,
-                      position: "absolute",
-                      right: -3,
-                      borderRadius: 10,
-                    }}
-                  />
+                  <View style={styles.QuantitySelector} />
                 )}
               </View>
             ),
           }}
         />
         <Tabs.Screen
-          name="OrdersScreen/index"
+          name="OrdersScreen"
           options={{
             title: "Orders",
             tabBarIcon: ({ focused }) => (
@@ -101,12 +119,12 @@ export default function _layout() {
           }}
         />
         <Tabs.Screen
-          name="SettingScreen/index"
+          name="SettingScreen"
           options={{
             title: "Setting",
             tabBarIcon: ({ focused }) => (
               <Ionicons
-                name={focused ? "fast-food-sharp" : "fast-food-outline"}
+                name={focused ? "settings-sharp" : "settings-outline"}
                 size={24}
                 color="white"
               />
@@ -117,3 +135,27 @@ export default function _layout() {
     </SafeAreaView>
   );
 }
+
+export const styles = StyleSheet.create({
+  tabBarStyle: {
+    backgroundColor: GlobalColors.themeColor,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 5,
+    height: 55,
+    borderRadius: 10,
+    elevation: 10,
+    position: "absolute",
+    left: 20,
+    width: Dimensions.get("screen").width - 20,
+    marginLeft: 10,
+  },
+  QuantitySelector: {
+    backgroundColor: "rgba(10,150,255,1)",
+    width: 10,
+    height: 10,
+    position: "absolute",
+    right: -3,
+    borderRadius: 10,
+  },
+});

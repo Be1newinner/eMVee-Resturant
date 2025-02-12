@@ -13,6 +13,8 @@ import TopView from "@/components/TopView";
 import AddToCart2 from "@/components/AddToCart2";
 import BottomOrderBar from "@/components/BottomOrderBar";
 import { getCategoryImageURL, getImageURL } from "@/services/offline/Image";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 
 const CategoryItems = () => {
   const searchParams = useLocalSearchParams();
@@ -143,29 +145,72 @@ const CategoryItems = () => {
                       >
                         {item.t}
                       </Text>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          gap: 10,
-                        }}
-                      >
+                      {item.pd ? (
+                        <View
+                          style={{
+                            gap: 10,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                            }}
+                          >
+                            <AntDesign
+                              name="arrowdown"
+                              size={16}
+                              color={
+                                Math.round((item.pd / item.p) * 100) > 100
+                                  ? GlobalColors.themeColor
+                                  : GlobalColors.discountPercent
+                              }
+                            />
+                            <Text
+                              style={{
+                                fontWeight: "900",
+                                color:
+                                  Math.round((item.pd / item.p) * 100) > 100
+                                    ? GlobalColors.themeColor
+                                    : GlobalColors.discountPercent,
+                                marginLeft: 5,
+                              }}
+                            >
+                              {Math.round((item.pd / item.p) * 100)}%
+                            </Text>
+
+                            <Text
+                              style={{
+                                fontWeight: "900",
+                                marginLeft: 5,
+                                textDecorationLine: "line-through",
+                                color: GlobalColors.discountPricing,
+                              }}
+                            >
+                              ₹{item.p}/-
+                            </Text>
+                          </View>
+
+                          <Text
+                            style={{
+                              fontWeight: "900",
+                              marginLeft: 5,
+                              fontSize: 18,
+                            }}
+                          >
+                            ₹{item.pd}/-
+                          </Text>
+                        </View>
+                      ) : (
                         <Text
                           style={{
-                            fontWeight: 600,
+                            fontWeight: "500",
+                            marginLeft: 5,
                             fontSize: 18,
                           }}
                         >
-                          ₹{item.p}
+                          ₹{item.p}/-
                         </Text>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            textDecorationLine: "line-through",
-                          }}
-                        >
-                          ₹{item.m}
-                        </Text>
-                      </View>
+                      )}
                       <Text
                         style={{
                           color: "#678",

@@ -1,10 +1,10 @@
 import { FlatList, Image, Pressable, Text, View } from "react-native";
-import { GlobalColors } from "../../../infrasrtructure/GlobalVariables";
-import TopView from "../../../components/TopView";
+import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import TopView from "@/components/TopView";
 import { useSelector } from "react-redux";
-import OrderStatus from "../../../services/offline/OrderStatus";
+import OrderStatus from "@/services/offline/OrderStatus";
 import { useRouter } from "expo-router";
-import { PAGES_STACK } from "../../../constants/Pages";
+import { PAGES_STACK } from "@/constants/Pages";
 
 export default function OrdersScreen() {
   const OrdersSelector = useSelector((state) => state.Orders);
@@ -29,7 +29,7 @@ export default function OrdersScreen() {
             {Object.values(OrdersSelector).length ? null : (
               <>
                 <Image
-                  source={require("../../../assets/cart-empty.webp")}
+                  source={require("../../assets/cart-empty.webp")}
                   width={300}
                   height={300}
                   style={{

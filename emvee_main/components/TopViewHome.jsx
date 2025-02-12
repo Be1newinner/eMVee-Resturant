@@ -7,7 +7,7 @@ import { Link, useRouter } from "expo-router";
 
 import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { StoreDetailsContext } from "@/services/StoreDetails/StoreDetailsContext";
-import { PAGES_STACK } from "../constants/Pages";
+import { PAGES_STACK, PAGES_TAB } from "../constants/Pages";
 
 export const TopViewHome = () => {
   const saved_addresses = useSelector((state) => state.Address);
@@ -90,7 +90,7 @@ export const TopViewHome = () => {
                 }}
               >
                 <MaterialIcons name="place" size={17} color="#fff" />
-                <Link href="/Stack/AddAddressScreen">
+                <Link href={PAGES_STACK.ADD_ADDRESS_SCREEN}>
                   <Text
                     style={{
                       color: "#fff",
@@ -117,7 +117,7 @@ export const TopViewHome = () => {
           </View>
         </View>
 
-        <Link href="BottomTabs/SettingScreen">
+        <Link href={PAGES_TAB.SETTING_SCREEN}>
           <FontAwesome6
             name="user"
             size={28}

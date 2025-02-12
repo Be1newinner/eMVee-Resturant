@@ -13,6 +13,8 @@ import { useRouter } from "expo-router";
 
 import { getImageURL } from "@/services/offline/Image";
 import { PAGES_STACK } from "../constants/Pages";
+import { GlobalColors } from "../infrasrtructure/GlobalVariables";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const PopularList = ({ children }) => {
   const router = useRouter();
@@ -49,13 +51,12 @@ const PopularList = ({ children }) => {
               },
             ]}
             onPress={() => {
-              console.log(item)
+              console.log(item);
               router.push({
                 pathname: PAGES_STACK.PRODUCT_DETAIL,
                 params: { productId: item.k },
-              })
-            }
-            }
+              });
+            }}
           >
             {item.i ? (
               <Image
@@ -103,15 +104,64 @@ const PopularList = ({ children }) => {
                 {item.v}
               </Text>
             )}
-            <Text
-              style={{
-                fontWeight: "500",
-                // color: GlobalColors.themeColor,
-                marginLeft: 5,
-              }}
-            >
-              ₹{item.p}/-
-            </Text>
+            {item.pd ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <AntDesign
+                  name="arrowdown"
+                  size={16}
+                  color={
+                    Math.round(((item.pd) / item.p) * 100) > 100
+                      ? GlobalColors.themeColor
+                      : GlobalColors.discountPercent
+                  }
+                />
+                <Text
+                  style={{
+                    fontWeight: "900",
+                    color:
+                      Math.round(((item.pd) / item.p) * 100) > 100
+                        ? GlobalColors.themeColor
+                        : GlobalColors.discountPercent,
+                    marginLeft: 5,
+                  }}
+                >
+                  {Math.round(((item.pd) / item.p) * 100)}%
+                </Text>
+
+                <Text
+                  style={{
+                    fontWeight: "900",
+                    marginLeft: 5,
+                    textDecorationLine: "line-through",
+                    color: GlobalColors.discountPricing,
+                  }}
+                >
+                  ₹{item.p}/-
+                </Text>
+
+                <Text
+                  style={{
+                    fontWeight: "900",
+                    marginLeft: 5,
+                  }}
+                >
+                  ₹{item.pd}/-
+                </Text>
+              </View>
+            ) : (
+              <Text
+                style={{
+                  fontWeight: "500",
+                  marginLeft: 5,
+                }}
+              >
+                ₹{item.p}/-
+              </Text>
+            )}
           </Pressable>
         );
       }}

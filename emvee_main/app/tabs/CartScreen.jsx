@@ -2,7 +2,6 @@ import { Dimensions, Image, Text, View } from "react-native";
 import { ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ref, child, get } from "firebase/database";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
@@ -15,12 +14,14 @@ import { addInCart, resetCart } from "@/services/Slices/CartSlice";
 import addOrderController from "@/services/OrdersController/addOrderController";
 import { LoadingModal } from "@/components/LoadingModal";
 import { getImageURL } from "@/services/offline/Image";
-import { realtimeDB } from "@/infrasrtructure/firebase.config";
-import { PAGES_STACK, PAGES_TAB } from "../../../constants/Pages";
+import { PAGES_STACK, PAGES_TAB } from "@/constants/Pages";
+
+import sendNotificationToAdmin from "@/services/apis/sendNotifications";
+import getAdminTokens from "@/services/apis/getAdminTokens";
 
 export default function CartScreen() {
   const router = useRouter();
-  const selector = useSelector((state) => state.Cart);
+  const CartSelector = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const AddressSelector = useSelector((state) => state.Address);
   const AuthSelector = useSelector((state) => state.Authentication);
@@ -29,68 +30,30 @@ export default function CartScreen() {
   const [CartData, setCartData] = useState(null);
   const [cartTotal, setCartTotal] = useState(null);
   const [authState, setAuthState] = useState(null);
-
-  const getAdminTokens = async () => {
-    try {
-      let data;
-      const dbRef = await ref(realtimeDB);
-      await get(child(dbRef, `token`)).then((snapshot) => {
-        snapshot.exists() && (data = snapshot.val());
-      });
-      return data;
-    } catch (error) {
-      console.log("Getting ADMIN TOKEN ERROR => ", error);
-      return null;
-    }
-  };
-
-  const sendNotificationToAdmin = async ({ token, orderData }) => {
-    if (!token) return null;
-    try {
-      await fetch('https://e-m-vee-resturant.vercel.app/api/send-pn', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Accept-encoding': 'gzip, deflate',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: token,
-          title: "New Order Recieved!",
-          message: "You have a new Order",
-          scopeKey: "@be1newinner/emvee-admin",
-          experienceId: "@be1newinner/emvee-admin",
-          channelId: "default",
-        }),
-      });
-
-    } catch (error) {
-      console.log("UNABLE TO SEND NOTIFICATION TO ADMIN => ", error);
-    }
-  };
+  const [visible, setVisible] = useState(false);
 
   const ConfirmOrder = async () => {
     try {
       setLoadingScreen(true);
 
       const response = await addOrderController({
-        CartSelector: selector,
+        CartSelector: CartSelector,
         AddressSelector,
         authState,
       });
 
-      const orderItems = Object.values(selector?.items) || [];
+      const orderItems = Object.values(CartSelector?.items) || [];
       const personName =
         AddressSelector?.addresses?.filter(
           (e) => e.k == AddressSelector?.default
         )[0]?.n || "no name";
 
       if (AddressSelector?.addresses?.length < 1) {
-        router.navigate(PAGES_STACK.ADD_ADDRESS_SCREEN)
+        router.navigate(PAGES_STACK.ADD_ADDRESS_SCREEN);
       }
 
       const orderTime = Date.now();
-      const orderTotal = selector.total || 0;
+      const orderTotal = CartSelector.total || 0;
 
       if (response.status === 200) {
         const orderData = {
@@ -119,11 +82,10 @@ export default function CartScreen() {
         router.replace({
           pathname: PAGES_STACK.ORDER_CONFIRM,
           params: {
-            orderID: response?.orderID
-          }
+            orderID: response?.orderID,
+          },
         });
       }
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -131,23 +93,21 @@ export default function CartScreen() {
     }
   };
 
-  const [visible, setVisible] = useState(false);
-
   useEffect(() => {
     if (ConfirmClicked) {
-      if (selector.subtotal == 0) {
+      if (CartSelector.subtotal == 0) {
         router.replace(PAGES_TAB.HOME_SCREEN);
       }
     }
 
-    if (selector.subtotal != 0) {
-      setCartData(selector?.items);
+    if (CartSelector.subtotal != 0) {
+      setCartData(CartSelector?.items);
       setCartTotal({
-        total: selector?.total || 0,
-        subtotal: selector?.subtotal || 0,
-        tax: selector?.tax || 0,
-        delivery: selector?.delivery || 0,
-        discount: selector?.discount || 0,
+        total: CartSelector?.total || 0,
+        subtotal: CartSelector?.subtotal || 0,
+        tax: CartSelector?.tax || 0,
+        delivery: CartSelector?.delivery || 0,
+        discount: CartSelector?.discount || 0,
       });
     } else {
       setCartData(null);
@@ -159,7 +119,7 @@ export default function CartScreen() {
         discount: 0,
       });
     }
-  }, [selector]);
+  }, [CartSelector]);
 
   useEffect(() => {
     try {
@@ -177,11 +137,7 @@ export default function CartScreen() {
       }}
     >
       <View>
-        <TopView
-          position="relative"
-          color="#000"
-          title={"Your Cart"}
-        />
+        <TopView position="relative" color="#000" title={"Your Cart"} />
 
         {cartTotal?.subtotal != 0 ? (
           <View>
@@ -271,7 +227,7 @@ export default function CartScreen() {
                           {item?.t}
                         </Text>
                         <Text>
-                          {item?.qty} x ₹{item?.p}
+                          {item?.qty} x ₹{item?.pd ? item?.pd : item?.p}
                         </Text>
                         <AddToCart
                           Quantity={item?.qty}
@@ -368,10 +324,7 @@ export default function CartScreen() {
                   </View>
                 ))}
               </View>
-              <Button
-                status="danger"
-                onPress={ConfirmOrder}
-              >
+              <Button status="danger" onPress={ConfirmOrder}>
                 Confirm Order
               </Button>
             </View>
@@ -386,7 +339,7 @@ export default function CartScreen() {
             }}
           >
             <Image
-              source={require("../../../assets/cart-empty.webp")}
+              source={require("../../assets/cart-empty.webp")}
               style={{
                 width: 300,
                 height: 300,
