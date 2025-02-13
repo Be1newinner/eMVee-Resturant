@@ -27,12 +27,6 @@ const CategoryItems = () => {
     setIsButtonActive(!isButtonActive);
   };
 
-  // console.log(data);
-
-  // useEffect(() => {
-  //   console.log(typeof category);
-  // }, [category])
-
   return (
     <View style={{ flex: 1, backgroundColor: "#e34" }}>
       <TopView position={"relative"} title={category.t} />

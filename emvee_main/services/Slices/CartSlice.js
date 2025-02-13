@@ -20,6 +20,7 @@ export const CartSlice = createSlice({
   reducers: {
     addInCart(state, action) {
       const data = action.payload;
+      console.log({ data })
       const newState = produce(state, (draftState) => {
         draftState.items[data.k] = data;
         draftState.qty = Object.values(draftState.items)?.filter(
@@ -28,7 +29,7 @@ export const CartSlice = createSlice({
       });
 
       return produce(newState, (draftState) => {
-        console.log({ draftState })
+        // console.log({ draftState })
         const subtotal = Object.values(newState.items).reduce(
           (total, value) => {
             if (value.pd)

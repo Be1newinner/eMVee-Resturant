@@ -1,27 +1,16 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import AddToCart from "@/components/AddToCart";
 import BottomOrderBar from "@/components/BottomOrderBar";
 import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
 import { useDispatch, useSelector } from "react-redux";
 import { addInCart } from "@/services/Slices/CartSlice";
-import { getImageURL } from "@/services/offline/Image";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { useLocalSearchParams } from "expo-router";
+import ProductFeatures from "@/components/productDetails/ProductFeatures";
+import ProductImageView from "@/components/productDetails/ProductImageView";
+import ProductPriceSection from "@/components/productDetails/ProductPriceSection";
+import ProductDetailHeader from "@/components/productDetails/ProductDetailHeader";
 
 export default function ProductDetail() {
-  const router = useRouter();
   const searchParams = useLocalSearchParams();
   const productId = searchParams?.productId;
   const ProductData = useSelector((state) => state.AllProducts.data).find(
@@ -41,7 +30,7 @@ export default function ProductDetail() {
         addInCart({
           ...ProductData,
           qty: Quantity,
-          total: Quantity * ProductData.p,
+          total: Quantity * (ProductData.pd ? ProductData.pd : ProductData.p),
         })
       );
     }
@@ -51,278 +40,31 @@ export default function ProductDetail() {
     setQuantity(selector.items[ProductData.k]?.qty || 0);
   }, [selector]);
 
-  // useEffect(() => {
-  //   console.log("ProductData => ", ProductData);
-  //   console.log("productId => ", productId);
-  //   // console.log("ProductData2 => ", ProductData2.find((item) => item.k == productId))
-  // }, [productId, ProductData]);
-
   return (
     <>
-      <ScrollView style={{ position: "relative" }}>
-        <View style={{ backgroundColor: "#fff", flex: 1, paddingBottom: 40 }}>
-          <View
-            style={{
-              position: "absolute",
-              top: 10,
-              left: 10,
-              zIndex: 99,
-              width: Dimensions.get("screen").width - 20,
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: "rgba(255,255,255,0.25)",
-              padding: 5,
-              borderRadius: 10,
-            }}
-          >
-            <Pressable
-              onPress={() => router.canGoBack() && router.back()}
-              style={{ marginRight: 10 }}
-            >
-              <Ionicons name="arrow-back-outline" size={36} color="#000" />
-            </Pressable>
-            <Text
-              style={{
-                color: "#000",
-                fontWeight: 500,
-                fontSize: 18,
-              }}
-            >
-              Product Details
-            </Text>
-          </View>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          <ProductDetailHeader />
 
-          <View>
-            <LinearGradient
-              colors={["rgba(0,0,0,0.8)", "transparent"]}
-              style={{
-                width: Dimensions.get("screen").width,
-                height: "auto",
-                aspectRatio: 1.3,
-                position: "absolute",
-                borderBottomLeftRadius: 20,
-                borderBottomRightRadius: 20,
-              }}
-            />
-            {ProductData.i ? (
-              <Image
-                source={{ uri: getImageURL(ProductData.k) }}
-                style={{
-                  width: Dimensions.get("screen").width,
-                  aspectRatio: 1.3,
-                  borderBottomLeftRadius: 20,
-                  borderBottomRightRadius: 20,
-                }}
-              />
-            ) : (
-              <View
-                style={{
-                  width: Dimensions.get("screen").width,
-                  aspectRatio: 1.3,
-                  borderBottomLeftRadius: 20,
-                  borderBottomRightRadius: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: 700, fontSize: 22 }}>
-                  {ProductData.t}
-                </Text>
-              </View>
-            )}
-          </View>
+          <ProductImageView ProductData={ProductData} />
 
-          <View style={{ padding: 10, marginTop: 10, gap: 10 }}>
-            <Text
-              style={{
-                color: GlobalColors.productText,
-                fontSize: 26,
-                fontWeight: 600,
-              }}
-            >
-              {ProductData.t}
-            </Text>
-            <Text style={{ color: GlobalColors.productText, lineHeight: 18 }}>
-              {ProductData.d}
-            </Text>
+          <View style={styles.contentContainer}>
+            <Text style={styles.productTitle}>{ProductData.t}</Text>
+            <Text style={styles.productDescription}>{ProductData.d}</Text>
 
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    color: GlobalColors.productText,
-                    fontSize: 18,
-                    marginBottom: 10,
-                  }}
-                >
-                  Price
-                </Text>
-                {ProductData.pd ? (
-                  <View
-                    style={{
-                      gap: 10,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                      }}
-                    >
-                      <AntDesign
-                        name="arrowdown"
-                        size={16}
-                        color={
-                          Math.round((ProductData.pd / ProductData.p) * 100) >
-                          100
-                            ? GlobalColors.themeColor
-                            : GlobalColors.discountPercent
-                        }
-                      />
-                      <Text
-                        style={{
-                          fontWeight: "900",
-                          color:
-                            Math.round((ProductData.pd / ProductData.p) * 100) >
-                            100
-                              ? GlobalColors.themeColor
-                              : GlobalColors.discountPercent,
-                          marginLeft: 5,
-                        }}
-                      >
-                        {Math.round((ProductData.pd / ProductData.p) * 100)}%
-                      </Text>
+            <ProductPriceSection ProductData={ProductData} />
+            <View style={styles.separator} />
 
-                      <Text
-                        style={{
-                          fontWeight: "900",
-                          marginLeft: 5,
-                          textDecorationLine: "line-through",
-                          color: GlobalColors.discountPricing,
-                        }}
-                      >
-                        ₹{ProductData.p}/-
-                      </Text>
-                    </View>
+            <ProductFeatures />
 
-                    <Text
-                      style={{
-                        fontWeight: "900",
-                        marginLeft: 5,
-                        fontSize: 18,
-                      }}
-                    >
-                      ₹{ProductData.pd}/-
-                    </Text>
-                  </View>
-                ) : (
-                  <Text
-                    style={{
-                      fontWeight: "500",
-                      marginLeft: 5,
-                      fontSize: 18,
-                    }}
-                  >
-                    ₹{ProductData.p}/-
-                  </Text>
-                )}
-              </View>
-
-              <AddToCart Quantity={Quantity} setQuantity={setQuantity} />
-            </View>
-
-            <View
-              style={{
-                backgroundColor: "rgba(0,50,200,0.07)",
-                height: 4,
-                marginVertical: 20,
-              }}
-            />
-
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 20,
-                justifyContent: "space-between",
-              }}
-            >
-              {[
-                { key: 0, title: "Free Delivery" },
-                { key: 1, title: "Cash On Delivery" },
-                { key: 2, title: "Premium Quality" },
-              ].map((item) => (
-                <View key={item.key}>
-                  <View
-                    style={{
-                      backgroundColor: "rgba(50,150,255,0.18)",
-                      width: Dimensions.get("screen").width / 4,
-                      height: Dimensions.get("screen").width / 4,
-                      borderRadius: Dimensions.get("screen").width / 4,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {item.key === 0 ? (
-                      <MaterialCommunityIcons
-                        name="truck-delivery-outline"
-                        size={Dimensions.get("screen").width / 4 - 50}
-                        color={GlobalColors.themeColor}
-                      />
-                    ) : item.key === 1 ? (
-                      <MaterialIcons
-                        name="money"
-                        size={Dimensions.get("screen").width / 4 - 50}
-                        color={GlobalColors.themeColor}
-                      />
-                    ) : (
-                      <MaterialIcons
-                        name="workspace-premium"
-                        size={Dimensions.get("screen").width / 4 - 50}
-                        color={GlobalColors.themeColor}
-                      />
-                    )}
-                  </View>
-                  <Text
-                    style={{
-                      color: "rgba(0,0,0,0.55)",
-                      fontWeight: 500,
-                      marginTop: 5,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.title}
-                  </Text>
-                </View>
-              ))}
-            </View>
-
-            <View
-              style={{
-                backgroundColor: "rgba(0,50,200,0.07)",
-                height: 4,
-                marginVertical: 20,
-              }}
-            />
+            <View style={styles.separator} />
 
             <View>
-              <Text style={{ fontWeight: 700, fontSize: 18 }}>
-                Country of Origin
-              </Text>
-              <Text style={{ fontSize: 16 }}>India</Text>
+              <Text style={styles.originTitle}>Country of Origin</Text>
+              <Text style={styles.originText}>India</Text>
             </View>
 
-            <View
-              style={{
-                backgroundColor: "rgba(0,50,200,0.07)",
-                height: 4,
-                marginVertical: 20,
-              }}
-            />
+            <View style={styles.separator} />
           </View>
         </View>
       </ScrollView>
@@ -330,3 +72,40 @@ export default function ProductDetail() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollView: {
+    position: "relative",
+  },
+  container: {
+    backgroundColor: "#fff",
+    flex: 1,
+    paddingBottom: 40,
+  },
+  contentContainer: {
+    padding: 10,
+    marginTop: 10,
+    gap: 10,
+  },
+  productTitle: {
+    color: GlobalColors.productText,
+    fontSize: 26,
+    fontWeight: "600",
+  },
+  productDescription: {
+    color: GlobalColors.productText,
+    lineHeight: 18,
+  },
+  separator: {
+    backgroundColor: "rgba(0,50,200,0.07)",
+    height: 4,
+    marginVertical: 20,
+  },
+  originTitle: {
+    fontWeight: "700",
+    fontSize: 18,
+  },
+  originText: {
+    fontSize: 16,
+  },
+});
