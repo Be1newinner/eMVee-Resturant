@@ -6,12 +6,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
 import ProfileTopView from "@/components/ProfileTopView";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { logout } from "@/services/Slices/AuthSlice";
 import { resetCart } from "@/services/Slices/CartSlice";
 import { resetAddress } from "@/services/Slices/AddressSlice";
 import { PAGES_STACK } from "@/constants/Pages";
-
 
 export default function SettingScreen() {
   const AuthSelector = useSelector((state) => state.Authentication);
@@ -101,12 +100,12 @@ export default function SettingScreen() {
               onPress={async () => {
                 if (item.key == 6) {
                   if (authState?.phone_no?.length === 10) {
-                    await item.action2()
+                    await item.action2();
                   } else {
-                    router.navigate(item.action)
+                    router.navigate(item.action);
                   }
                 } else {
-                  router.navigate(item.action)
+                  router.navigate(item.action);
                 }
               }}
             >

@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { GlobalColors } from "../../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "../../infrastructure/GlobalVariables";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";

@@ -1,4 +1,4 @@
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Button, Card, Modal } from "@ui-kitten/components";
 import { Feather } from "@expo/vector-icons";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import TopView from "@/components/TopView";
 import { Divider } from "@ui-kitten/components";
 import AddNewAddressButton from "@/components/AddNewAddressButton";
@@ -20,7 +20,9 @@ import {
 } from "@/services/Slices/AddressSlice";
 import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
-import { firestoreDB } from "@/infrasrtructure/firebase.config";
+// import { firestoreDB } from "@/infrasrtructure/firebase.config";
+import { firestoreDB } from "@/infrastructure/firebase.config";
+
 import { useRouter } from "expo-router";
 import { PAGES_STACK } from "@/constants/Pages";
 

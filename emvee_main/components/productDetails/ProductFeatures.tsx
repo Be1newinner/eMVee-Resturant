@@ -1,5 +1,5 @@
 import { PRODUCT_FEATURES } from "@/constants/ProductDetails";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";

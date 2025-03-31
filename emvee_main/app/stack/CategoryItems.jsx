@@ -14,7 +14,7 @@ import AddToCart2 from "@/components/AddToCart2";
 import BottomOrderBar from "@/components/BottomOrderBar";
 import { getCategoryImageURL, getImageURL } from "@/services/offline/Image";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 
 const CategoryItems = () => {
   const searchParams = useLocalSearchParams();

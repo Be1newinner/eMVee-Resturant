@@ -1,6 +1,6 @@
 import { Timestamp, doc, onSnapshot } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
-import { firestoreDB } from "../../infrasrtructure/firebase.config";
+import { firestoreDB } from "../../infrastructure/firebase.config";
 
 export const StoreDetailsContext = createContext();
 

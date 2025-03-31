@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { firestoreDB } from "../../infrasrtructure/firebase.config";
+import { firestoreDB } from "../../infrastructure/firebase.config";
 import { useDispatch, useSelector } from "react-redux";
 import { addOrder } from "../Slices/OrdersSlice";
 
