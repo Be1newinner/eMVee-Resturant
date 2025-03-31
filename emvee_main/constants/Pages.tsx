@@ -1,7 +1,7 @@
 export const PAGES_STACK = {
   ABOUT_US: "/stack/AboutUs",
   ADD_ADDRESS_SCREEN: "/stack/AddAddressScreen",
-  LOGIN_WITH_PHONE: "/stack/Auth/LoginWithPhone",
+  LOGIN_WITH_PHONE: "/stack/LoginWithPhone",
   CATEGORY_ITEMS: "/stack/CategoryItems",
   ORDER_CONFIRM: "/stack/OrderConfirm",
   ORDERS_DETAILS: "/stack/OrdersDetails",
