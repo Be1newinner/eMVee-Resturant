@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import ProfileTopView from "@/components/ProfileTopView";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { Button, Input } from "@ui-kitten/components";
 import TopView from "@/components/TopView";
 

@@ -1,5 +1,5 @@
 import { Timestamp, collection, addDoc } from "firebase/firestore";
-import { firestoreDB } from "../../infrasrtructure/firebase.config";
+import { firestoreDB } from "../../infrastructure/firebase.config";
 
 export default async function addOrderController({
   AddressSelector,

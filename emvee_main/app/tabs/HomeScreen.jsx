@@ -10,7 +10,7 @@ import PopularList from "@/components/PopularList";
 import GetProductsController from "@/services/OrdersController/GetProductsController";
 import GetAddressController from "@/services/OrdersController/GetAddressController";
 import { TopViewHome } from "@/components/TopViewHome";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { login } from "@/services/Slices/AuthSlice";
 import { addProducts } from "@/services/Slices/AllProductsSlice";
 import { addCategories } from "@/services/Slices/AllCategoriesSlice";

@@ -1,5 +1,5 @@
 import { getDocs, query, collection, where, limit } from "firebase/firestore";
-import { firestoreDB } from "../../infrasrtructure/firebase.config";
+import { firestoreDB } from "../../infrastructure/firebase.config";
 
 export default async function GetAddressController({ phone_no }) {
   try {

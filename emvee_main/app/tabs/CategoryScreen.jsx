@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { TopViewHome } from "@/components/TopViewHome";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
 import { getCategoryImageURL } from "@/services/offline/Image";
 import { useRouter } from "expo-router";
@@ -57,12 +57,13 @@ const CategoryScreen = () => {
         renderItem={({ item, index }) => (
           <Pressable
             onPress={() => {
-              console.log("DATA => ", item)
+              console.log("DATA => ", item);
               router.push({
-                pathname: PAGES_STACK.CATEGORY_ITEMS, params: {
-                  category: JSON.stringify(item)
-                }
-              })
+                pathname: PAGES_STACK.CATEGORY_ITEMS,
+                params: {
+                  category: JSON.stringify(item),
+                },
+              });
             }}
             style={{
               borderRadius: 10,

@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import { updateDoc, doc } from "firebase/firestore";
 
-import { firestoreDB } from "@/infrasrtructure/firebase.config";
+import { firestoreDB } from "@/infrastructure/firebase.config";
 import { cancelOrder } from "@/services/Slices/OrdersSlice";
 
 export const OrderCancelModal = ({ visible, setVisible, cancelID }) => {

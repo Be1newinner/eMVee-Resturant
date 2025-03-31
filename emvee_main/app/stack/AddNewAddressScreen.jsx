@@ -9,11 +9,11 @@ import {
 } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewAddress } from "@/services/Slices/AddressSlice";
 import { addDoc, collection } from "firebase/firestore";
-import { firestoreDB } from "@/infrasrtructure/firebase.config";
+import { firestoreDB } from "@/infrastructure/firebase.config";
 import { useRouter } from "expo-router";
 
 export default function AddNewAddressButton() {

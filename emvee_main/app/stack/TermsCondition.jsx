@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import TopView from "@/components/TopView";
 
 export default function TermsCondition({ navigation }) {

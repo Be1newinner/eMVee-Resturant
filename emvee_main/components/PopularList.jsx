@@ -13,7 +13,7 @@ import { useRouter } from "expo-router";
 
 import { getImageURL } from "@/services/offline/Image";
 import { PAGES_STACK } from "../constants/Pages";
-import { GlobalColors } from "../infrasrtructure/GlobalVariables";
+import { GlobalColors } from "../infrastructure/GlobalVariables";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const PopularList = ({ children }) => {
@@ -114,7 +114,7 @@ const PopularList = ({ children }) => {
                   name="arrowdown"
                   size={16}
                   color={
-                    Math.round(((item.pd) / item.p) * 100) > 100
+                    Math.round((item.pd / item.p) * 100) > 100
                       ? GlobalColors.themeColor
                       : GlobalColors.discountPercent
                   }
@@ -123,13 +123,13 @@ const PopularList = ({ children }) => {
                   style={{
                     fontWeight: "900",
                     color:
-                      Math.round(((item.pd) / item.p) * 100) > 100
+                      Math.round((item.pd / item.p) * 100) > 100
                         ? GlobalColors.themeColor
                         : GlobalColors.discountPercent,
                     marginLeft: 5,
                   }}
                 >
-                  {Math.round(((item.pd) / item.p) * 100)}%
+                  {Math.round((item.pd / item.p) * 100)}%
                 </Text>
 
                 <Text

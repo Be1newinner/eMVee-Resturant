@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import ProductSearchBar from "@/components/ProductSearchBar";
 import { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -44,11 +44,7 @@ export default function ProductSearchScreen() {
         gap: 10,
       }}
     >
-      <TopView
-        title="Search Dishes"
-        position="relative"
-        color="#222"
-      />
+      <TopView title="Search Dishes" position="relative" color="#222" />
 
       <ProductSearchBar
         value={value}
@@ -84,7 +80,10 @@ export default function ProductSearchScreen() {
                 gap: 10,
               }}
               onPress={() =>
-                router.push({ pathname: PAGES_STACK.PRODUCT_DETAIL, params: { productId: item.k } })
+                router.push({
+                  pathname: PAGES_STACK.PRODUCT_DETAIL,
+                  params: { productId: item.k },
+                })
               }
             >
               {item.i ? (
@@ -107,7 +106,9 @@ export default function ProductSearchScreen() {
                     height: 50,
                   }}
                 >
-                  <Text style={{ fontWeight: "600", fontSize: 20, color: "#fff" }}>
+                  <Text
+                    style={{ fontWeight: "600", fontSize: 20, color: "#fff" }}
+                  >
                     {item.t.slice(0, 1)}
                   </Text>
                 </View>
@@ -115,7 +116,11 @@ export default function ProductSearchScreen() {
               <View style={{ flex: 1 }}>
                 <Text style={{ fontWeight: "500" }}>{item.t}</Text>
                 <Text style={{ color: GlobalColors.productText }}>
-                  In {item?.c ? AllCategories?.data?.find((e) => e.k === item?.c)?.t : ""} Category
+                  In{" "}
+                  {item?.c
+                    ? AllCategories?.data?.find((e) => e.k === item?.c)?.t
+                    : ""}{" "}
+                  Category
                 </Text>
               </View>
               <View style={{ justifyContent: "center" }}>
@@ -148,7 +153,10 @@ export default function ProductSearchScreen() {
                 gap: 10,
               }}
               onPress={() =>
-                router.push({ pathname: PAGES_STACK.PRODUCT_DETAIL, params: { productId: item.k } })
+                router.push({
+                  pathname: PAGES_STACK.PRODUCT_DETAIL,
+                  params: { productId: item.k },
+                })
               }
             >
               {item.i ? (
@@ -171,7 +179,9 @@ export default function ProductSearchScreen() {
                     height: 50,
                   }}
                 >
-                  <Text style={{ fontWeight: "600", fontSize: 20, color: "#fff" }}>
+                  <Text
+                    style={{ fontWeight: "600", fontSize: 20, color: "#fff" }}
+                  >
                     {item.t.slice(0, 1)}
                   </Text>
                 </View>
@@ -179,7 +189,11 @@ export default function ProductSearchScreen() {
               <View style={{ flex: 1 }}>
                 <Text style={{ fontWeight: "500" }}>{item.t}</Text>
                 <Text style={{ color: GlobalColors.productText }}>
-                  In {item?.c ? AllCategories?.data?.find((e) => e.k === item?.c)?.t : ""} Category
+                  In{" "}
+                  {item?.c
+                    ? AllCategories?.data?.find((e) => e.k === item?.c)?.t
+                    : ""}{" "}
+                  Category
                 </Text>
               </View>
               <View style={{ justifyContent: "center" }}>

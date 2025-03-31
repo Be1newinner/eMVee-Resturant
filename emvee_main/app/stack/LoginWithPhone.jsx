@@ -6,7 +6,7 @@ import { login } from "@/services/Slices/AuthSlice";
 import GetAddressController from "@/services/OrdersController/GetAddressController";
 import { addAddressArray } from "@/services/Slices/AddressSlice";
 import { ref, set } from "firebase/database";
-import { realtimeDB } from "@/infrasrtructure/firebase.config";
+import { realtimeDB } from "@/infrastructure/firebase.config";
 import { useRouter } from "expo-router";
 
 export default function LoginWithPhone() {

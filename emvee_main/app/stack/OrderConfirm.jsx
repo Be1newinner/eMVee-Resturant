@@ -1,6 +1,6 @@
 import { Dimensions, Image, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { Button } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -78,7 +78,12 @@ export default function OrderConfirm() {
           </Button>
 
           <Pressable
-            onPress={() => router.replace({ pathname: PAGES_STACK.ORDERS_DETAILS, params: { OrderID: orderID } })}
+            onPress={() =>
+              router.replace({
+                pathname: PAGES_STACK.ORDERS_DETAILS,
+                params: { OrderID: orderID },
+              })
+            }
           >
             <Text
               style={{
@@ -101,6 +106,6 @@ export default function OrderConfirm() {
           </Text>
         </View>
       </View>
-    </ScrollView >
+    </ScrollView>
   );
 }

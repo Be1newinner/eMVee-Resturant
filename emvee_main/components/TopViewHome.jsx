@@ -5,7 +5,7 @@ import { Input } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
 import { Link, useRouter } from "expo-router";
 
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { StoreDetailsContext } from "@/services/StoreDetails/StoreDetailsContext";
 import { PAGES_STACK, PAGES_TAB } from "../constants/Pages";
 
@@ -118,11 +118,7 @@ export const TopViewHome = () => {
         </View>
 
         <Link href={PAGES_TAB.SETTING_SCREEN}>
-          <FontAwesome6
-            name="user"
-            size={28}
-            color="#fff"
-          />
+          <FontAwesome6 name="user" size={28} color="#fff" />
         </Link>
       </View>
       <Input

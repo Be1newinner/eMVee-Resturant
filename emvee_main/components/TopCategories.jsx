@@ -3,10 +3,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "expo-router";
 
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { getCategoryImageURL } from "@/services/offline/Image";
 import { PAGES_STACK } from "../constants/Pages";
-
 
 const ProductItems = () => {
   const navigation = useRouter();

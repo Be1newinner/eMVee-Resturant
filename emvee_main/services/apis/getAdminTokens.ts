@@ -1,4 +1,4 @@
-import { realtimeDB } from "@/infrasrtructure/firebase.config";
+import { realtimeDB } from "@/infrastructure/firebase.config";
 import { ref, child, get } from "firebase/database";
 
 export const getAdminTokens = async () => {

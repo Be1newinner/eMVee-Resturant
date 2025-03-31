@@ -1,6 +1,6 @@
 import { Button } from "@ui-kitten/components";
 import { Dimensions, Text, View } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { useSelector } from "react-redux";
 import { useRouter } from "expo-router";
 import { PAGES_TAB } from "../constants/Pages";

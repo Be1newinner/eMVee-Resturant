@@ -20,7 +20,6 @@ import {
 } from "@/services/Slices/AddressSlice";
 import { AntDesign } from "@expo/vector-icons";
 import { doc, deleteDoc } from "firebase/firestore";
-// import { firestoreDB } from "@/infrasrtructure/firebase.config";
 import { firestoreDB } from "@/infrastructure/firebase.config";
 
 import { useRouter } from "expo-router";

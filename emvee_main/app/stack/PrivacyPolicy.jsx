@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import TopView from "@/components/TopView";
 
 export default function PrivacyPolicy() {
@@ -11,11 +11,7 @@ export default function PrivacyPolicy() {
       }}
     >
       <View>
-        <TopView
-          title="Privacy Policy"
-          position="relative"
-          color="black"
-        />
+        <TopView title="Privacy Policy" position="relative" color="black" />
 
         <View
           style={{

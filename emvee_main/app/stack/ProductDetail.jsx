@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import BottomOrderBar from "@/components/BottomOrderBar";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import { useDispatch, useSelector } from "react-redux";
 import { addInCart } from "@/services/Slices/CartSlice";
 import { useLocalSearchParams } from "expo-router";

@@ -1,5 +1,5 @@
 import { FlatList, Image, Pressable, Text, View } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import TopView from "@/components/TopView";
 import { useSelector } from "react-redux";
 import OrderStatus from "@/services/offline/OrderStatus";
@@ -104,11 +104,14 @@ export default function OrdersScreen() {
                   </Text>
                 </Text>
                 <Pressable
-                  onPress={() => router.push({
-                    pathname: PAGES_STACK.ORDERS_DETAILS, params: {
-                      OrderID: item.orderID
-                    }
-                  })}
+                  onPress={() =>
+                    router.push({
+                      pathname: PAGES_STACK.ORDERS_DETAILS,
+                      params: {
+                        OrderID: item.orderID,
+                      },
+                    })
+                  }
                 >
                   <Text
                     style={{

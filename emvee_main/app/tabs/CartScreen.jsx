@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
 
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import TopView from "@/components/TopView";
 import AddToCart from "@/components/AddToCart";
 import { OrderConfirmModal } from "@/components/OrderConfirmModal";

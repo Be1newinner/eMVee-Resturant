@@ -1,5 +1,5 @@
 import { Dimensions, ScrollView, Text, View } from "react-native";
-import { GlobalColors } from "@/infrasrtructure/GlobalVariables";
+import { GlobalColors } from "@/infrastructure/GlobalVariables";
 import TopView from "@/components/TopView";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -468,10 +468,10 @@ export default function OrdersDetails() {
                   {OrdersItems?.status == 0
                     ? "Waiting for admin to accept Order!"
                     : OrdersItems?.status == 3
-                      ? new Date(
+                    ? new Date(
                         OrdersItems?.deliveredTime * 1000
                       ).toLocaleString()
-                      : new Date(
+                    : new Date(
                         OrdersItems?.willBeDeliveredTime * 1000
                       ).toLocaleString()}
                 </Text>
