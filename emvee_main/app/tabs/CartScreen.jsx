@@ -346,7 +346,7 @@ export default function CartScreen() {
               }}
             />
             <Text style={{ fontSize: 16, fontWeight: "700" }}>
-              Your cart is empty
+              Your basket is empty
             </Text>
             <Pressable
               style={{

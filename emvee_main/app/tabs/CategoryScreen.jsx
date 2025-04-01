@@ -25,6 +25,7 @@ const CategoryScreen = () => {
         flex: 1,
       }}
     >
+      <TopViewHome />
       <FlatList
         data={TotalCategoryList?.data}
         numColumns={2}
@@ -42,7 +43,6 @@ const CategoryScreen = () => {
         keyExtractor={(e) => e.k}
         ListHeaderComponent={
           <View>
-            <TopViewHome />
             <Text
               style={{
                 fontSize: 16,

@@ -50,10 +50,10 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TopViewHome />
       <PopularList
         children={
           <View>
-            <TopViewHome />
             <View style={styles.categoryHeader}>
               <Text style={styles.headerText}>Our Top Categories</Text>
               <Pressable onPress={() => router.push(PAGES_TAB.CATEGORY_SCREEN)}>

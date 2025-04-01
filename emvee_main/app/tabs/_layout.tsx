@@ -29,7 +29,7 @@ export default function _layout() {
       name: "CartScreen",
       icon_active: "cart-sharp",
       icon_inactive: "cart-outline",
-      title: "Cart",
+      title: "Basket",
     },
     {
       id: 3,
@@ -90,7 +90,7 @@ export default function _layout() {
         <Tabs.Screen
           name="CartScreen"
           options={{
-            title: "Cart",
+            title: "Basket",
             tabBarIcon: ({ focused }) => (
               <View>
                 <Ionicons
