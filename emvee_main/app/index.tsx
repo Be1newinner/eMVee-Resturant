@@ -4,7 +4,7 @@ import { Dimensions, Image, View } from "react-native";
 
 export default function Index() {
   return (
-    <View   
+    <View
       style={{
         backgroundColor: "white",
         flex: 1,

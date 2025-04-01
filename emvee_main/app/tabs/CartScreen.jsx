@@ -1,4 +1,4 @@
-import { Dimensions, Image, Text, View } from "react-native";
+import { Dimensions, Image, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -335,7 +335,7 @@ export default function CartScreen() {
               justifyContent: "center",
               alignItems: "center",
               padding: 20,
-              marginTop: Dimensions.get("window").height * 0.2,
+              marginTop: Dimensions.get("window").height * 0.05,
             }}
           >
             <Image
@@ -345,6 +345,25 @@ export default function CartScreen() {
                 height: 300,
               }}
             />
+            <Text style={{ fontSize: 16, fontWeight: "700" }}>
+              Your cart is empty
+            </Text>
+            <Pressable
+              style={{
+                backgroundColor: "black",
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                borderRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 30,
+              }}
+              onPress={() => router.push("/tabs/HomeScreen")}
+            >
+              <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
+                Browse products
+              </Text>
+            </Pressable>
           </View>
         )}
       </View>
