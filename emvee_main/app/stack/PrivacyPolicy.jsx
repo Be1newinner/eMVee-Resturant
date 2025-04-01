@@ -9,14 +9,13 @@ export default function PrivacyPolicy({ navigation }) {
       colors={[GlobalColors.primary, GlobalColors.secondary]}
       style={styles.container}
     >
+      <TopView
+        navigation={navigation}
+        title="Privacy Policy"
+        position="relative"
+        color={GlobalColors.text}
+      />
       <ScrollView>
-        <TopView
-          navigation={navigation}
-          title="Privacy Policy"
-          position="relative"
-          color={GlobalColors.text}
-        />
-
         <View style={styles.content}>
           {/* Introduction Card */}
           <View style={styles.card}>

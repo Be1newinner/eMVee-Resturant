@@ -9,14 +9,13 @@ export default function TermsCondition({ navigation }) {
       colors={[GlobalColors.primary, GlobalColors.secondary]}
       style={styles.container}
     >
+      <TopView
+        navigation={navigation}
+        title="Terms and Conditions"
+        position="relative"
+        color={GlobalColors.text}
+      />
       <ScrollView>
-        <TopView
-          navigation={navigation}
-          title="Terms and Conditions"
-          position="relative"
-          color={GlobalColors.text}
-        />
-
         <View style={styles.content}>
           {/* Section Card */}
           <View style={styles.card}>

@@ -19,7 +19,7 @@ export default function TopView({
         zIndex: 99,
         backgroundColor: "rgba(0,0,0,0)",
         flexDirection: "row",
-        height: 40,
+        height: 60,
         alignItems: "center",
         ...style,
       }}
